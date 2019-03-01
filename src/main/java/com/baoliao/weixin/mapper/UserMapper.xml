@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baoliao.weixin.dao.UserDao">
+    <select id="queryUserList" resultType="com.baoliao.weixin.bean.User">
+      select * from WECHAT_USER_INFO;
+    </select>
+
+    <insert id="insertFollowInfo">
+        INSERT INTO WECHAT_USER_INFO(OPENID,SUBSCRIBE,SUBSCRIBETIME)VALUES (#{openId},1,NOW())
+    </insert>
+
+    <update id="updateFollowInfo">
+        UPDATE WECHAT_USER_INFO SET SUBSCRIBE='0',cancelSubscribeTime=NOW() WHERE OPENID = #{fromUserName} AND SUBSCRIBE='1'
+    </update>
+</mapper>
