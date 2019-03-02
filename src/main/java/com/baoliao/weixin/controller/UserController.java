@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -17,10 +18,9 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/queryUserList")
-    public String queryUserList(Model model){
-        System.out.println("进入queryUserList====controller==>>>");
+    public String queryUserList(HttpServletRequest request){
         List<User> userList = userService.queryUserList();
-        model.addAttribute("userList",userList);
+        request.setAttribute("userList",userList);
         return "index";
     }
 }
