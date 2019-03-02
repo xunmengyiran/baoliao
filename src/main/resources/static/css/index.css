@@ -1,0 +1,147 @@
+@CHARSET "UTF-8";
+<style>
+/*         body {
+            background: #EFEFEF
+        } */
+        .gouxuan_der{
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: #fff;
+            border-radius: 50%;
+            width: 25px;
+            display: none
+        }
+        .dsf_jhh_xdf .mui-col-xs-6{
+            margin-top:6px;
+        }
+        .dsf_jhh_xdf .mui-col-xs-6.act .gouxuan_der{
+            display: block;
+        }
+		.cz_mb{
+               height: 660px;
+               overflow-y: scroll;
+        }
+        .sd_jh_dertx_mb{
+		    width: 100%;
+		    height: 100%;
+		}
+		.bgzhu_{
+		    width: 100%;
+		    height: 100%;
+		}
+		.sdfsdf li{
+           margin-bottom: 10px !important;
+		}
+		.dfer_jh_drt textarea {
+		    text-indent: 0px;
+		    padding: 10px;
+		    font-size: 14px;
+            color: #000;
+		}
+		#ssd_ooie {
+		    position: absolute;
+		    left: 20%;
+		    top: 20%;
+		    width: 50%;
+		    height: 50%;
+		    opacity: 0;
+		    overflow:hidden;
+		}
+		.sd_hjerer {
+		    position: absolute;
+		    right: -5px;
+		    top: -12px;
+		    height:24px;
+		    width:24px;
+		    line-height:24px;
+		}
+		.ovhd{}
+
+      .sd_hjh_dertd {
+            border-top: 5px solid #F8F8F8
+        }
+        
+        input.guoqishij {
+            font-size: 14px;
+            text-indent: 0px;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+            height: 30px !important;
+            width: 100% !important;
+        }
+        .ds_dd_deert{
+            border: 1px solid #7abd54;
+            height: 30px;
+            line-height: 30px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+        .mui-btn-blue{
+            background: #7abd54;
+            border: 1px solid #7abd54;
+        }
+        .mui-table-view-cell.mui-active{
+            background: #fff
+        }
+        
+        .mui-navigate-right:after, .mui-push-left:after, .mui-push-right:after{
+            color: #7abd54
+        }
+        .dgf_deert{
+            position: relative;
+            bottom: 12px;
+        }
+        .sd_jh_dertx_mb.ab{
+            width: 80px;
+            height: 80px;
+        }
+        .sdfsdf{
+        overflow: hidden
+        }
+        .red1 {
+    color: #ff2003 !important;
+}
+        
+        .mui-table-view-cell.mui-collapse .mui-collapse-content{
+          margin:13px -15px -5px
+        }
+        .dsf_jh_derert .mui-col-xs-4.act *{
+    color: #70C434
+      }
+      
+    
+        .animate {
+            padding-left: 20px;
+            font-size: 14px;
+            display: inline-block;
+            white-space: nowrap;
+            animation: 15s wordsLoop linear infinite normal;
+            position: fixed; top:0; width: 100%; height: 20px; line-height: 20px; letter-spacing: 1px; color:#ff0000;
+        }
+
+        @keyframes wordsLoop {
+            0% {
+                transform: translateX(100px);
+                -webkit-transform: translateX(100px);
+            }
+            100% {
+                transform: translateX(-220%);
+                -webkit-transform: translateX(-220%);
+            }
+        }
+
+        @-webkit-keyframes wordsLoop {
+            0% {
+                transform: translateX(100px);
+                -webkit-transform: translateX(100px);
+            }
+            100% {
+                transform: translateX(-220%);
+                -webkit-transform: translateX(-220%);
+            }
+        }
+/*         .df_jh_drt{
+             padding-top: 20px;
+        } */
+    </style>

@@ -1,0 +1,48 @@
+.sd_guanzhu {
+	font-size: 12px;
+	color: #ff0000;
+	border: 1px solid #ff0000;
+	border-radius: 3px;
+	padding: 0 10px;
+	line-height: 20px;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.sd_guanzhu_ {
+	font-size: 12px;
+	color: #ff6b11;
+	border: 1px solid #ff6b11;
+	border-radius: 3px;
+	padding: 0 10px;
+	line-height: 20px;
+	display: inline-block;
+	margin-top: 10px;
+}
+
+.mui-table-view:before, .mui-table-view:after, .mui-table-view-cell:after
+	{
+	display: none
+}
+
+.sd_hjg_deeert {
+	width: 120px;
+	height: 120px;
+	/*  border:1px solid red  */
+}
+
+.eer_deert {
+	height: 50px;
+}
+
+.sd_jh_derett {
+	position: relative !important;
+	bottom: inherit;
+	margin-top: 20px;
+}
+
+.bgls_zfb {
+	background: #09f !important;
+	border: 1px solid #09f !important;
+	color: #fff;
+}
