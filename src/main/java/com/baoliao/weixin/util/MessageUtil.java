@@ -11,9 +11,15 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -22,6 +28,8 @@ import java.util.*;
 public class MessageUtil {
     protected static final Log log = LogFactory.getLog(MessageUtil.class);
 
+    private static HttpServletRequest request;
+    private static HttpServletResponse response;
     /**
      * 解析微信发来的请求（XML）
      *
@@ -53,7 +61,9 @@ public class MessageUtil {
         return map;
     }
 
-    public static String buildXml(Map<String, String> map, UserDao userDao) {
+    public static String buildXml(Map<String, String> map, UserDao userDao,HttpServletRequest req,HttpServletResponse res) {
+        request = req;
+        response = res;
         String result = "";
         // 发送方帐号（open_id）
         String fromUserName = map.get("FromUserName");
@@ -113,40 +123,15 @@ public class MessageUtil {
             }
 
         } else if (eventType.equals(Constants.MSG_TYPE.EVENT_TYPE_CLICK)) {
-            if (map.get("EventKey").equals("onLine")) {
-                // 按钮的点击事件
-                /*BaseMessage bsg = new BaseMessage();
-                bsg.setToUserName(fromUserName);
-                bsg.setFromUserName(toUserName);
-                bsg.setCreateTime(new Date().getTime());
-                bsg.setMsgType("transfer_customer_service");
-                SignUtil.xstream.alias("xml", bsg.getClass());
-                return SignUtil.xstream.toXML(bsg);*/
-                String content = "请求处理异常，请稍候尝试！";
-                TextMessage textMessage = new TextMessage();
-                textMessage.setToUserName(fromUserName);
-                textMessage.setFromUserName(toUserName);
-                textMessage.setCreateTime(new Date().getTime());
-                textMessage.setMsgType(Constants.MSG_TYPE.MESSAGE_TYPE_TEXT);
-                textMessage.setFuncFlag(0);
-                content = "请输入您需要咨询的问题，马上会有客服人员回复！";
-                textMessage.setContent(content);
-                SignUtil.xstream.alias("xml", textMessage.getClass());
-                return SignUtil.xstream.toXML(textMessage);
+            if (map.get("EventKey").equals("1111")) {
+                try {
+                    request.getRequestDispatcher("/index.jsp").forward(request,response);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (map.get("EventKey").equals("contact")) {
-                String content = "请求处理异常，请稍候尝试！";
-                TextMessage textMessage = new TextMessage();
-                textMessage.setToUserName(fromUserName);
-                textMessage.setFromUserName(toUserName);
-                textMessage.setCreateTime(new Date().getTime());
-                textMessage.setMsgType(Constants.MSG_TYPE.MESSAGE_TYPE_TEXT);
-                textMessage.setFuncFlag(0);
-                content = "电话服务热线：4008210539\n" +
-                        "QQ服务群：272068846、421109495\n" +
-                        "邮箱：wifi@support.akazam.com";
-                textMessage.setContent(content);
-                SignUtil.xstream.alias("xml", textMessage.getClass());
-                return SignUtil.xstream.toXML(textMessage);
             }
         }
         return "";

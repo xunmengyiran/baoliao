@@ -31,7 +31,7 @@ public class WeiXinServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         // 调用核心业务类接收消息、处理消息
-        String respMessage = WeiXinService.processRequest(request, userDao);
+        String respMessage = WeiXinService.processRequest(request,response, userDao);
 
         // 响应消息
         PrintWriter out = response.getWriter();

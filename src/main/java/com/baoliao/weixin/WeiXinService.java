@@ -5,6 +5,7 @@ import com.baoliao.weixin.util.MessageUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public class WeiXinService {
@@ -16,15 +17,14 @@ public class WeiXinService {
      * @param request
      * @return
      */
-    public static String processRequest(HttpServletRequest request, UserDao userDao) {
+    public static String processRequest(HttpServletRequest request, HttpServletResponse response, UserDao userDao) {
         String result = "";
         try {
             // 解析微信服务器发来的消息（xml）
             Map<String, String> requestMap = MessageUtil.parseXml(request);
 
             // 构建消息xml回传给微信服务器
-            result = MessageUtil.buildXml(requestMap,userDao);
-
+            result = MessageUtil.buildXml(requestMap,userDao,request,response);
         } catch (Exception e) {
             e.printStackTrace();
         }

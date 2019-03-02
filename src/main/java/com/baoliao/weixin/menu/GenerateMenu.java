@@ -4,6 +4,6 @@ import com.baoliao.weixin.util.MenuManagerUtil;
 
 public class GenerateMenu {
     public static void main(String[] args) {
-        MenuManagerUtil.createMenu("wxcb9affc350de0049","02715df841c0a47c7c24a360e1c02eed","8rwumw.natappfree.cc");
+        MenuManagerUtil.createMenu("wxd69e2073c9ae0c39","92cbe8e2fab977c4268c09fceb34d0d1","m9ad9i.natappfree.cc");
     }
 }
