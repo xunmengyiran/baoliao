@@ -4,7 +4,7 @@ package com.baoliao.weixin.message.resp;
  * 文本消息
  * 
  */
-public class TextMessage extends com.akazam.wifi.guoman.weixin.message.resp.BaseMessage {
+public class TextMessage extends com.baoliao.weixin.message.resp.BaseMessage {
 	// 回复的消息内容
 	private String Content;
 

@@ -1,4 +1,4 @@
-package com.akazam.wifi.guoman.weixin.message.resp;
+package com.baoliao.weixin.message.resp;
 
 /**
  * 音乐model

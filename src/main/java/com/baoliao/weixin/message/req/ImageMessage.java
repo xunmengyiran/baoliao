@@ -1,4 +1,4 @@
-package com.akazam.wifi.guoman.weixin.message.req;
+package com.baoliao.weixin.message.req;
 
 /**
  * 图片消息

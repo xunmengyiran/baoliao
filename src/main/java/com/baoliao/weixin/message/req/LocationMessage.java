@@ -1,10 +1,10 @@
-package com.akazam.wifi.guoman.weixin.message.req;
+package com.baoliao.weixin.message.req;
 
 /**
  * 地理位置消息
  *
  */
-public class LocationMessage extends BaseMessage {
+public class LocationMessage extends com.baoliao.weixin.message.req.BaseMessage {
     // 地理位置维度
     private String Location_X;
     // 地理位置经度

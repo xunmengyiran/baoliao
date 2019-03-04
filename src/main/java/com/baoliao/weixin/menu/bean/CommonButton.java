@@ -2,7 +2,6 @@ package com.baoliao.weixin.menu.bean;
 
 /***
  * 普通按钮（子按钮）
- * @author akazam
  *
  */
 public class CommonButton extends Button {

@@ -1,6 +1,5 @@
 package com.baoliao.weixin.util;
 
-import com.akazam.wifi.guoman.weixin.message.resp.BaseMessage;
 import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.AccessToken;
 import com.baoliao.weixin.dao.UserDao;
@@ -11,10 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.akazam.wifi.guoman.weixin.message.req;
+package com.baoliao.weixin.message.req;
 
 /**
  * 消息基类（普通用户 -> 公众帐号）
