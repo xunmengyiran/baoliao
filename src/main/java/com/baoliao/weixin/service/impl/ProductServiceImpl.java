@@ -41,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
         if (StringUtils.isNotEmpty(openId)) {
             vo.setOpenId(openId);
         }
+
         int i = productDao.insertSelective(vo);
         if (i > 0) {
             model.put("result", i);
