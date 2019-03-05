@@ -11,33 +11,72 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 03/03/2019 15:45:56
+ Date: 05/03/2019 11:32:49
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
+-- Table structure for tb_product
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_product`;
+CREATE TABLE `tb_product`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `open_id` bigint(20) NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `introduct` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `type` tinyint(4) NULL DEFAULT NULL,
+  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `picture_url` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `price` decimal(10, 0) NULL DEFAULT NULL,
+  `expritation_date` datetime NULL DEFAULT NULL,
+  `is_refund` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY USING BTREE (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for tb_trade
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_trade`;
+CREATE TABLE `tb_trade`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `open_id` bigint(20) NOT NULL,
+  `productb_id` int(11) NOT NULL,
+  `create_time` datetime NULL DEFAULT NULL,
+  `money` decimal(10, 0) NULL DEFAULT NULL,
+  PRIMARY KEY USING BTREE (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
 -- Table structure for tb_user
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_user`;
 CREATE TABLE `tb_user`  (
-  `id` int(13) NOT NULL AUTO_INCREMENT,
-  `userName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `open_id` bigint(20) NULL DEFAULT NULL,
+  `profit` decimal(10, 0) NULL DEFAULT NULL,
+  `balance` decimal(10, 0) NULL DEFAULT NULL,
+  `rate` float NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Records of tb_user
+-- Table structure for tb_vermicelli
 -- ----------------------------
-INSERT INTO `tb_user` VALUES (1, '11', '12222');
+DROP TABLE IF EXISTS `tb_vermicelli`;
+CREATE TABLE `tb_vermicelli`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `buyer_id` bigint(20) NOT NULL,
+  `selller_id` bigint(20) NOT NULL,
+  PRIMARY KEY USING BTREE (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Table structure for wechat_user_info
+-- Table structure for tb_wechat_user_info
 -- ----------------------------
-DROP TABLE IF EXISTS `wechat_user_info`;
-CREATE TABLE `wechat_user_info`  (
+DROP TABLE IF EXISTS `tb_wechat_user_info`;
+CREATE TABLE `tb_wechat_user_info`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `phoneNumber` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号码',
   `openId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '微信用户唯一标识',
@@ -59,9 +98,22 @@ CREATE TABLE `wechat_user_info`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 58 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Records of wechat_user_info
+-- Records of tb_wechat_user_info
 -- ----------------------------
-INSERT INTO `wechat_user_info` VALUES (56, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-01', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `wechat_user_info` VALUES (57, NULL, 'ohDAp1PykHDgkhyTXqEAEWQRo0bk', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-02', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tb_wechat_user_info` VALUES (56, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-01', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tb_wechat_user_info` VALUES (57, NULL, 'ohDAp1PykHDgkhyTXqEAEWQRo0bk', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-02', NULL, NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for tb_withdrawal
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_withdrawal`;
+CREATE TABLE `tb_withdrawal`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `open_id` bigint(20) NOT NULL,
+  `money` decimal(10, 0) NOT NULL,
+  `profit` decimal(10, 0) NULL DEFAULT 0,
+  `create_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY USING BTREE (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;

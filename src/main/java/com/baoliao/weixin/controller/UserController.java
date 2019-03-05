@@ -4,10 +4,8 @@ import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -17,6 +15,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 初始化用户信息，返回index.jsp
+     *
+     * @param request
+     * @return
+     */
     @GetMapping("/queryUserList")
     public String queryUserList(HttpServletRequest request){
         List<User> userList = userService.queryUserList();

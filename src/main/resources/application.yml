@@ -9,9 +9,12 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/baoliao
+    url: jdbc:mysql://127.0.0.1:3306/baoliao?characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
     username: root
     password: 123456
+    #url: jdbc:mysql://10.47.17.219:3306/baoliao?characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
+    #username: root
+    #password: root
   thymeleaf:
     cache: false
   mvc:

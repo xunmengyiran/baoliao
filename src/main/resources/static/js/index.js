@@ -1,6 +1,6 @@
 var path = "/lmjl_core";
 var basePath = "https://lmjl.ttkgou.com/lmjl_core/";
-var img_url = "http://lm-img.oss-cn-shenzhen.aliyuncs.com/res/";
+var img_url = "https://lm-img.oss-cn-shenzhen.aliyuncs.com/res/";
 
 $(function() {
 	
@@ -105,7 +105,7 @@ $(function() {
 		var color_s="#"+moban.split("_")[0];
 		var color_x="#"+moban.split("_")[1];
 		//var content = $('#content').val();//内容
-		
+        var code = $('#code').val();//openId
 		var strContent = document.getElementById("content").value;  
         //alert("处理前的strContent为\r\n"+strContent); 
         var content=getFormatCode(strContent);//内容
@@ -175,26 +175,27 @@ $(function() {
             time_cycle=sd_drrt; } */
         $(".dsf_Jh_dfgf").addClass("show");
         s_drer=true;
+        var data = {
+            'title' : title,
+            'content' : content,
+            'price' : price,
+            'introduct' : introduce,
+            'expritationDate' : expire_time_str,
+            'isRefund' : is_refund,
+			'code':code
+        };
 		$.ajax({
 			type : 'POST',
-			url : path+'/weixin/resource_add',
-			data :{
-				'title' : title,
-				'content' : content,
-				'img' : img,
-				'price' : price,
-				'color_s' : color_s,
-				'color_x' : color_x,
-				'introduce' : introduce,
-				'expire_time_str' : expire_time_str,
-				'is_refund' : is_refund,
-				'time_cycle' : time_cycle
-			},
-			dataType : 'json',
-			success : function(result) {
+			url : '/product/save',
+            data:JSON.stringify(data),
+            contentType : "application/json",
+            dataType: 'json',
+			success : function(data) {
+				alert(data.result);
+                var str = eval('(' + data + ')');
 				$(".dsf_Jh_dfgf").removeClass("show");
 				s_drer=false;
-	            if (result.success) {
+	            if (str.result==1) {
 	            	window.location.href=basePath+"weixin/get_resource_info?type=1&id="+result.data;
 				}else{
 					 mui.alert(result.msg)}

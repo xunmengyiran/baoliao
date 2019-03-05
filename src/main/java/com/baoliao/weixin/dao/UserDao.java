@@ -1,13 +1,24 @@
 package com.baoliao.weixin.dao;
-
 import com.baoliao.weixin.bean.User;
 import org.apache.ibatis.annotations.Mapper;
-
 import java.util.List;
+
 @Mapper
 public interface UserDao {
+    /**
+     * 获取所有用户
+     * @return
+     */
+    //TODO
+    //暂时获取所有用户 后续换成特定用户，例如：绑定的用户
     List<User> queryUserList();
 
+    /**
+     * 绑定微信
+     *
+     * @param user
+     * @return
+     */
     int bindWeChatUser(User user);
 
     /**

@@ -22,6 +22,12 @@ public class User {
     private String[] privilege;
     private String privilegeStr;
 
+    private Long profit;
+
+    private Long balance;
+
+    private Float rate;
+
     public int getId() {
         return id;
     }
@@ -164,5 +170,29 @@ public class User {
 
     public void setPrivilegeStr(String privilegeStr) {
         this.privilegeStr = privilegeStr;
+    }
+
+    public Long getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Long profit) {
+        this.profit = profit;
+    }
+
+    public Long getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Long balance) {
+        this.balance = balance;
+    }
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public void setRate(Float rate) {
+        this.rate = rate;
     }
 }

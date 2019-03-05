@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baoliao.weixin.dao.ProductDao" >
+  <resultMap id="BaseResultMap" type="com.baoliao.weixin.bean.Product" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="open_id" property="openId" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="introduct" property="introduct" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="expritation_date" property="expritationDate" jdbcType="VARCHAR" />
+    <result column="is_refund" property="isRefund" jdbcType="TINYINT" />
+  </resultMap>
+  <insert id="insert" parameterType="com.baoliao.weixin.bean.Product" >
+    insert into t_product (id, open_id, title,
+      introduct, type, content,
+      picture_url, price, expritation_date,
+      is_refund)
+    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
+      #{introduct,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR},
+      #{pictureUrl,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{expritationDate,jdbcType=VARCHAR},
+      #{isRefund,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.baoliao.weixin.bean.Product" >
+    insert into TB_PRODUCT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="introduct != null" >
+        introduct,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="pictureUrl != null" >
+        picture_url,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="expritationDate != null" >
+        expritation_date,
+      </if>
+      <if test="isRefund != null" >
+        is_refund,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="introduct != null" >
+        #{introduct,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null" >
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="expritationDate != null" >
+        #{expritationDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isRefund != null" >
+        #{isRefund,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

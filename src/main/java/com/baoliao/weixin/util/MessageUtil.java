@@ -26,6 +26,7 @@ public class MessageUtil {
 
     private static HttpServletRequest request;
     private static HttpServletResponse response;
+
     /**
      * 解析微信发来的请求（XML）
      *
@@ -57,7 +58,7 @@ public class MessageUtil {
         return map;
     }
 
-    public static String buildXml(Map<String, String> map, UserDao userDao,HttpServletRequest req,HttpServletResponse res) {
+    public static String buildXml(Map<String, String> map, UserDao userDao, HttpServletRequest req, HttpServletResponse res) {
         request = req;
         response = res;
         String result = "";
@@ -86,7 +87,7 @@ public class MessageUtil {
     }
 
     public static String buildTextMessage(Map<String, String> map, String fromUserName, String toUserName, UserDao userDao) {
-    return null;
+        return null;
     }
 
     public String buildImageMessage(Map<String, String> map, String fromUserName, String toUserName) {
@@ -121,7 +122,7 @@ public class MessageUtil {
         } else if (eventType.equals(Constants.MSG_TYPE.EVENT_TYPE_CLICK)) {
             if (map.get("EventKey").equals("1111")) {
                 try {
-                    request.getRequestDispatcher("/index.jsp").forward(request,response);
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                 } catch (ServletException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
