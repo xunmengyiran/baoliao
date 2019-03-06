@@ -36,7 +36,7 @@ public class MenuManagerUtil {
             // 删除
 //        String requestUrl = Constants.URL.MENU_DELETE_URL.replace("ACCESS_TOKEN", at.getToken());
 //        JSONObject jobj =WeixinIntefaceUtil.httpRequest(requestUrl, "GET", "");
-//        log.info(jobj.toString());
+//        log.info("删除成功。"+jobj.toString());
 //         查询
 //        String requestUrl = Constants.URL.MENU_QUERY_URL.replace("ACCESS_TOKEN", at.getToken());
 //        JSONObject jobj =WeixinIntefaceUtil.httpRequest(requestUrl, "GET", "");

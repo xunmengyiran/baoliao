@@ -3,37 +3,37 @@ package com.baoliao.weixin.bean;
 import java.util.Date;
 
 public class Trade {
-    private Integer id;
+    private int id;
 
-    private Long openId;
+    private String openId;
 
-    private Integer productId;
+    private int productId;
 
     private Date createTime;
 
-    private Long money;
+    private String money;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getOpenId() {
+    public String getOpenId() {
         return openId;
     }
 
-    public void setOpenId(Long openId) {
+    public void setOpenId(String openId) {
         this.openId = openId;
     }
 
-    public Integer getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(Integer productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -45,11 +45,11 @@ public class Trade {
         this.createTime = createTime;
     }
 
-    public Long getMoney() {
+    public String getMoney() {
         return money;
     }
 
-    public void setMoney(Long money) {
+    public void setMoney(String money) {
         this.money = money;
     }
 }

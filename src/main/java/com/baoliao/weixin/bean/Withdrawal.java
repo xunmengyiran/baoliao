@@ -3,7 +3,7 @@ package com.baoliao.weixin.bean;
 import java.util.Date;
 
 public class Withdrawal {
-    private Integer id;
+    private int id;
 
     private Long openId;
 

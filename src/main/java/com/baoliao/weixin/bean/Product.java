@@ -1,7 +1,7 @@
 package com.baoliao.weixin.bean;
 
 public class Product {
-    private Integer id;
+    private int id;
 
     private String openId;
 
@@ -9,25 +9,25 @@ public class Product {
 
     private String introduct;
 
-    private Byte type;
+    private String type;
 
     private String content;
 
     private String pictureUrl;
 
-    private Long price;
+    private String price;
 
     private String expritationDate;
 
-    private Byte isRefund;
+    private String isRefund;
 
     private String code;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -44,7 +44,7 @@ public class Product {
     }
 
     public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
+        this.title = title;
     }
 
     public String getIntroduct() {
@@ -52,14 +52,14 @@ public class Product {
     }
 
     public void setIntroduct(String introduct) {
-        this.introduct = introduct == null ? null : introduct.trim();
+        this.introduct = introduct;
     }
 
-    public Byte getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -68,7 +68,7 @@ public class Product {
     }
 
     public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+        this.content = content;
     }
 
     public String getPictureUrl() {
@@ -76,14 +76,14 @@ public class Product {
     }
 
     public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl == null ? null : pictureUrl.trim();
+        this.pictureUrl = pictureUrl;
     }
 
-    public Long getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -95,11 +95,11 @@ public class Product {
         this.expritationDate = expritationDate;
     }
 
-    public Byte getIsRefund() {
+    public String getIsRefund() {
         return isRefund;
     }
 
-    public void setIsRefund(Byte isRefund) {
+    public void setIsRefund(String isRefund) {
         this.isRefund = isRefund;
     }
 
