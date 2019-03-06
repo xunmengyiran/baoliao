@@ -212,15 +212,15 @@
 </section>
 
 <section class="dsf_jh_derert mui-row ">
-    <a class="mui-col-xs-4 z3 act" href="https://lmjl.ttkgou.com/lmjl_core/weixin/resource_add_">
+    <a class="mui-col-xs-4 z3 act" href="http://localhost/user/queryUserList">
         <i class="dx icon-wenjian  fz22"></i>
         <p class="fz12">首页</p>
     </a>
-    <a class="mui-col-xs-4 z3" href="https://lmjl.ttkgou.com/lmjl_core/weixin/resource_record">
+    <a class="mui-col-xs-4 z3" href="http://localhost/user/queryMyCode">
         <i class="dx icon-ziliaoku fz20"></i>
         <p class="fz12">我的料</p>
     </a>
-    <a class="mui-col-xs-4 z3 " href="https://lmjl.ttkgou.com/lmjl_core/weixin/account_info">
+    <a class="mui-col-xs-4 z3 " href="http://localhost/user/queryMyInfo">
         <i class="dx icon-qiandai  fz24"></i>
         <p class="fz12">我的</p>
     </a>
