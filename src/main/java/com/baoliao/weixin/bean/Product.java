@@ -1,7 +1,5 @@
 package com.baoliao.weixin.bean;
 
-import java.util.Date;
-
 public class Product {
     private Integer id;
 
