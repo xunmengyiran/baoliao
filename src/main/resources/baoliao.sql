@@ -11,7 +11,7 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 06/03/2019 14:06:31
+ Date: 09/03/2019 23:49:32
 */
 
 SET NAMES utf8mb4;
@@ -28,12 +28,12 @@ CREATE TABLE `tb_product`  (
   `introduct` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '简介',
   `type` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料码内容描述',
-  `picture_url` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图片url',
+  `img_arr` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图片url',
   `price` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '料码价格',
   `expritation_date` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '过期时间',
   `is_refund` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否退款(1:有退款 0：没有退款)',
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_product
@@ -41,6 +41,8 @@ CREATE TABLE `tb_product`  (
 INSERT INTO `tb_product` VALUES (1, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '你', '', '5', '2019-03-05 12:59:00', '0');
 INSERT INTO `tb_product` VALUES (2, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '在', '', '5', '2019-03-05 13:06:00', '0');
 INSERT INTO `tb_product` VALUES (3, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '88', '2019-03-06 11:03:00', '0');
+INSERT INTO `tb_product` VALUES (4, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '', '20190309175011,20190309175011', '88', '2019-03-09 17:49', '0');
+INSERT INTO `tb_product` VALUES (5, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 'www嗯嗯', '电饭锅黄金甲家具', NULL, '', '20190309232444,20190309232456', '1', '2019-03-18 23:24', '0');
 
 -- ----------------------------
 -- Table structure for tb_trade
@@ -102,7 +104,7 @@ CREATE TABLE `tb_wechat_user_info`  (
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `privilege` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_wechat_user_info
@@ -111,6 +113,7 @@ INSERT INTO `tb_wechat_user_info` VALUES (56, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllI
 INSERT INTO `tb_wechat_user_info` VALUES (57, NULL, 'ohDAp1PykHDgkhyTXqEAEWQRo0bk', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-02', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `tb_wechat_user_info` VALUES (58, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-05', '2019-03-05 13:02:55', NULL, NULL, NULL, NULL);
 INSERT INTO `tb_wechat_user_info` VALUES (59, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-05', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tb_wechat_user_info` VALUES (60, NULL, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-09', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tb_withdrawal
