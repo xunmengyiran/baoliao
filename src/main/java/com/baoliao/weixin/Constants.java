@@ -4,7 +4,6 @@ import com.baoliao.weixin.bean.AccessToken;
 
 public interface Constants {
     AccessToken CURRENT_TOKEN = null;
-
     interface WECHAT_PARAMETER {
         String APPID = "wxd69e2073c9ae0c39";
         String APPSECRET = "92cbe8e2fab977c4268c09fceb34d0d1";

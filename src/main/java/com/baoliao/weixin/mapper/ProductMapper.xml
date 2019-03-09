@@ -8,7 +8,7 @@
     <result column="introduct" property="introduct" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+      <result column="img_arr" property="imgArr" jdbcType="VARCHAR"/>
     <result column="price" property="price" jdbcType="DECIMAL" />
     <result column="expritation_date" property="expritationDate" jdbcType="VARCHAR" />
     <result column="is_refund" property="isRefund" jdbcType="TINYINT" />
@@ -16,11 +16,11 @@
   <insert id="insert" parameterType="com.baoliao.weixin.bean.Product" >
     insert into t_product (id, open_id, title,
       introduct, type, content,
-      picture_url, price, expritation_date,
+      img_arr, price, expritation_date,
       is_refund)
     values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
       #{introduct,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR},
-      #{pictureUrl,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{expritationDate,jdbcType=VARCHAR},
+      #{img_arr,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{expritationDate,jdbcType=VARCHAR},
       #{isRefund,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.baoliao.weixin.bean.Product" >
@@ -44,8 +44,8 @@
       <if test="content != null" >
         content,
       </if>
-      <if test="pictureUrl != null" >
-        picture_url,
+        <if test="imgArr != null">
+            img_arr,
       </if>
       <if test="price != null" >
         price,
@@ -76,8 +76,8 @@
       <if test="content != null" >
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="pictureUrl != null" >
-        #{pictureUrl,jdbcType=VARCHAR},
+        <if test="imgArr != null">
+            #{imgArr,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},

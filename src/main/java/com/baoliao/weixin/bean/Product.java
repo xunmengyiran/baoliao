@@ -1,5 +1,7 @@
 package com.baoliao.weixin.bean;
 
+import java.util.List;
+
 public class Product {
     private int id;
 
@@ -13,7 +15,7 @@ public class Product {
 
     private String content;
 
-    private String pictureUrl;
+    private String imgArr;
 
     private String price;
 
@@ -71,14 +73,6 @@ public class Product {
         this.content = content;
     }
 
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
-    }
-
     public String getPrice() {
         return price;
     }
@@ -109,5 +103,13 @@ public class Product {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getImgArr() {
+        return imgArr;
+    }
+
+    public void setImgArr(String imgArr) {
+        this.imgArr = imgArr;
     }
 }
