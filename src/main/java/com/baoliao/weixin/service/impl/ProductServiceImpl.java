@@ -2,6 +2,7 @@ package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Product;
+import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.dao.ProductDao;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.util.Utils;
@@ -39,12 +40,34 @@ public class ProductServiceImpl implements ProductService {
     public String insertSelective(HttpServletRequest request, Product vo) {
         String code = vo.getCode();
         HttpSession session = request.getSession();
-        String openId = (String) session.getAttribute("openId");
-        if (StringUtils.isEmpty(openId)) {
+        User user = (User) session.getAttribute("user");
+        String openId = user.getOpenId();
+        if (user == null) {
             String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
             JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
             openId = jsonObject.getString("openid");
-            session.setAttribute("openId", openId);
+            String access_token = jsonObject.getString("access_token");
+            String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
+            jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
+            String nickName = jsonObject.getString("nickname");
+            String sex = jsonObject.getString("sex");
+            String language = jsonObject.getString("language");
+            String city = jsonObject.getString("city");
+            String province = jsonObject.getString("province");
+            String country = jsonObject.getString("country");
+            String headImgUrl = jsonObject.getString("headimgurl");
+
+            user = new User();
+            user.setOpenId(openId);
+            user.setNickName(nickName);
+            user.setSex(Integer.parseInt(sex));
+            user.setLanguage(language);
+            user.setCity(city);
+            user.setProvince(province);
+            user.setCountry(country);
+            user.setHeadimgUrl(headImgUrl);
+            // 由于code只能使用一次，所以将用户信息存入session
+            request.getSession().setAttribute("user", user);
         }
         Map<String, Object> model = new HashMap<String, Object>();
         if (StringUtils.isNotEmpty(openId)) {

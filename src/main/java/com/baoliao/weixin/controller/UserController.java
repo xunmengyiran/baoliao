@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -21,10 +22,29 @@ public class UserController {
      * @param request
      * @return
      */
-    @GetMapping("/queryUserList")
-    public String queryUserList(HttpServletRequest request){
-        List<User> userList = userService.queryUserList();
-        request.setAttribute("userList",userList);
+    @GetMapping("/goIndex")
+    public String goIndex(HttpServletRequest request) {
+        try {
+//            List<User> userList = userService.goIndex();
+//            request.setAttribute("userList", userList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "index";
+    }
+
+    @GetMapping("/queryMyCode")
+    public String queryMyCode() {
+        return "myCode";
+    }
+
+    @GetMapping("/queryMyInfo")
+    public String queryMyInfo(HttpServletRequest request) {
+        try {
+            userService.queryMyInfo(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "myInfo";
     }
 }

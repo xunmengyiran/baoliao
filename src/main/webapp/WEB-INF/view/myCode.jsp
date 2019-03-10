@@ -54,15 +54,15 @@
 </section>
 
 <section class="dsf_jh_derert mui-row ">
-    <a class="mui-col-xs-4 z3 act" href="http://localhost/user/queryUserList">
+    <a class="mui-col-xs-4 z3 act" href="/user/goIndex">
         <i class="dx icon-wenjian  fz22"></i>
         <p class="fz12">首页</p>
     </a>
-    <a class="mui-col-xs-4 z3" href="http://localhost/user/queryMyCode">
+    <a class="mui-col-xs-4 z3" href="/user/queryMyCode">
         <i class="dx icon-ziliaoku fz20"></i>
         <p class="fz12">我的料</p>
     </a>
-    <a class="mui-col-xs-4 z3 " href="http://localhost/user/queryMyInfo">
+    <a class="mui-col-xs-4 z3 " href="/user/queryMyInfo">
         <i class="dx icon-qiandai  fz24"></i>
         <p class="fz12">我的</p>
     </a>

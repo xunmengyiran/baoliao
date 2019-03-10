@@ -1,12 +1,12 @@
 <%@page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>首页</title>
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
-
     <!-- 本地资源 -->
     <link rel="stylesheet" href="/css/index.css" type="text/css"/>
     <link href="/css/mui.min.css" rel="stylesheet"/>
@@ -210,17 +210,16 @@
         </section>
     </section>
 </section>
-
 <section class="dsf_jh_derert mui-row ">
-    <a class="mui-col-xs-4 z3 act" href="http://localhost/user/queryUserList">
+    <a class="mui-col-xs-4 z3 act" href="/user/goIndex">
         <i class="dx icon-wenjian  fz22"></i>
         <p class="fz12">首页</p>
     </a>
-    <a class="mui-col-xs-4 z3" href="http://localhost/user/queryMyCode">
+    <a class="mui-col-xs-4 z3" href="/user/queryMyCode">
         <i class="dx icon-ziliaoku fz20"></i>
         <p class="fz12">我的料</p>
     </a>
-    <a class="mui-col-xs-4 z3 " href="http://localhost/user/queryMyInfo">
+    <a class="mui-col-xs-4 z3 " href="/user/queryMyInfo">
         <i class="dx icon-qiandai  fz24"></i>
         <p class="fz12">我的</p>
     </a>

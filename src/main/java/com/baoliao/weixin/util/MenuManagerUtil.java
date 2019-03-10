@@ -53,7 +53,7 @@ public class MenuManagerUtil {
         ComplexButton button1 = new ComplexButton();
         button1.setName("彩料助手");
         button1.setType("view");
-        button1.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri=http://"+redirect_domain_name+"/user/queryUserList&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+        button1.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=http://" + redirect_domain_name + "/user/goIndex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 //        // 菜单1的子菜单
 //        ViewButton button1_1 = new ViewButton();
 //        button1_1.setName("订购时长卡");
@@ -86,7 +86,7 @@ public class MenuManagerUtil {
         ComplexButton button2 = new ComplexButton();
         button2.setName("我的");
         button2.setType("view");
-        button2.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid="+appid+"&redirect_uri=http://"+redirect_domain_name+"/user/queryUserList&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
+        button2.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=http://" + redirect_domain_name + "/user/queryMyInfo&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect");
 //        // 菜单2的子菜单
 ////        ViewButton button2_1 = new ViewButton();
 ////        button2_1.setName("优惠领取");

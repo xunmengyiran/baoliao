@@ -108,9 +108,9 @@
     <!--  <p class="cf pl10">今日收益</p> -->
     <section class='cf  pl10 fz12'>今日收益
         <section class='df_jh_deet cf cen  fr pr20 ab'>
-            <image src='http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKJQmibj0EJBJ92AuQicQDG6G7GRuNgJL3y6Gg9zkhX4FuU2b9Bo2xhhZaZJlZ8owpX6BEg7ibtu4ciaA/132'
+            <image src='${sessionScope.user.headimgUrl}'
                    class='user_icon_e yj cz ab'></image>
-            <span class=' fz12 cz '>a何文?a</span>
+            <span class=' fz12 cz '>${sessionScope.user.nickName}</span>
         </section>
     </section>
     <view class="qc">
@@ -175,15 +175,15 @@
 </section>
 
 <section class="dsf_jh_derert mui-row ">
-    <a class="mui-col-xs-4 z3 act" href="http://localhost/user/queryUserList">
+    <a class="mui-col-xs-4 z3 act" href="/user/goIndex">
         <i class="dx icon-wenjian  fz22"></i>
         <p class="fz12">首页</p>
     </a>
-    <a class="mui-col-xs-4 z3" href="http://localhost/user/queryMyCode">
+    <a class="mui-col-xs-4 z3" href="/user/queryMyCode">
         <i class="dx icon-ziliaoku fz20"></i>
         <p class="fz12">我的料</p>
     </a>
-    <a class="mui-col-xs-4 z3 " href="http://localhost/user/queryMyInfo">
+    <a class="mui-col-xs-4 z3 " href="/user/queryMyInfo">
         <i class="dx icon-qiandai  fz24"></i>
         <p class="fz12">我的</p>
     </a>
