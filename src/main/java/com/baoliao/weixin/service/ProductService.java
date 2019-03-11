@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface ProductService {
 
-    String insertSelective(HttpServletRequest request, Product record) throws Exception;
+    String saveProduct(HttpServletRequest request, Product record) throws Exception;
 
     String uploadImgByBase64(HttpServletRequest request, String imgData, String format) throws Exception;
 }

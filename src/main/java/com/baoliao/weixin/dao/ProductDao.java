@@ -5,5 +5,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductDao {
 
-    int insertSelective(Product product);
+    int saveProduct(Product product);
 }

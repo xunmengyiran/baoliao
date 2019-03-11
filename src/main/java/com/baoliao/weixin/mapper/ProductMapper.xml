@@ -23,7 +23,7 @@
       #{img_arr,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{expritationDate,jdbcType=VARCHAR},
       #{isRefund,jdbcType=TINYINT})
   </insert>
-    <insert id="insertSelective" parameterType="com.baoliao.weixin.bean.Product" useGeneratedKeys="true"
+    <insert id="saveProduct" parameterType="com.baoliao.weixin.bean.Product" useGeneratedKeys="true"
             keyProperty="id">
     insert into TB_PRODUCT
     <trim prefix="(" suffix=")" suffixOverrides="," >

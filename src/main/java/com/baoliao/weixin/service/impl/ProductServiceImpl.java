@@ -9,7 +9,10 @@ import com.baoliao.weixin.util.Utils;
 import com.baoliao.weixin.util.WeixinIntefaceUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
@@ -31,18 +34,24 @@ import java.util.Map;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+    @Value("${domain_name}")
+    private String domainName;
+    private Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Autowired
     ProductDao productDao;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmsssss");
 
     @Override
-    public String insertSelective(HttpServletRequest request, Product vo) {
+    public String saveProduct(HttpServletRequest request, Product vo) {
         String code = vo.getCode();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        String openId = user.getOpenId();
-        if (user == null) {
+        String openId = "dev";
+        if (user != null) {
+            openId = user.getOpenId();
+        } else {
             String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
             JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
             openId = jsonObject.getString("openid");
@@ -67,14 +76,14 @@ public class ProductServiceImpl implements ProductService {
             user.setCountry(country);
             user.setHeadimgUrl(headImgUrl);
             // 由于code只能使用一次，所以将用户信息存入session
-            request.getSession().setAttribute("user", user);
+            session.setAttribute("user", user);
         }
         Map<String, Object> model = new HashMap<String, Object>();
         if (StringUtils.isNotEmpty(openId)) {
             vo.setOpenId(openId);
         }
 
-        int i = productDao.insertSelective(vo);
+        int i = productDao.saveProduct(vo);
         if (i > 0) {
             model.put("result", i);
             model.put("msg", "成功");
@@ -82,6 +91,19 @@ public class ProductServiceImpl implements ProductService {
             model.put("result", i);
             model.put("msg", "保存数据出现异常:" + i);
         }
+        log.info("读取的域名配置是:" + domainName);
+        File file = null;
+        try {
+            file = new File(ResourceUtils.getURL("classpath:").getPath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "QRCodeImg" + File.separator;
+        String logoPath = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img" + File.separator + "logo.png";
+        int fileName = Utils.zxingCodeCreate(domainName + "/product/detailInfo?id=" + vo.getId() + "&price=" + vo.getPrice(), path, 250, logoPath);
+        log.info("生成的二维码名称:" + fileName);
+        session.setAttribute("fileName", fileName + ".jpg");
+        session.setAttribute("product", vo);
         JSONObject jObject = JSONObject.fromObject(model);
         return jObject.toString();
     }

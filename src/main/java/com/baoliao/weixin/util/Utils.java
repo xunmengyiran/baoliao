@@ -64,7 +64,8 @@ public class Utils {
         }
     }
 
-    public static boolean zxingCodeCreate(String content, String path, Integer size, String logoPath) {
+    public static int zxingCodeCreate(String content, String path, Integer size, String logoPath) {
+        int fileName = 0;
         try {
             //图片类型
             String imageType = "jpg";
@@ -72,17 +73,17 @@ public class Utils {
             BufferedImage image = getBufferedImage(content, size, logoPath);
             //获得随机数
             Random random = new Random();
+            fileName = random.nextInt(1000);
             //生成二维码存放文件
-            File file = new File(path + random.nextInt(1000) + ".jpg");
+            File file = new File(path + fileName + ".jpg");
             if (!file.exists()) {
                 file.mkdirs();
             }
             ImageIO.write(image, imageType, file);
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
+        return fileName;
     }
 
     public static BufferedImage getBufferedImage(String content, Integer size, String logoPath) {
@@ -144,6 +145,6 @@ public class Utils {
     }
 
     public static void main(String[] args) {
-        System.out.println(zxingCodeCreate("1234567", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
+        System.out.println(zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
     }
 }

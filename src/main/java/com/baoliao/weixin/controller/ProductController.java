@@ -4,6 +4,8 @@ import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.service.ProductService;
 import org.apache.commons.collections.bag.SynchronizedBag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/product")
 public class ProductController {
+
+    private Logger log = LoggerFactory.getLogger(ProductController.class);
+
     @Autowired
     private ProductService productService;
 
@@ -28,16 +34,23 @@ public class ProductController {
      * @param vo
      */
     @PostMapping("/save")
-    public void queryUserList(HttpServletRequest request, HttpServletResponse response, @RequestBody Product vo) {
+    public void saveProduct(HttpServletRequest request, HttpServletResponse response, @RequestBody Product vo) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setCharacterEncoding("UTF-8");
         PrintWriter pw = null;
         try {
-            String result = productService.insertSelective(request, vo);
+            String result = productService.saveProduct(request, vo);
             pw = response.getWriter();
             pw.write(result);
+            log.info("保存数据成功:" + result);
         } catch (IOException e1) {
             e1.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("保存数据出错" + e);
         } finally {
             pw.flush();
             pw.close();
@@ -52,13 +65,30 @@ public class ProductController {
             pw = response.getWriter();
             pw.write(result);
         } catch (IOException e1) {
+            log.error("上传图片出错1" + e1);
             e1.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("上传图片出错2" + e);
         } finally {
             pw.flush();
             pw.close();
         }
 
+    }
+
+    @GetMapping("resultPage")
+    public String goGenerateResultPage() {
+        return "generate_result";
+    }
+
+    @GetMapping("detailInfo")
+    public String getDetailInfoByScan(@RequestParam String id, @RequestParam String price) {
+        log.info("扫描二维码获取到的id是:" + id + ",价格是:" + price);
+        if ("0".equals(price)) {
+            return "product_detail_info";
+        } else {
+
+        }
+        return "pay";
     }
 }

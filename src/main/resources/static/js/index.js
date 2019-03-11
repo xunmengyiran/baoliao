@@ -198,13 +198,13 @@ $(function () {
             contentType: "application/json",
             dataType: 'json',
             success: function (data) {
-                var str = eval('(' + data + ')');
+                // var str = eval('(' + data + ')');
                 $(".dsf_Jh_dfgf").removeClass("show");
                 s_drer = false;
-                if (str.result == 1) {
-                    window.location.href = basePath + "weixin/get_resource_info?type=1&id=" + result.data;
+                if (data.result == 1) {
+                    window.location.href = "http://28nmdc.natappfree.cc/product/resultPage";
                 } else {
-                    mui.alert(result.msg)
+                    mui.alert(data.msg)
                 }
             },
             error: function () {

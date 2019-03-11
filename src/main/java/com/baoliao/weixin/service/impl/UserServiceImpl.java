@@ -2,11 +2,14 @@ package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.User;
+import com.baoliao.weixin.controller.UserController;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.WeixinIntefaceUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     UserDao userDao;
 
@@ -31,13 +36,16 @@ public class UserServiceImpl implements UserService {
         HttpSession session = request.getSession();
         String openId = (String) session.getAttribute("openId");
         User user = (User) session.getAttribute("user");
+        log.info("从session中获取的user:" + user);
         if (user == null) {
             String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
             JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
+            log.info("jsonObject1:" + jsonObject);
             openId = jsonObject.getString("openid");
             String access_token = jsonObject.getString("access_token");
             String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
             jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
+            log.info("jsonObject2:" + jsonObject);
             String nickName = jsonObject.getString("nickname");
             String sex = jsonObject.getString("sex");
             String language = jsonObject.getString("language");
