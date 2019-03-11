@@ -30,12 +30,12 @@
 </section>
 
 <section class="mt20 cen">
-    <img src="/static/img/132.jpg" class="yj user_icon_b"/>
-    <p class="fz13 mt5">良心球料发单号</p>
+    <img src="${sessionScope.user.headimgUrl}" class="yj user_icon_b"/>
+    <p class="fz13 mt5">${sessionScope.user.nickName}</p>
     <div><span class="sd_guanzhu">关注作者</span></div>
     <span class="b fz16 sd_jgh_ddr">CBA消息单</span>
     <section class="mt15">
-        <span class="fz14 dserrf_jh_d br yj4"><span class="num_er red fz30">6</span> 元</span>
+        <span class="fz14 dserrf_jh_d br yj4"><span class="num_er red fz30">${sessionScope.price}</span> 元</span>
     </section>
     <input type="hidden" name="price" id="price" value="6"/>
     <input type="hidden" name="id" id="id" value="453477"/>
@@ -46,7 +46,7 @@
 
     <p class="fz12 mt5 z3 cen  pd">
         <a class="mui-btn bgls  pt10 pm10 fz16 " style="width:320px" id="pay_resource" data-type="weixin">微信支付获取付费资源</a>
-        <a class="mui-btn bgls_zfb  pt10 pm10 fz16 mt10" style="width:320px" id="pay_resource_zfb" data-type="zfb">支付宝支付获取付费资源</a>
+        <%--<a class="mui-btn bgls_zfb  pt10 pm10 fz16 mt10" style="width:320px" id="pay_resource_zfb" data-type="zfb">支付宝支付获取付费资源</a>--%>
     </p>
 
     <p class="red fz12 dfdf_deererty mt20">温馨提示：关注料码精灵公众号 <br/>新建料、查看购买记录、接收消息提醒</p>
@@ -59,7 +59,7 @@
 </section>
 
 <section class="sd_jh_derett cen">
-    <img src="https://lmjl.ttkgou.com/lmjl_core/img/lmjl_qr.jpg" class="sd_hjg_deeert"/>
+    <img src="http://47.98.48.197:8090/qrcode_for_gh_4a3e9c82befd_258.jpg" class="sd_hjg_deeert"/>
     <p class="red fz12 dfdf_deererty ">长按识别 关注公众号</p>
 </section>
 </body>

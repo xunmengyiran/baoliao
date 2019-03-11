@@ -4,13 +4,12 @@ mybatis:
   mapper-locations: classpath:com/baoliao/weixin/mapper/*Mapper.xml
 spring:
   profiles:
-    active: dev
+    active: prod
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/baoliao?characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
     username: root
-    #    password: root
-    password: 123456
+    password: Bingbet
   thymeleaf:
     cache: false
   mvc:
@@ -18,9 +17,11 @@ spring:
       prefix: /WEB-INF/view/
       suffix: .jsp
 
-domain_name: http://28nmdc.natappfree.cc
+#扫描二维码后跳转的域名
+domain_name: http://cailiao.bingbet.net
 
 #上传图片存储位置
 product_img_path: /root/servers/file_server/tomcat8534/webapps/ROOT/userImg/
+
 #生成的二维码位置
 qr_code_img_path: /root/servers/file_server/tomcat8534/webapps/ROOT/QRCodeImg/

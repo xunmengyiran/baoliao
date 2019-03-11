@@ -28,59 +28,44 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Administrator on 2019\3\4 0004.
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     @Value("${domain_name}")
     private String domainName;
-    private Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
+    @Value("${product_img_path}")
+    private String productImgPath;
+
+    @Value("${qr_code_img_path}")
+    private String qrCodeImgPath;
+
+    @Value("${spring.profiles.active}")
+    protected String activeProfile;
+
 
     @Autowired
     ProductDao productDao;
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmsssss");
 
     @Override
     public String saveProduct(HttpServletRequest request, Product vo) {
         String code = vo.getCode();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        String openId = "dev";
-        if (user != null) {
-            openId = user.getOpenId();
-        } else {
-            String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
-            JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
-            openId = jsonObject.getString("openid");
-            String access_token = jsonObject.getString("access_token");
-            String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
-            jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
-            String nickName = jsonObject.getString("nickname");
-            String sex = jsonObject.getString("sex");
-            String language = jsonObject.getString("language");
-            String city = jsonObject.getString("city");
-            String province = jsonObject.getString("province");
-            String country = jsonObject.getString("country");
-            String headImgUrl = jsonObject.getString("headimgurl");
-
-            user = new User();
-            user.setOpenId(openId);
-            user.setNickName(nickName);
-            user.setSex(Integer.parseInt(sex));
-            user.setLanguage(language);
-            user.setCity(city);
-            user.setProvince(province);
-            user.setCountry(country);
-            user.setHeadimgUrl(headImgUrl);
-            // 由于code只能使用一次，所以将用户信息存入session
+        if (user == null) {
+            user = Utils.getUserInfoByCode(code);
             session.setAttribute("user", user);
         }
         Map<String, Object> model = new HashMap<String, Object>();
-        if (StringUtils.isNotEmpty(openId)) {
-            vo.setOpenId(openId);
+        if (StringUtils.isNotEmpty(user.getOpenId())) {
+            vo.setOpenId(user.getOpenId());
         }
 
         int i = productDao.saveProduct(vo);
@@ -98,10 +83,17 @@ public class ProductServiceImpl implements ProductService {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        String path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "QRCodeImg" + File.separator;
-        String logoPath = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img" + File.separator + "logo.png";
-        int fileName = Utils.zxingCodeCreate(domainName + "/product/detailInfo?id=" + vo.getId() + "&price=" + vo.getPrice(), path, 250, logoPath);
+        String path = qrCodeImgPath;
+        String logoPath = qrCodeImgPath + "logo.png";
+        if ("dev".equals(activeProfile)) {
+            path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "QRCodeImg" + File.separator;
+            logoPath = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img" + File.separator + "logo.png";
+        }
+        log.info("保存时，环境是" + activeProfile + ",存储路径是" + path);
+        String fileName = Utils.zxingCodeCreate(domainName + "/product/detailInfo?id=" + vo.getId() + "&price=" + vo.getPrice(), path, 250, logoPath);
         log.info("生成的二维码名称:" + fileName);
+        productDao.updateQRImgNameById(vo.getId());
+        log.info("更新qr_img_name成功。");
         session.setAttribute("fileName", fileName + ".jpg");
         session.setAttribute("product", vo);
         JSONObject jObject = JSONObject.fromObject(model);
@@ -111,12 +103,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String uploadImgByBase64(HttpServletRequest request, String imgData, String format) throws FileNotFoundException {
         Map<String, Object> resultMap = new HashMap<String, Object>();
-        String currDateStr = sdf.format(new Date());
+        String currDateStr = Constants.DATA_FORMAT.sdf1.format(new Date());
+        Random random = new Random();
+        String fileName = currDateStr + String.valueOf(random.nextInt(1000));
         resultMap.put("success", true);
         resultMap.put("data", currDateStr);
-        File file = new File(ResourceUtils.getURL("classpath:").getPath());
-        String path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "userImg" + File.separator;
-        Utils.GenerateImage(imgData, currDateStr, path, format);
+        String path = productImgPath;
+        if ("dev".equals(activeProfile)) {
+            File file = new File(ResourceUtils.getURL("classpath:").getPath());
+            path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "userImg" + File.separator;
+        }
+        log.info("上传图片时环境是" + activeProfile + ",存储路径是" + path);
+        log.info("文件名是:" + currDateStr);
+        Utils.GenerateImage(imgData, fileName, path, format);
         JSONObject jObject = JSONObject.fromObject(resultMap);
         return jObject.toString();
     }

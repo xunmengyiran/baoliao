@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ProductDao {
 
     int saveProduct(Product product);
+
+    int updateQRImgNameById(int id);
 }

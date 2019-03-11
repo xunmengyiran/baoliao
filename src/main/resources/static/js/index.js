@@ -202,7 +202,8 @@ $(function () {
                 $(".dsf_Jh_dfgf").removeClass("show");
                 s_drer = false;
                 if (data.result == 1) {
-                    window.location.href = "http://28nmdc.natappfree.cc/product/resultPage";
+                    // window.location.href = "http://28nmdc.natappfree.cc/product/resultPage";
+                    window.location.href = "http://cailiao.bingbet.net/product/resultPage";
                 } else {
                     mui.alert(data.msg)
                 }
@@ -262,7 +263,7 @@ function fileChange(that) {
 
                     dataType: "json",
                     cache: false,
-                    async: false,
+                    // async: false,
                     success: function (data) {
                         res++;
                         if (data.success) {

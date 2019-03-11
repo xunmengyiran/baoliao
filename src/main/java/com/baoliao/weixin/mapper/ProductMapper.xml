@@ -25,7 +25,7 @@
   </insert>
     <insert id="saveProduct" parameterType="com.baoliao.weixin.bean.Product" useGeneratedKeys="true"
             keyProperty="id">
-    insert into TB_PRODUCT
+      insert into tb_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -91,5 +91,9 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateQRImgNameById" parameterType="java.lang.Integer">
+    update tb_product set qr_img_name = #{id}
+  </update>
 
 </mapper>

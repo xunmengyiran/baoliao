@@ -19,10 +19,8 @@
     </style>
 </head>
 <body>
-<c:out value="/QRCodeImg/${sessionScope.fileName}"></c:out>
-<c:out value="${requestScope.product.id}"></c:out>
 <div style="text-align: center;margin-top: 80%;">
-    <img style="width: 50%;" src="/QRCodeImg/411.jpg">
+    <img style="width: 50%;" src="http://47.98.48.197:8090/QRCodeImg/${sessionScope.fileName}">
 </div>
 <div style="margin-top: 14%;margin-left: 12%;">
     <img style="width: 17%;position: relative;" src="${sessionScope.user.headimgUrl}">

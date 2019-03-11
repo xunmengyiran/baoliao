@@ -1,11 +1,17 @@
 package com.baoliao.weixin.util;
 
+import com.baoliao.weixin.Constants;
+import com.baoliao.weixin.bean.AccessToken;
+import com.baoliao.weixin.bean.User;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -13,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -21,6 +28,9 @@ import static com.google.zxing.client.j2se.MatrixToImageConfig.BLACK;
 import static com.google.zxing.client.j2se.MatrixToImageConfig.WHITE;
 
 public class Utils {
+
+    private Logger log = LoggerFactory.getLogger(Utils.class);
+
     public static String GetImageStr() {//将图片文件转化为字节数组字符串，并对其进行Base64编码处理
         String imgFile = "D:\\tupian\\a.jpg";//待处理的图片
         InputStream in = null;
@@ -64,8 +74,8 @@ public class Utils {
         }
     }
 
-    public static int zxingCodeCreate(String content, String path, Integer size, String logoPath) {
-        int fileName = 0;
+    public static String zxingCodeCreate(String content, String path, Integer size, String logoPath) {
+        String fileName = "";
         try {
             //图片类型
             String imageType = "jpg";
@@ -73,9 +83,12 @@ public class Utils {
             BufferedImage image = getBufferedImage(content, size, logoPath);
             //获得随机数
             Random random = new Random();
-            fileName = random.nextInt(1000);
+            String currDateStr = Constants.DATA_FORMAT.sdf1.format(new Date());
+            fileName = currDateStr + String.valueOf(random.nextInt(1000));
             //生成二维码存放文件
+            System.out.println("保存二维码的路径:" + path + fileName + ".jpg");
             File file = new File(path + fileName + ".jpg");
+            System.out.println("File对象:" + file);
             if (!file.exists()) {
                 file.mkdirs();
             }
@@ -142,6 +155,60 @@ public class Utils {
             e.printStackTrace();
         }
         return image;
+    }
+
+    public static User getUserInfoByCode(String code) {
+        String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
+        JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
+        String openId = jsonObject.getString("openid");
+        String access_token = jsonObject.getString("access_token");
+        String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
+        jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
+        String nickName = jsonObject.getString("nickname");
+        String sex = jsonObject.getString("sex");
+        String language = jsonObject.getString("language");
+        String city = jsonObject.getString("city");
+        String province = jsonObject.getString("province");
+        String country = jsonObject.getString("country");
+        String headImgUrl = jsonObject.getString("headimgurl");
+
+        User user = new User();
+        user.setOpenId(openId);
+        user.setNickName(nickName);
+        user.setSex(Integer.parseInt(sex));
+        user.setLanguage(language);
+        user.setCity(city);
+        user.setProvince(province);
+        user.setCountry(country);
+        user.setHeadimgUrl(headImgUrl);
+        // 由于code只能使用一次，所以将用户信息存入session
+        return user;
+    }
+
+    public static User getUserInfoByopenId(String openId) {
+        AccessToken accessToken = WeixinIntefaceUtil.getAccessToken(Constants.WECHAT_PARAMETER.APPID, Constants.WECHAT_PARAMETER.APPSECRET);
+        String access_token = accessToken.getToken();
+        String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
+        JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
+        String nickName = jsonObject.getString("nickname");
+        String sex = jsonObject.getString("sex");
+        String language = jsonObject.getString("language");
+        String city = jsonObject.getString("city");
+        String province = jsonObject.getString("province");
+        String country = jsonObject.getString("country");
+        String headImgUrl = jsonObject.getString("headimgurl");
+
+        User user = new User();
+        user.setOpenId(openId);
+        user.setNickName(nickName);
+        user.setSex(Integer.parseInt(sex));
+        user.setLanguage(language);
+        user.setCity(city);
+        user.setProvince(province);
+        user.setCountry(country);
+        user.setHeadimgUrl(headImgUrl);
+        // 由于code只能使用一次，所以将用户信息存入session
+        return user;
     }
 
     public static void main(String[] args) {

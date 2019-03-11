@@ -9,14 +9,14 @@
     <result column="rate" property="rate" jdbcType="REAL" />
   </resultMap>
   <select id="queryUserList" resultType="com.baoliao.weixin.bean.User">
-      select * from TB_WECHAT_USER_INFO;
+      select * from tb_wechat_user_info;
     </select>
 
   <insert id="insertFollowInfo">
-        INSERT INTO TB_WECHAT_USER_INFO(OPENID,SUBSCRIBE,SUBSCRIBETIME)VALUES (#{openId},1,NOW())
+        INSERT INTO tb_wechat_user_info(OPENID,SUBSCRIBE,SUBSCRIBETIME)VALUES (#{openId},1,NOW())
     </insert>
 
   <update id="updateFollowInfo">
-        UPDATE TB_WECHAT_USER_INFO SET SUBSCRIBE='0',cancelSubscribeTime=NOW() WHERE OPENID = #{fromUserName} AND SUBSCRIBE='1'
+        UPDATE tb_wechat_user_info SET SUBSCRIBE='0',cancelSubscribeTime=NOW() WHERE OPENID = #{fromUserName} AND SUBSCRIBE='1'
     </update>
 </mapper>
