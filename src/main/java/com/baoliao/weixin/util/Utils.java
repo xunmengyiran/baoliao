@@ -180,16 +180,19 @@ public class Utils {
         user.setCity(city);
         user.setProvince(province);
         user.setCountry(country);
-        user.setHeadimgUrl(headImgUrl);
+        user.setHeadImgUrl(headImgUrl);
         // 由于code只能使用一次，所以将用户信息存入session
         return user;
     }
 
-    public static User getUserInfoByopenId(String openId) {
+    public static User getUserInfoByOpenId(String openId) {
         AccessToken accessToken = WeixinIntefaceUtil.getAccessToken(Constants.WECHAT_PARAMETER.APPID, Constants.WECHAT_PARAMETER.APPSECRET);
+        System.out.println("AccessToken==>" + accessToken);
         String access_token = accessToken.getToken();
+        System.out.println("access_token==>" + access_token);
         String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
         JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
+        System.out.println("jsonObject==>" + jsonObject.toString());
         String nickName = jsonObject.getString("nickname");
         String sex = jsonObject.getString("sex");
         String language = jsonObject.getString("language");
@@ -206,12 +209,14 @@ public class Utils {
         user.setCity(city);
         user.setProvince(province);
         user.setCountry(country);
-        user.setHeadimgUrl(headImgUrl);
+        user.setHeadImgUrl(headImgUrl);
         // 由于code只能使用一次，所以将用户信息存入session
         return user;
     }
 
     public static void main(String[] args) {
-        System.out.println(zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
+//        System.out.println(zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
+        String st = "䵺";
+        System.out.println(st);
     }
 }

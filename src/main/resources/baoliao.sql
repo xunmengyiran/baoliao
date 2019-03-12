@@ -11,7 +11,7 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 09/03/2019 23:49:32
+ Date: 12/03/2019 11:43:28
 */
 
 SET NAMES utf8mb4;
@@ -28,21 +28,43 @@ CREATE TABLE `tb_product`  (
   `introduct` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '简介',
   `type` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '料码内容描述',
-  `img_arr` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图片url',
+  `img_arr` varchar(4000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图片名数组',
   `price` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '料码价格',
   `expritation_date` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '过期时间',
   `is_refund` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否退款(1:有退款 0：没有退款)',
+  `qr_img_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '二维码图片名',
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_product
 -- ----------------------------
-INSERT INTO `tb_product` VALUES (1, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '你', '', '5', '2019-03-05 12:59:00', '0');
-INSERT INTO `tb_product` VALUES (2, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '在', '', '5', '2019-03-05 13:06:00', '0');
-INSERT INTO `tb_product` VALUES (3, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '88', '2019-03-06 11:03:00', '0');
-INSERT INTO `tb_product` VALUES (4, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '', '20190309175011,20190309175011', '88', '2019-03-09 17:49', '0');
-INSERT INTO `tb_product` VALUES (5, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 'www嗯嗯', '电饭锅黄金甲家具', NULL, '', '20190309232444,20190309232456', '1', '2019-03-18 23:24', '0');
+INSERT INTO `tb_product` VALUES (1, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '你', '', '5', '2019-03-05 12:59:00', '0', NULL);
+INSERT INTO `tb_product` VALUES (2, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '在', '', '5', '2019-03-05 13:06:00', '0', NULL);
+INSERT INTO `tb_product` VALUES (3, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '88', '2019-03-06 11:03:00', '0', NULL);
+INSERT INTO `tb_product` VALUES (4, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '', '20190309175011,20190309175011', '88', '2019-03-09 17:49', '0', NULL);
+INSERT INTO `tb_product` VALUES (5, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 'www嗯嗯', '电饭锅黄金甲家具', NULL, '', '20190309232444,20190309232456', '1', '2019-03-18 23:24', '0', NULL);
+INSERT INTO `tb_product` VALUES (6, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '3333', '', '68', '2019-03-10 15:37', '0', NULL);
+INSERT INTO `tb_product` VALUES (7, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '222', '33', NULL, '444', '', '88', '2019-03-10 15:38', '0', NULL);
+INSERT INTO `tb_product` VALUES (8, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '222', NULL, '333', '', '0', '2019-03-10 18:04', '0', NULL);
+INSERT INTO `tb_product` VALUES (9, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '钱钱钱', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (10, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '222', NULL, '333', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (11, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '【qexd', '好好好', NULL, '你奶奶家呢', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (12, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (13, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '2', '3', NULL, '333', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (14, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '22', NULL, '333', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (15, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '222', NULL, '333', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (16, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '33', '', '0', '2019-03-10 21:16', '0', NULL);
+INSERT INTO `tb_product` VALUES (17, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '0', '2019-03-10 21:17', '0', NULL);
+INSERT INTO `tb_product` VALUES (18, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '333', '', '0', '2019-03-10 21:18', '0', NULL);
+INSERT INTO `tb_product` VALUES (19, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '333', '', '0', '2019-03-10 21:20', '0', NULL);
+INSERT INTO `tb_product` VALUES (20, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '0', '2019-03-10 21:21', '0', NULL);
+INSERT INTO `tb_product` VALUES (21, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '333', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (22, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '33', '', '0', '2019-03-10 21:23', '0', NULL);
+INSERT INTO `tb_product` VALUES (23, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', 'w', NULL, '好好好', '', '0', '2019-03-10 21:27', '0', NULL);
+INSERT INTO `tb_product` VALUES (24, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '22', NULL, '333', '', '0', '2019-03-10 21:37', '0', NULL);
+INSERT INTO `tb_product` VALUES (25, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '333', '', '0', '', '0', NULL);
+INSERT INTO `tb_product` VALUES (26, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '333', '', '88', '2019-03-10 21:50', '0', NULL);
 
 -- ----------------------------
 -- Table structure for tb_trade
@@ -96,7 +118,7 @@ CREATE TABLE `tb_wechat_user_info`  (
   `country` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所在国家',
   `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '省份',
   `language` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户的语言，简体中文为zh_CN',
-  `headimgUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像)',
+  `headImgUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像)',
   `subscribeTime` date NULL DEFAULT NULL COMMENT '用户关注时间',
   `cancelSubscribeTime` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户取消关注时间',
   `bindTime` date NULL DEFAULT NULL COMMENT '绑定时间',
@@ -104,7 +126,7 @@ CREATE TABLE `tb_wechat_user_info`  (
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `privilege` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_wechat_user_info
@@ -114,6 +136,7 @@ INSERT INTO `tb_wechat_user_info` VALUES (57, NULL, 'ohDAp1PykHDgkhyTXqEAEWQRo0b
 INSERT INTO `tb_wechat_user_info` VALUES (58, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-05', '2019-03-05 13:02:55', NULL, NULL, NULL, NULL);
 INSERT INTO `tb_wechat_user_info` VALUES (59, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-05', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `tb_wechat_user_info` VALUES (60, NULL, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-09', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tb_wechat_user_info` VALUES (61, NULL, 'ohDAp1N1zrrbwZIwpMtjatFjDfac', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-10', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tb_withdrawal

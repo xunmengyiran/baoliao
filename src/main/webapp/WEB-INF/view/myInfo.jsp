@@ -108,7 +108,7 @@
     <!--  <p class="cf pl10">今日收益</p> -->
     <section class='cf  pl10 fz12'>今日收益
         <section class='df_jh_deet cf cen  fr pr20 ab'>
-            <image src='${sessionScope.user.headimgUrl}'
+            <image src='${sessionScope.user.headImgUrl}'
                    class='user_icon_e yj cz ab'></image>
             <span class=' fz12 cz '>${sessionScope.user.nickName}</span>
         </section>

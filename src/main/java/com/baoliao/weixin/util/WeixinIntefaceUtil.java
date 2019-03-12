@@ -31,7 +31,8 @@ public class WeixinIntefaceUtil {
      */
     public static AccessToken getAccessToken(String appid, String appsecret) {
         log.info("接收到的appid是:" + appid + ",接收到的appsecret是" + appsecret);
-        AccessToken accessToken = null;
+        AccessToken accessToken = Constants.CURRENT_TOKEN;
+        log.info("既存的AccessToken是" + accessToken);
         Long lNow = Calendar.getInstance().getTimeInMillis() - 50;
 
         boolean isAgain = false;
@@ -42,7 +43,7 @@ public class WeixinIntefaceUtil {
                 isAgain = true;
             }
         }
-
+        log.info("isAgain是" + isAgain);
         if (isAgain) {
             String requestUrl = Constants.URL.ACCESS_TOKEN_URL.replace("APPID", appid).replace("APPSECRET", appsecret);
             JSONObject jsonObject = httpRequest(requestUrl, "GET", null);
@@ -60,6 +61,7 @@ public class WeixinIntefaceUtil {
                 }
             }
         }
+        log.info("最终的accessToken是:" + accessToken);
         return accessToken;
     }
 

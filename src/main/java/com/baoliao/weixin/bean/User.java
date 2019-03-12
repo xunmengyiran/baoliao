@@ -13,7 +13,7 @@ public class User {
     private String country;//用户所在国家
     private String province;//用户所在省份
     private String language;//用户的语言，简体中文为zh_CN
-    private String headimgUrl;//用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空
+    private String headImgUrl;//用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空
     private Date subscribeTime;//用户关注时间，为时间戳。如果用户曾多次关注，则取最后关注时间
     private Date cancelSubscribeTime;
     private Date bindTime;//用户绑定账号时间
@@ -108,12 +108,12 @@ public class User {
         this.language = language;
     }
 
-    public String getHeadimgUrl() {
-        return headimgUrl;
+    public String getHeadImgUrl() {
+        return headImgUrl;
     }
 
-    public void setHeadimgUrl(String headimgUrl) {
-        this.headimgUrl = headimgUrl;
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
     }
 
     public Date getSubscribeTime() {

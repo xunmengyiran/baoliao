@@ -9,4 +9,8 @@ public interface ProductService {
     String saveProduct(HttpServletRequest request, Product record) throws Exception;
 
     String uploadImgByBase64(HttpServletRequest request, String imgData, String format) throws Exception;
+
+    void getPayInfo(HttpServletRequest request, String id, String price) throws Exception;
+
+    String getOpenIdById(String id) throws Exception;
 }

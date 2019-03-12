@@ -4,6 +4,7 @@ import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.dao.ProductDao;
+import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.util.Utils;
 import com.baoliao.weixin.util.WeixinIntefaceUtil;
@@ -54,6 +55,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductDao productDao;
 
+    @Autowired
+    UserDao userDao;
+
     @Override
     public String saveProduct(HttpServletRequest request, Product vo) {
         String code = vo.getCode();
@@ -68,7 +72,12 @@ public class ProductServiceImpl implements ProductService {
             vo.setOpenId(user.getOpenId());
         }
 
-        int i = productDao.saveProduct(vo);
+        int i = 0;
+        try {
+            i = productDao.saveProduct(vo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (i > 0) {
             model.put("result", i);
             model.put("msg", "成功");
@@ -90,9 +99,14 @@ public class ProductServiceImpl implements ProductService {
             logoPath = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img" + File.separator + "logo.png";
         }
         log.info("保存时，环境是" + activeProfile + ",存储路径是" + path);
-        String fileName = Utils.zxingCodeCreate(domainName + "/product/detailInfo?id=" + vo.getId() + "&price=" + vo.getPrice(), path, 250, logoPath);
+        //https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=http://" + redirect_domain_name + "/user/goIndex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect
+        String fileName = Utils.zxingCodeCreate("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", path, 250, logoPath);
         log.info("生成的二维码名称:" + fileName);
-        productDao.updateQRImgNameById(vo.getId());
+        try {
+            productDao.updateQRImgNameById(vo.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("更新qr_img_name成功。");
         session.setAttribute("fileName", fileName + ".jpg");
         session.setAttribute("product", vo);
@@ -118,5 +132,20 @@ public class ProductServiceImpl implements ProductService {
         Utils.GenerateImage(imgData, fileName, path, format);
         JSONObject jObject = JSONObject.fromObject(resultMap);
         return jObject.toString();
+    }
+
+    @Override
+    public void getPayInfo(HttpServletRequest request, String id, String price) throws Exception {
+        String openId = getOpenIdById(id);
+        log.info("获取的openId值为" + openId);
+        User user = userDao.getUserInfoByOpenId(openId);
+        request.getSession().setAttribute("user", user);
+        request.getSession().setAttribute("price", price);
+    }
+
+    @Override
+    public String getOpenIdById(String id) throws Exception {
+        String openId = productDao.getOpenIdById(id);
+        return openId;
     }
 }

@@ -39,8 +39,6 @@ public interface Constants {
         // 与接口配置信息中的Token要一致
         String TOKEN = "baoliao";
         // 微信跳转页面授权域名
-        // prod
-        String REDIRECT_DOMAIN_NAME = "wifi.189.cn/guoman";
         // dev
 //        String REDIRECT_DOMAIN_NAME = "8rwumw.natappfree.cc";
 

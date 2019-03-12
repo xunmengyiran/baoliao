@@ -30,7 +30,7 @@
 </section>
 
 <section class="mt20 cen">
-    <img src="${sessionScope.user.headimgUrl}" class="yj user_icon_b"/>
+    <img src="${sessionScope.user.headImgUrl}" class="yj user_icon_b"/>
     <p class="fz13 mt5">${sessionScope.user.nickName}</p>
     <div><span class="sd_guanzhu">关注作者</span></div>
     <span class="b fz16 sd_jgh_ddr">CBA消息单</span>

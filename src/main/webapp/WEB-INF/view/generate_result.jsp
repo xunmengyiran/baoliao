@@ -23,7 +23,7 @@
     <img style="width: 50%;" src="http://47.98.48.197:8090/QRCodeImg/${sessionScope.fileName}">
 </div>
 <div style="margin-top: 14%;margin-left: 12%;">
-    <img style="width: 17%;position: relative;" src="${sessionScope.user.headimgUrl}">
+    <img style="width: 17%;position: relative;" src="${sessionScope.user.headImgUrl}">
 </div>
 <span style="margin-left: 28%;margin-top: -37px;position: absolute;color: #fff;">${sessionScope.user.nickName}</span>
 <c:if test="${sessionScope.product.price == 0}">

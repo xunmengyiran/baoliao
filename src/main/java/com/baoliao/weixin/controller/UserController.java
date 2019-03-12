@@ -28,9 +28,11 @@ public class UserController {
     @GetMapping("/goIndex")
     public String goIndex(HttpServletRequest request) {
         log.info("进入首页");
+        String code = request.getParameter("code");
         try {
-//            List<User> userList = userService.goIndex();
-//            request.setAttribute("userList", userList);
+            // TODO
+            // 必须先关注才能进入首页，所以此处只需要更新就行了
+            userService.updateUserInfo(code);
         } catch (Exception e) {
             log.error("进入首页出错,错误信息;" + e);
         }

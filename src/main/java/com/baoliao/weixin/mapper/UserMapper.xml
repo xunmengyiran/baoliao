@@ -19,4 +19,12 @@
   <update id="updateFollowInfo">
         UPDATE tb_wechat_user_info SET SUBSCRIBE='0',cancelSubscribeTime=NOW() WHERE OPENID = #{fromUserName} AND SUBSCRIBE='1'
     </update>
+
+  <update id="updateUserInfo" parameterType="com.baoliao.weixin.bean.User">
+    UPDATE tb_wechat_user_info set nickName=#{nickName},sex=#{sex},city=#{city},country=#{country},province=#{province},language=#{language},headImgUrl=#{headImgUrl} WHERE openId=#{openId} and subscribe='1'
+  </update>
+
+  <select id="getUserInfoByOpenId" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.User">
+    select * from tb_wechat_user_info where openId=#{openId} and subscribe='1'
+  </select>
 </mapper>

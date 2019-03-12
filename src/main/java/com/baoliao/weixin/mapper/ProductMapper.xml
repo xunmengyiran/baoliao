@@ -96,4 +96,7 @@
     update tb_product set qr_img_name = #{id}
   </update>
 
+  <select id="getOpenIdById" parameterType="java.lang.String" resultType="java.lang.String">
+    select open_id from tb_product where id=#{id}
+  </select>
 </mapper>

@@ -5,7 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductDao {
 
-    int saveProduct(Product product);
+    int saveProduct(Product product) throws Exception;
 
-    int updateQRImgNameById(int id);
+    int updateQRImgNameById(int id) throws Exception;
+
+    String getOpenIdById(String id) throws Exception;
 }
