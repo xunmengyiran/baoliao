@@ -58,6 +58,7 @@
       <if test="isRefund != null" >
         is_refund,
       </if>
+      create_time,
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -90,6 +91,7 @@
       <if test="isRefund != null" >
         #{isRefund,jdbcType=TINYINT},
       </if>
+      #{createTime}
     </trim>
   </insert>
 

@@ -1,6 +1,6 @@
 var path = "/lmjl_core";
 var basePath = "https://lmjl.ttkgou.com/lmjl_core/";
-var img_url = "https://lm-img.oss-cn-shenzhen.aliyuncs.com/res/";
+var img_url = "http://47.98.48.197:8090/userImg/";
 
 $(function () {
 

@@ -9,6 +9,7 @@ public interface Constants {
 
     interface DATA_FORMAT {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmsssss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
     interface WECHAT_PARAMETER {
         String APPID = "wxd69e2073c9ae0c39";
@@ -30,7 +31,8 @@ public interface Constants {
         // 获取授权用户信息
         String OAUTH2_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
         // 主动发送模板消息
-        String TEMPLATE_MESSSAGE_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/sendSms?access_token=ACCESS_TOKEN";
+//        String TEMPLATE_MESSSAGE_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/sendSms?access_token=ACCESS_TOKEN";
+        String TEMPLATE_MESSSAGE_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         // 获取ticket
         String TICKET_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN";
     }

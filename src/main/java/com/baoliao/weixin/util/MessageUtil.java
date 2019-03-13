@@ -145,6 +145,7 @@ public class MessageUtil {
         AccessToken at = WeixinIntefaceUtil.getAccessToken(Constants.WECHAT_PARAMETER.APPID, Constants.WECHAT_PARAMETER.APPSECRET);
         String url = Constants.URL.TEMPLATE_MESSSAGE_SEND_URL.replace("ACCESS_TOKEN", at.getToken());
         JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(url, "POST", message);
+        log.info("调用模板消息接口返回jsonObject:" + jsonObject);
         if (null != jsonObject) {
             result = jsonObject.optInt("errcode");
             log.info("发送模板消息信息" + result + ":" + jsonObject.toString());

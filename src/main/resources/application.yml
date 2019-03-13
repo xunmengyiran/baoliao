@@ -24,3 +24,6 @@ domain_name: http://28nmdc.natappfree.cc
 product_img_path: /root/servers/file_server/tomcat8534/webapps/ROOT/userImg/
 #生成的二维码位置
 qr_code_img_path: /root/servers/file_server/tomcat8534/webapps/ROOT/QRCodeImg/
+logging:
+  level:
+    com.baoliao.weixin.dao: debug

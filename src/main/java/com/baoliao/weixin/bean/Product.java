@@ -1,5 +1,7 @@
 package com.baoliao.weixin.bean;
 
+import java.util.Date;
+
 public class Product {
     private int id;
 
@@ -24,6 +26,10 @@ public class Product {
     private String code;
 
     private String qrImgName;
+
+    private Date createTime;
+
+    private int isDelete;
 
     public int getId() {
         return id;
@@ -121,6 +127,22 @@ public class Product {
         this.qrImgName = qrImgName;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -136,6 +158,8 @@ public class Product {
                 ", isRefund='" + isRefund + '\'' +
                 ", code='" + code + '\'' +
                 ", qrImgName='" + qrImgName + '\'' +
+                ", createTime=" + createTime +
+                ", isDelete='" + isDelete + '\'' +
                 '}';
     }
 }

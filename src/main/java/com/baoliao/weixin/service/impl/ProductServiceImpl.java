@@ -2,10 +2,13 @@ package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Product;
+import com.baoliao.weixin.bean.TemplateData;
 import com.baoliao.weixin.bean.User;
+import com.baoliao.weixin.bean.WeChatTemplate;
 import com.baoliao.weixin.dao.ProductDao;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.ProductService;
+import com.baoliao.weixin.util.MessageUtil;
 import com.baoliao.weixin.util.Utils;
 import com.baoliao.weixin.util.WeixinIntefaceUtil;
 import net.sf.json.JSONObject;
@@ -74,6 +77,7 @@ public class ProductServiceImpl implements ProductService {
 
         int i = 0;
         try {
+            vo.setCreateTime(new Date());
             i = productDao.saveProduct(vo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,6 +112,7 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
         }
         log.info("更新qr_img_name成功。");
+        sendSaveSuccessMessage(vo);
         session.setAttribute("fileName", fileName + ".jpg");
         session.setAttribute("product", vo);
         JSONObject jObject = JSONObject.fromObject(model);
@@ -121,14 +126,14 @@ public class ProductServiceImpl implements ProductService {
         Random random = new Random();
         String fileName = currDateStr + String.valueOf(random.nextInt(1000));
         resultMap.put("success", true);
-        resultMap.put("data", currDateStr);
+        resultMap.put("data", fileName + format);
         String path = productImgPath;
         if ("dev".equals(activeProfile)) {
             File file = new File(ResourceUtils.getURL("classpath:").getPath());
             path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "userImg" + File.separator;
         }
         log.info("上传图片时环境是" + activeProfile + ",存储路径是" + path);
-        log.info("文件名是:" + currDateStr);
+        log.info("文件名是:" + fileName);
         Utils.GenerateImage(imgData, fileName, path, format);
         JSONObject jObject = JSONObject.fromObject(resultMap);
         return jObject.toString();
@@ -149,5 +154,45 @@ public class ProductServiceImpl implements ProductService {
         request.getSession().setAttribute("seller_user", seller_user);
         //TODO
         request.getSession().setAttribute("user", buyer_user);
+    }
+
+    public void sendSaveSuccessMessage(Product product) {
+        log.info("准备发送模板信息");
+        WeChatTemplate weChatTemplate = new WeChatTemplate();
+        // TODO
+        // 模板ID
+        weChatTemplate.setTemplate_id("C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM");
+        // 需要推送的用户openId
+        weChatTemplate.setTouser(product.getOpenId());
+        //点击跳转的链接
+        weChatTemplate.setUrl("http://cailiao.bingbet.net/user/queryMyCode");
+
+        Map<String, TemplateData> data = new HashMap<>();
+
+        TemplateData first = new TemplateData();
+        first.setValue("作品制作完成通知");
+        first.setColor("#173177");
+        data.put("first", first);
+
+        TemplateData keyword1 = new TemplateData();
+        keyword1.setValue(product.getTitle());
+        keyword1.setColor("#173177");
+        data.put("keyword1", keyword1);
+
+        TemplateData keyword2 = new TemplateData();
+        keyword2.setValue(Constants.DATA_FORMAT.sdf2.format(product.getCreateTime()));
+        keyword2.setColor("#173177");
+        data.put("keyword2", keyword2);
+
+
+        TemplateData remark = new TemplateData();
+        remark.setValue("请点击'我的作品'查看");
+        remark.setColor("#173177");
+        data.put("remark", remark);
+
+        weChatTemplate.setData(data);
+        JSONObject json = JSONObject.fromObject(weChatTemplate);
+        log.info("模板消息组装完成:" + json.toString());
+        MessageUtil.sendCustomerService(json.toString());
     }
 }
