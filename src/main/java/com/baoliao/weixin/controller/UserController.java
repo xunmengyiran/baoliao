@@ -32,7 +32,7 @@ public class UserController {
         try {
             // TODO
             // 必须先关注才能进入首页，所以此处只需要更新就行了
-            userService.updateUserInfo(code);
+            userService.updateUserInfo(request, code);
         } catch (Exception e) {
             log.error("进入首页出错,错误信息;" + e);
         }

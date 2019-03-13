@@ -32,8 +32,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUserInfo(String code) throws Exception {
+    public int updateUserInfo(HttpServletRequest request, String code) throws Exception {
         User user = Utils.getUserInfoByCode(code);
+        request.getSession().setAttribute("user", user);
         userDao.updateUserInfo(user);
         return 0;
     }

@@ -1,7 +1,5 @@
 package com.baoliao.weixin.bean;
 
-import java.util.List;
-
 public class Product {
     private int id;
 
@@ -24,6 +22,8 @@ public class Product {
     private String isRefund;
 
     private String code;
+
+    private String qrImgName;
 
     public int getId() {
         return id;
@@ -111,5 +111,31 @@ public class Product {
 
     public void setImgArr(String imgArr) {
         this.imgArr = imgArr;
+    }
+
+    public String getQrImgName() {
+        return qrImgName;
+    }
+
+    public void setQrImgName(String qrImgName) {
+        this.qrImgName = qrImgName;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", openId='" + openId + '\'' +
+                ", title='" + title + '\'' +
+                ", introduct='" + introduct + '\'' +
+                ", type='" + type + '\'' +
+                ", content='" + content + '\'' +
+                ", imgArr='" + imgArr + '\'' +
+                ", price='" + price + '\'' +
+                ", expritationDate='" + expritationDate + '\'' +
+                ", isRefund='" + isRefund + '\'' +
+                ", code='" + code + '\'' +
+                ", qrImgName='" + qrImgName + '\'' +
+                '}';
     }
 }

@@ -11,7 +11,7 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 12/03/2019 11:43:28
+ Date: 13/03/2019 10:08:29
 */
 
 SET NAMES utf8mb4;
@@ -37,45 +37,17 @@ CREATE TABLE `tb_product`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Records of tb_product
--- ----------------------------
-INSERT INTO `tb_product` VALUES (1, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '你', '', '5', '2019-03-05 12:59:00', '0', NULL);
-INSERT INTO `tb_product` VALUES (2, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '我', '你', NULL, '在', '', '5', '2019-03-05 13:06:00', '0', NULL);
-INSERT INTO `tb_product` VALUES (3, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '88', '2019-03-06 11:03:00', '0', NULL);
-INSERT INTO `tb_product` VALUES (4, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '', '20190309175011,20190309175011', '88', '2019-03-09 17:49', '0', NULL);
-INSERT INTO `tb_product` VALUES (5, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 'www嗯嗯', '电饭锅黄金甲家具', NULL, '', '20190309232444,20190309232456', '1', '2019-03-18 23:24', '0', NULL);
-INSERT INTO `tb_product` VALUES (6, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '3333', '', '68', '2019-03-10 15:37', '0', NULL);
-INSERT INTO `tb_product` VALUES (7, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '222', '33', NULL, '444', '', '88', '2019-03-10 15:38', '0', NULL);
-INSERT INTO `tb_product` VALUES (8, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '222', NULL, '333', '', '0', '2019-03-10 18:04', '0', NULL);
-INSERT INTO `tb_product` VALUES (9, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '钱钱钱', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (10, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '222', NULL, '333', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (11, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '【qexd', '好好好', NULL, '你奶奶家呢', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (12, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (13, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '2', '3', NULL, '333', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (14, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '22', NULL, '333', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (15, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '222', NULL, '333', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (16, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '33', '', '0', '2019-03-10 21:16', '0', NULL);
-INSERT INTO `tb_product` VALUES (17, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '0', '2019-03-10 21:17', '0', NULL);
-INSERT INTO `tb_product` VALUES (18, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '333', '', '0', '2019-03-10 21:18', '0', NULL);
-INSERT INTO `tb_product` VALUES (19, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '333', '', '0', '2019-03-10 21:20', '0', NULL);
-INSERT INTO `tb_product` VALUES (20, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '3', '', '0', '2019-03-10 21:21', '0', NULL);
-INSERT INTO `tb_product` VALUES (21, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '333', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (22, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '33', '', '0', '2019-03-10 21:23', '0', NULL);
-INSERT INTO `tb_product` VALUES (23, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', 'w', NULL, '好好好', '', '0', '2019-03-10 21:27', '0', NULL);
-INSERT INTO `tb_product` VALUES (24, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '11', '22', NULL, '333', '', '0', '2019-03-10 21:37', '0', NULL);
-INSERT INTO `tb_product` VALUES (25, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '333', '', '0', '', '0', NULL);
-INSERT INTO `tb_product` VALUES (26, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '111', '222', NULL, '333', '', '88', '2019-03-10 21:50', '0', NULL);
-
--- ----------------------------
 -- Table structure for tb_trade
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_trade`;
 CREATE TABLE `tb_trade`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `open_id` bigint(20) NOT NULL,
-  `productb_id` int(11) NOT NULL,
+  `id` int(13) NOT NULL AUTO_INCREMENT,
+  `product_id` int(13) NOT NULL COMMENT '产品id',
+  `buyer_open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '买家openId',
+  `seller_open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '卖家openId',
+  `money` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '交易金额',
+  `pay_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付类型(余额支付和支付宝支付，待定)',
   `create_time` datetime NULL DEFAULT NULL,
-  `money` decimal(10, 0) NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -89,17 +61,6 @@ CREATE TABLE `tb_user`  (
   `profit` decimal(10, 0) NULL DEFAULT NULL COMMENT '收益总额',
   `balance` decimal(10, 0) NULL DEFAULT NULL COMMENT '余额',
   `rate` float NULL DEFAULT NULL COMMENT '费率',
-  PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for tb_vermicelli
--- ----------------------------
-DROP TABLE IF EXISTS `tb_vermicelli`;
-CREATE TABLE `tb_vermicelli`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `buyer_id` bigint(20) NOT NULL COMMENT '买家用户id',
-  `selller_id` bigint(20) NOT NULL COMMENT '卖家用户id',
   PRIMARY KEY USING BTREE (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -127,16 +88,6 @@ CREATE TABLE `tb_wechat_user_info`  (
   `privilege` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of tb_wechat_user_info
--- ----------------------------
-INSERT INTO `tb_wechat_user_info` VALUES (56, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-01', '2019-03-05 13:02:55', NULL, NULL, NULL, NULL);
-INSERT INTO `tb_wechat_user_info` VALUES (57, NULL, 'ohDAp1PykHDgkhyTXqEAEWQRo0bk', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-02', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_wechat_user_info` VALUES (58, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-05', '2019-03-05 13:02:55', NULL, NULL, NULL, NULL);
-INSERT INTO `tb_wechat_user_info` VALUES (59, NULL, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-05', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_wechat_user_info` VALUES (60, NULL, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-09', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_wechat_user_info` VALUES (61, NULL, 'ohDAp1N1zrrbwZIwpMtjatFjDfac', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-10', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tb_withdrawal

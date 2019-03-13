@@ -12,5 +12,4 @@ public interface ProductService {
 
     void getPayInfo(HttpServletRequest request, String id, String price) throws Exception;
 
-    String getOpenIdById(String id) throws Exception;
 }

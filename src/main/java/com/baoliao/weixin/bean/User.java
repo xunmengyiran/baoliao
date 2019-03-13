@@ -1,5 +1,6 @@
 package com.baoliao.weixin.bean;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class User {
@@ -194,5 +195,32 @@ public class User {
 
     public void setRate(Float rate) {
         this.rate = rate;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", openId='" + openId + '\'' +
+                ", subscribe=" + subscribe +
+                ", nickName='" + nickName + '\'' +
+                ", sex=" + sex +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", language='" + language + '\'' +
+                ", headImgUrl='" + headImgUrl + '\'' +
+                ", subscribeTime=" + subscribeTime +
+                ", cancelSubscribeTime=" + cancelSubscribeTime +
+                ", bindTime=" + bindTime +
+                ", unionId='" + unionId + '\'' +
+                ", remark='" + remark + '\'' +
+                ", privilege=" + Arrays.toString(privilege) +
+                ", privilegeStr='" + privilegeStr + '\'' +
+                ", profit=" + profit +
+                ", balance=" + balance +
+                ", rate=" + rate +
+                '}';
     }
 }

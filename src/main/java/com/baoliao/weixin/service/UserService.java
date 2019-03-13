@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     List<User> goIndex() throws Exception;
 
-    int updateUserInfo(String code) throws Exception;
+    int updateUserInfo(HttpServletRequest request, String code) throws Exception;
 
     User queryMyInfo(HttpServletRequest request) throws Exception;
 }

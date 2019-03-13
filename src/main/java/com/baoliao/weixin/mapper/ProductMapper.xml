@@ -3,15 +3,16 @@
 <mapper namespace="com.baoliao.weixin.dao.ProductDao" >
   <resultMap id="BaseResultMap" type="com.baoliao.weixin.bean.Product" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="open_id" property="openId" jdbcType="BIGINT" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR"/>
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="introduct" property="introduct" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="type" property="type" jdbcType="VARCHAR"/>
     <result column="content" property="content" jdbcType="VARCHAR" />
       <result column="img_arr" property="imgArr" jdbcType="VARCHAR"/>
-    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="VARCHAR"/>
     <result column="expritation_date" property="expritationDate" jdbcType="VARCHAR" />
-    <result column="is_refund" property="isRefund" jdbcType="TINYINT" />
+    <result column="is_refund" property="isRefund" jdbcType="VARCHAR"/>
+    <result column="qr_img_name" property="qrImgName" jdbcType="VARCHAR"/>
   </resultMap>
   <insert id="insert" parameterType="com.baoliao.weixin.bean.Product" >
     insert into t_product (id, open_id, title,
@@ -96,7 +97,7 @@
     update tb_product set qr_img_name = #{id}
   </update>
 
-  <select id="getOpenIdById" parameterType="java.lang.String" resultType="java.lang.String">
-    select open_id from tb_product where id=#{id}
+  <select id="getProductById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from tb_product where id=#{id}
   </select>
 </mapper>

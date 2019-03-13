@@ -9,5 +9,5 @@ public interface ProductDao {
 
     int updateQRImgNameById(int id) throws Exception;
 
-    String getOpenIdById(String id) throws Exception;
+    Product getProductById(int id) throws Exception;
 }

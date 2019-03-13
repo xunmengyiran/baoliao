@@ -136,16 +136,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void getPayInfo(HttpServletRequest request, String id, String price) throws Exception {
-        String openId = getOpenIdById(id);
-        log.info("获取的openId值为" + openId);
-        User user = userDao.getUserInfoByOpenId(openId);
-        request.getSession().setAttribute("user", user);
-        request.getSession().setAttribute("price", price);
-    }
-
-    @Override
-    public String getOpenIdById(String id) throws Exception {
-        String openId = productDao.getOpenIdById(id);
-        return openId;
+        log.info("传入的产品id为:" + id);
+        String code = request.getParameter("code");
+        User buyer_user = Utils.getUserInfoByCode(code);
+        log.info("============buyer_user=============" + buyer_user.toString());
+        Product product = productDao.getProductById(Integer.parseInt(id));
+        log.info("============product=============" + product.toString());
+        User seller_user = userDao.getUserInfoByOpenId(product.getOpenId());
+        log.info("============seller_user=============" + seller_user.toString());
+        request.getSession().setAttribute("product", product);
+        request.getSession().setAttribute("buyer_user", buyer_user);
+        request.getSession().setAttribute("seller_user", seller_user);
+        //TODO
+        request.getSession().setAttribute("user", buyer_user);
     }
 }

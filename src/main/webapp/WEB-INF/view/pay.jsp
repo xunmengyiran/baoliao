@@ -30,16 +30,19 @@
 </section>
 
 <section class="mt20 cen">
-    <img src="${sessionScope.user.headImgUrl}" class="yj user_icon_b"/>
-    <p class="fz13 mt5">${sessionScope.user.nickName}</p>
+    <img src="${sessionScope.seller_user.headImgUrl}" class="yj user_icon_b"/>
+    <p class="fz13 mt5">${sessionScope.seller_user.nickName}</p>
     <div><span class="sd_guanzhu">关注作者</span></div>
     <span class="b fz16 sd_jgh_ddr">CBA消息单</span>
     <section class="mt15">
-        <span class="fz14 dserrf_jh_d br yj4"><span class="num_er red fz30">${sessionScope.price}</span> 元</span>
+        <span class="fz14 dserrf_jh_d br yj4"><span
+                class="num_er red fz30">${sessionScope.product.price}</span> 元</span>
     </section>
-    <input type="hidden" name="price" id="price" value="6"/>
-    <input type="hidden" name="id" id="id" value="453477"/>
-    <input type="hidden" name="en_id" id="en_id" value="9d170bf5ae60fa40519d4e8600a786b2"/>
+    <input type="hidden" name="price" id="price" value="${sessionScope.product.price}"/>
+    <input type="hidden" name="id" id="id" value="${sessionScope.product.id}"/>
+    <input type="hidden" name="en_id" id="en_id" value="${sessionScope.product.id}"/>
+    <input type="hidden" name="buyer_openId" id="buyer_openId" value="${sessionScope.buyer_user.openId}"/>
+    <input type="hidden" name="seller_openId" id="seller_openId" value="${sessionScope.seller_user.openId}"/>
     <input type="hidden" name="balance" id="balance" value="0"/>
 
     <section class="eer_deert"></section>
