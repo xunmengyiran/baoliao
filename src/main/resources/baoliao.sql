@@ -11,7 +11,7 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 13/03/2019 22:03:26
+ Date: 14/03/2019 16:08:30
 */
 
 SET NAMES utf8mb4;
@@ -22,14 +22,19 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_focus_info`;
 CREATE TABLE `tb_focus_info`  (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `self_open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '自身openId',
   `other_open_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '被关注着openId',
   `create_time` datetime NULL DEFAULT NULL COMMENT '关注时间',
   `is_cancel` int(1) NULL DEFAULT 0 COMMENT '是否取消关注，默认未取消',
   `cancel_time` datetime NULL DEFAULT NULL COMMENT '取消关注时间',
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tb_focus_info
+-- ----------------------------
+INSERT INTO `tb_focus_info` VALUES (1, '111111', '222222', NULL, 0, NULL);
 
 -- ----------------------------
 -- Table structure for tb_product
