@@ -9,5 +9,19 @@
         <result column="is_cancel" property="type" jdbcType="INTEGER"/>
         <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+    <insert id="saveFocuInfo" parameterType="com.baoliao.weixin.bean.FocusInfo">
+    insert into tb_focus_info(self_open_id,other_open_id,create_time)values (#{selfOpenId},#{otherOpenId},#{createTime});
+</insert>
+
+    <select id="getFocusByOpenId" resultType="java.lang.Integer">
+        select count(0) from tb_focus_info where self_open_id=#{selfOpenId} and other_open_id=#{otherOpenId} and is_cancel=0
+    </select>
+
+    <select id="getMyFocusCount" resultType="java.lang.Integer">
+        select count(0) from tb_focus_info where self_open_id=#{openId} and is_cancel=0
+    </select>
+    <select id="getFansCount" resultType="java.lang.Integer">
+        select count(0) from tb_focus_info where other_open_id=#{openId} and is_cancel=0
+    </select>
 
 </mapper>

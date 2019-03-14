@@ -12,12 +12,15 @@ $(function () {
     })
 
     $(".sd_guanzhu").on("click", function () {
-        var id = $('#id').val();
+        // var id = $('#id').val();
+        var selfOenId = $('#buyer_openId').val();
+        var otherOpenId = $('#seller_openId').val();
         $.ajax({
             type: 'POST',
-            url: path + '/weixin/attention_add',
+            url: '/focus/focusAuthor',
             data: {
-                'id': id
+                "selfOenId": selfOenId,
+                "otherOpenId": otherOpenId
             },
             dataType: 'json',
             success: function (result) {
@@ -185,48 +188,38 @@ function onBridgeReady(appId, timeStamp, nonceStr, packageStr, signType, paySign
     );
 }
 
-function focusAuthor() {
-    var selfOenId = $('#buyer_openId').val();
-    var otherOpenId = $('#seller_openId').val();
-    $.ajax({
-        url: '/focus/focusAuthor',
-        data: {
-            "selfOenId": selfOenId,
-            "otherOpenId": otherOpenId
-        },
-        beforeSend: function () {
-            /*  $(".loading_box ,.disalog_bg3").show(); 	 */
-        },
-        success: function (result) {
-            result = $.parseJSON(result);
-            s_drer = false;
-            $(".dsf_Jh_dfgf").removeClass("show");
-            if (result.success) {
-                /*appId=result.data.appId;
-                timeStamp=result.data.timeStamp;
-                nonceStr=result.data.nonceStr;
-                packageStr=result.data.packageStr;
-                signType=result.data.signType;
-                paySign=result.data.paySign;
-                onBridgeReady(appId,timeStamp,nonceStr,packageStr,signType,paySign);*/
-                mui.toast("支付成功");
-                window.location.href = '/product/detailInfo2?id=' + en_id;
-            } else {
-                if (result.data == '1') {
-                    mui.toast("文章已过期，不能购买");
-                } else if (result.data == '2') {
-                    mui.toast("已经支付过了，再次扫码看到内容");
-                } else if (result.data == '3') {
-                    mui.toast("文章已删除，不能购买");
-                } else if (result.data == '4') {
-                    mui.toast("扫码无效，请再次扫码");
-                } else if (result.data == '5') {
-                    mui.toast("用户涉嫌违规，不能购买");
-                } else {
-                    window.location.href = path + '/weixin/pay_fail';
-                }
-            }
-        }
-    });
-
-}
+// function focusAuthor() {
+//     var selfOenId = $('#buyer_openId').val();
+//     var otherOpenId = $('#seller_openId').val();
+//     $.ajax({
+//         url: '/focus/focusAuthor',
+//         data: {
+//             "selfOenId": '11111111',
+//             "otherOpenId": '222222222'
+//         },
+//         beforeSend: function () {
+//             /*  $(".loading_box ,.disalog_bg3").show(); 	 */
+//         },
+//         success: function (result) {
+//             /*result = $.parseJSON(result);
+//             s_drer = false;
+//             $(".dsf_Jh_dfgf").removeClass("show");
+//             if (result.success) {
+//                 /!*appId=result.data.appId;
+//                 timeStamp=result.data.timeStamp;
+//                 nonceStr=result.data.nonceStr;
+//                 packageStr=result.data.packageStr;
+//                 signType=result.data.signType;
+//                 paySign=result.data.paySign;
+//                 onBridgeReady(appId,timeStamp,nonceStr,packageStr,signType,paySign);*!/
+//                 document.getElementById("guanzhu").innerText = "已关注";
+//             }*/
+//             document.getElementById("guanzhu").innerText = "已关注";
+//         }
+//     });
+//
+// }
+//
+// function cancelFocus() {
+//     document.getElementById("guanzhu").innerText = "关注作者";
+// }

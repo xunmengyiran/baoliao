@@ -5,6 +5,7 @@ import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.bean.TemplateData;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.bean.WeChatTemplate;
+import com.baoliao.weixin.dao.FocusDao;
 import com.baoliao.weixin.dao.ProductDao;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.ProductService;
@@ -61,14 +62,17 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    FocusDao focusDao;
+
+
     @Override
     public String saveProduct(HttpServletRequest request, Product vo) {
         String code = vo.getCode();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            user = Utils.getUserInfoByCode(code);
-            session.setAttribute("user", user);
+            user = Utils.getUserInfoByCode(request, code);
         }
         Map<String, Object> model = new HashMap<String, Object>();
         if (StringUtils.isNotEmpty(user.getOpenId())) {
@@ -143,7 +147,7 @@ public class ProductServiceImpl implements ProductService {
     public void getPayInfo(HttpServletRequest request, String id, String price) throws Exception {
         log.info("传入的产品id为:" + id);
         String code = request.getParameter("code");
-        User buyer_user = Utils.getUserInfoByCode(code);
+        User buyer_user = Utils.getUserInfoByCode(request, code);
         log.info("============buyer_user=============" + buyer_user.toString());
         Product product = productDao.getProductById(Integer.parseInt(id));
         log.info("============product=============" + product.toString());
@@ -153,7 +157,14 @@ public class ProductServiceImpl implements ProductService {
         request.getSession().setAttribute("buyer_user", buyer_user);
         request.getSession().setAttribute("seller_user", seller_user);
         //TODO
-        request.getSession().setAttribute("user", buyer_user);
+        //判段是否是关注的作者
+        int count = focusDao.getFocusByOpenId(buyer_user.getOpenId(), seller_user.getOpenId());
+        if (count == 0) {
+            request.getSession().setAttribute("focus", 0);
+        } else {
+            request.getSession().setAttribute("focus", 1);
+        }
+
     }
 
     public void sendSaveSuccessMessage(Product product) {

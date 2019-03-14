@@ -131,8 +131,10 @@
     </section>
 </section>
 <div class="srtop">
-    <div id="attention"><a href="https://lmjl.ttkgou.com/lmjl_core/weixin/attention_record">关注 <span>0</span></a></div>
-    <div id="follower"><a href="https://lmjl.ttkgou.com/lmjl_core/weixin/follower_record">粉丝 <span>0</span></a></div>
+    <div id="attention"><a href="https://lmjl.ttkgou.com/lmjl_core/weixin/attention_record">关注
+        <span>${sessionScope.focusCount}</span></a></div>
+    <div id="follower"><a href="https://lmjl.ttkgou.com/lmjl_core/weixin/follower_record">粉丝
+        <span>${sessionScope.fansCount}</span></a></div>
 </div>
 <ul class="mui-table-view">
     <li class="mui-table-view-cell fz16">

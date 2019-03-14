@@ -1,10 +1,8 @@
 package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.Constants;
-import com.baoliao.weixin.bean.Product;
-import com.baoliao.weixin.bean.TemplateData;
-import com.baoliao.weixin.bean.User;
-import com.baoliao.weixin.bean.WeChatTemplate;
+import com.baoliao.weixin.bean.*;
+import com.baoliao.weixin.dao.FocusDao;
 import com.baoliao.weixin.dao.ProductDao;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.FocusService;
@@ -37,4 +35,26 @@ public class FocusServiceImpl implements FocusService {
 
     private Logger log = LoggerFactory.getLogger(FocusServiceImpl.class);
 
+    @Autowired
+    FocusDao focusDao;
+
+    @Override
+    public String focusAuthor(String selfOenId, String otherOpenId) throws Exception {
+        Map<String, Object> result = new HashMap<String, Object>();
+        FocusInfo focusInfo = new FocusInfo();
+        focusInfo.setSelfOpenId(selfOenId);
+        focusInfo.setOtherOpenId(otherOpenId);
+        focusInfo.setCreateTime(new Date());
+        log.info("focusInfo" + focusInfo.toString());
+        int num = focusDao.saveFocuInfo(focusInfo);
+        log.info("保存成功条数为:" + num);
+        if (num == 1) {
+            result.put("success", true);
+        } else {
+            result.put("success", false);
+            result.put("msg", "关注失败");
+        }
+        JSONObject jObject = JSONObject.fromObject(result);
+        return jObject.toString();
+    }
 }

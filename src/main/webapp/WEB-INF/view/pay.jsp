@@ -32,7 +32,12 @@
 <section class="mt20 cen">
     <img src="${sessionScope.seller_user.headImgUrl}" class="yj user_icon_b"/>
     <p class="fz13 mt5">${sessionScope.seller_user.nickName}</p>
-    <div><span id="guanzhu" class="sd_guanzhu" onclick="focusAuthor();">关注作者</span></div>
+    <c:if test="${sessionScope.focus == 1}">
+        <div><span class="sd_guanzhu_">已关注</span></div>
+    </c:if>
+    <c:if test="${sessionScope.focus == 0}">
+        <div><span class="sd_guanzhu">关注作者</span></div>
+    </c:if>
     <span class="b fz16 sd_jgh_ddr">CBA消息单</span>
     <section class="mt15">
         <span class="fz14 dserrf_jh_d br yj4"><span

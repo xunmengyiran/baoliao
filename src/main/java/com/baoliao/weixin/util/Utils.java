@@ -16,6 +16,7 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -157,7 +158,7 @@ public class Utils {
         return image;
     }
 
-    public static User getUserInfoByCode(String code) {
+    public static User getUserInfoByCode(HttpServletRequest request, String code) {
         String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
         JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
         String openId = jsonObject.getString("openid");
@@ -181,7 +182,7 @@ public class Utils {
         user.setProvince(province);
         user.setCountry(country);
         user.setHeadImgUrl(headImgUrl);
-        // 由于code只能使用一次，所以将用户信息存入session
+        request.getSession().setAttribute("user", user);
         return user;
     }
 

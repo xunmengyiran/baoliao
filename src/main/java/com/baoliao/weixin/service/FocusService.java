@@ -6,5 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface FocusService {
 
+    String focusAuthor(String selfOenId, String otherOpenId) throws Exception;
 
 }

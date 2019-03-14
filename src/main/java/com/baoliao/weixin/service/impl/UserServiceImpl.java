@@ -1,14 +1,10 @@
 package com.baoliao.weixin.service.impl;
 
-import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.User;
-import com.baoliao.weixin.controller.UserController;
+import com.baoliao.weixin.dao.FocusDao;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
-import com.baoliao.weixin.util.WeixinIntefaceUtil;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +20,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    FocusDao focusDao;
 
     @Override
     public List<User> goIndex() {
@@ -33,8 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateUserInfo(HttpServletRequest request, String code) throws Exception {
-        User user = Utils.getUserInfoByCode(code);
-        request.getSession().setAttribute("user", user);
+        User user = Utils.getUserInfoByCode(request, code);
         userDao.updateUserInfo(user);
         return 0;
     }
@@ -43,14 +40,18 @@ public class UserServiceImpl implements UserService {
     public User queryMyInfo(HttpServletRequest request) throws Exception {
         String code = request.getParameter("code");
         HttpSession session = request.getSession();
-        String openId = (String) session.getAttribute("openId");
+//        String openId = (String) session.getAttribute("openId");
         User user = (User) session.getAttribute("user");
         log.info("从session中获取的user:" + user);
         if (user == null) {
-            user = Utils.getUserInfoByCode(code);
-            // 由于code只能使用一次，所以将用户信息存入session
-            request.getSession().setAttribute("user", user);
+            user = Utils.getUserInfoByCode(request, code);
         }
+        // 查询我关注的总数
+        int focusCount = focusDao.getMyFocusCount(user.getOpenId());
+        // 查询我的粉丝总数
+        int fansCount = focusDao.getFansCount(user.getOpenId());
+        request.getSession().setAttribute("focusCount", focusCount);
+        request.getSession().setAttribute("fansCount", fansCount);
         return user;
     }
 }

@@ -24,4 +24,24 @@ public class FocusController {
     @Autowired
     private FocusService focusService;
 
+    @PostMapping("/focusAuthor")
+    public void focusAuthor(@RequestParam String selfOenId, @RequestParam String otherOpenId, HttpServletResponse response) {
+        log.info("selfOenId===>" + selfOenId);
+        log.info("selfOenId===>" + otherOpenId);
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter pw = null;
+        try {
+            String result = focusService.focusAuthor(selfOenId, otherOpenId);
+            pw = response.getWriter();
+            pw.write(result);
+            log.info("关注作者成功:" + result);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (Exception e) {
+            log.error("关注作者出错" + e);
+        } finally {
+            pw.flush();
+            pw.close();
+        }
+    }
 }
