@@ -138,7 +138,7 @@
 </div>
 <ul class="mui-table-view">
     <li class="mui-table-view-cell fz16">
-        <a class="mui-navigate-right" href="https://lmjl.ttkgou.com/lmjl_core/weixin/get_income_record">
+        <a class="mui-navigate-right" href="/trade/tradeList">
             账户明细
         </a>
     </li>

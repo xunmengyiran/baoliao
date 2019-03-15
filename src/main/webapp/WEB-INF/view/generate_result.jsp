@@ -1,6 +1,4 @@
 <%@page pageEncoding="UTF-8" %>
-<%@ page import="com.baoliao.weixin.bean.User" %>
-<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>

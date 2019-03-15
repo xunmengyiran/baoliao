@@ -1,6 +1,7 @@
 package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.bean.Trade;
+import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.dao.TradeDao;
 import com.baoliao.weixin.service.TradeService;
 import net.sf.json.JSONObject;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -53,5 +56,16 @@ public class TradeServiceImpl implements TradeService {
         //TODO 模拟支付成功
 
         return jObject.toString();
+    }
+
+    @Override
+    public void queryTradeList(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        User user1 = new User();
+        user1.setOpenId("ohDAp1PJ7rxxLGZIoKbN1T2UllIo");
+        String openId = user1.getOpenId();
+        List<Trade> tradeList = tradeDao.queryTradeList(openId);
+        session.setAttribute("tradeList", tradeList);
     }
 }

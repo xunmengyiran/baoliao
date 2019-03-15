@@ -47,4 +47,14 @@ public class TradeController {
             pw.close();
         }
     }
+
+    @RequestMapping("/tradeList")
+    public String queryTradeList(HttpServletRequest request) {
+        try {
+            tradeService.queryTradeList(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "trade_list";
+    }
 }

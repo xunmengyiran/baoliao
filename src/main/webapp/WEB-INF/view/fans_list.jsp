@@ -1,8 +1,7 @@
-<%@ page import="com.baoliao.weixin.bean.User" %>
-<%@ page import="java.util.List" %>
+<%@page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>粉丝列表</title>
