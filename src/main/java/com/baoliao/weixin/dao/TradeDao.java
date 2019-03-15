@@ -7,4 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface TradeDao {
 
     int saveTradeInfo(Trade trade) throws Exception;
+
+    String getTodayIncomeByopenId(String openId) throws Exception;
+
+    String getIncomeCountByopenId(String openId) throws Exception;
 }

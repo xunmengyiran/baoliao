@@ -22,10 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Administrator on 2019\3\4 0004.
@@ -36,7 +33,9 @@ public class FocusServiceImpl implements FocusService {
     private Logger log = LoggerFactory.getLogger(FocusServiceImpl.class);
 
     @Autowired
-    FocusDao focusDao;
+    private FocusDao focusDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public String focusAuthor(String selfOenId, String otherOpenId) throws Exception {
@@ -56,5 +55,43 @@ public class FocusServiceImpl implements FocusService {
         }
         JSONObject jObject = JSONObject.fromObject(result);
         return jObject.toString();
+    }
+
+    @Override
+    public void getFocusList(HttpServletRequest request) throws Exception {
+        User user = (User) request.getSession().getAttribute("user");
+        List<String> focusList = focusDao.getFocusList(user.getOpenId());
+        log.info("获取到的关注openId集合:" + focusList.size());
+        List<User> userList = new ArrayList<>();
+        focusList.forEach(s -> {
+            try {
+                User u = userDao.getUserInfoByOpenId(s);
+                log.info(u.toString());
+                userList.add(u);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("获取关注列表失败。" + e);
+            }
+        });
+        request.getSession().setAttribute("focusList", userList);
+    }
+
+    @Override
+    public void getFansList(HttpServletRequest request) throws Exception {
+        User user = (User) request.getSession().getAttribute("user");
+        List<String> fansList = focusDao.getFansList(user.getOpenId());
+        log.info("获取到的粉丝openId集合:" + fansList.size());
+        List<User> userList = new ArrayList<>();
+        fansList.forEach(s -> {
+            try {
+                User u = userDao.getUserInfoByOpenId(s);
+                log.info(u.toString());
+                userList.add(u);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("获取粉丝列表失败。" + e);
+            }
+        });
+        request.getSession().setAttribute("fansList", userList);
     }
 }

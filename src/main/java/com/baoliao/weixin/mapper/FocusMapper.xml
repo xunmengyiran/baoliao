@@ -24,4 +24,12 @@
         select count(0) from tb_focus_info where other_open_id=#{openId} and is_cancel=0
     </select>
 
+    <select id="getFocusList" parameterType="java.lang.String" resultType="java.lang.String">
+        select other_open_id from tb_focus_info where self_open_id=#{openId}
+    </select>
+
+    <select id="getFansList" parameterType="java.lang.String" resultType="java.lang.String">
+        select self_open_id from tb_focus_info where other_open_id=#{openId}
+    </select>
+
 </mapper>

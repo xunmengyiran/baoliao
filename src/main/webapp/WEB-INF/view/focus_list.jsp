@@ -5,9 +5,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>关注列表</title>
 </head>
 <body>
-这是料详情页面。。。。
+<c:forEach var="user" items="${sessionScope.focusList}">
+    <c:out value="${user.openId}"></c:out>
+</c:forEach>
 </body>
 </html>

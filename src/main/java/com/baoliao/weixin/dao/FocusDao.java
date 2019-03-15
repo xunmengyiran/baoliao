@@ -1,8 +1,9 @@
 package com.baoliao.weixin.dao;
 
 import com.baoliao.weixin.bean.FocusInfo;
-import com.baoliao.weixin.bean.Product;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface FocusDao {
@@ -14,5 +15,9 @@ public interface FocusDao {
     int getMyFocusCount(String openId) throws Exception;
 
     int getFansCount(String openId) throws Exception;
+
+    List<String> getFocusList(String openId) throws Exception;
+
+    List<String> getFansList(String openId) throws Exception;
 
 }

@@ -44,4 +44,24 @@ public class FocusController {
             pw.close();
         }
     }
+
+    @GetMapping("/getFocusList")
+    public String getFocusList(HttpServletRequest request) {
+        try {
+            focusService.getFocusList(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "focus_list";
+    }
+
+    @GetMapping("/getFansList")
+    public String getFansList(HttpServletRequest request) {
+        try {
+            focusService.getFansList(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "fans_list";
+    }
 }

@@ -116,7 +116,7 @@
     <view class="qc">
     </view>
 
-    <p class="cf fz36 cen pt20">￥0</p>
+    <p class="cf fz36 cen pt20">${sessionScope.todayIncome}</p>
     <input type="hidden" name="balance" id="balance" value="0"/>
     <input type="hidden" name="zfb_account" id="zfb_account" value=""/>
     <section class="mui-row mt20 cen">
@@ -125,15 +125,15 @@
             <p class="cf fz12">余额</p>
         </section>
         <section class="mui-col-xs-6 cf fz18">
-            0
+            ${sessionScope.incomeCount}
             <p class="cf fz12">收益总额</p>
         </section>
     </section>
 </section>
 <div class="srtop">
-    <div id="attention"><a href="https://lmjl.ttkgou.com/lmjl_core/weixin/attention_record">关注
+    <div id="attention"><a href="/focus/getFocusList">关注
         <span>${sessionScope.focusCount}</span></a></div>
-    <div id="follower"><a href="https://lmjl.ttkgou.com/lmjl_core/weixin/follower_record">粉丝
+    <div id="follower"><a href="/focus/getFansList">粉丝
         <span>${sessionScope.fansCount}</span></a></div>
 </div>
 <ul class="mui-table-view">
