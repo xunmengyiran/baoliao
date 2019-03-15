@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
         //余额
         //TODO
-        // 余额 = 收益总额-支出总额-退款金额
+        // 余额 = 收益总额-支出总额-退款金额-提现金额
 
 
         // 查询我关注的总数

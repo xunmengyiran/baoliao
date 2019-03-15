@@ -15,10 +15,10 @@
     </insert>
 
     <select id="getTodayIncomeByopenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where to_days(create_time) = to_days(now()) and seller_open_id = #{openId}
+        select sum(money) from tb_trade where to_days(create_time) = to_days(now()) and seller_open_id = #{openId} and trade_type=0
     </select>
 
     <select id="getIncomeCountByopenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where seller_open_id = #{openId}
+        select sum(money) from tb_trade where seller_open_id = #{openId} and trade_type=0
     </select>
 </mapper>
