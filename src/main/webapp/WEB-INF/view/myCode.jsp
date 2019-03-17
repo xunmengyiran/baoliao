@@ -1,5 +1,7 @@
 <%@page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,24 +34,53 @@
     </section>
     <section class="mui-row mt10 pm10 cen dsf_jherr_der">
         <section class="mui-col-xs-6 fz16 act">
-            我卖的料(0)
+            我卖的料(${fn:length(sessionScope.sellerProductList)})
         </section>
         <section class="mui-col-xs-6 fz16">
-            我买的料(0)
+            我买的料(${fn:length(sessionScope.buyProductList)})
         </section>
     </section>
 </section>
 
 <section class="sdf_khj_dert  show aa">
-    <ul>
-    </ul>
+    <c:forEach var="trade" items="${sessionScope.sellerProductList}">
+        <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
+            <div style="margin-bottom: 6px">
+                    <%--<span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
+                                                                                  pattern="yyyy-MM-dd HH:ss:mm"/></span>--%>
+            </div>
+            <div>
+            <span>
+                <span style="color: #EBC49D;padding-right: 4px;">${trade.productTitle}</span>
+            </span>
+                <span style="float: right;font-size: 13px;">
+                <span style="color: grey">已售</span>
+                <span style="color: #EBC49D;">
+                        ${trade.sellerCount}
+                </span>
+                <span style="color: grey">份</span>
+            </span>
+            </div>
+        </div>
+    </c:forEach>
     <p class="pt10 pm10 fz13 cen btm z3 chakn_jghd_dr aa">点击查看更多</p>
 </section>
 
 <section class="sdf_khj_dert   ab">
-    <ul>
-
-    </ul>
+    <c:forEach var="trade" items="${sessionScope.buyProductList}">
+        <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
+            <div style="margin-bottom: 6px">
+                    <span style="float:right;font-size: 10px;color: #BCBCBC;"><fmt:formatDate
+                            value="${trade.createTime}"
+                            pattern="yyyy-MM-dd HH:ss:mm"/></span>
+            </div>
+            <div>
+            <span>
+                <span style="color: #EBC49D;padding-right: 4px;">${trade.productTitle}</span>
+            </span>
+            </div>
+        </div>
+    </c:forEach>
     <p class="pt10 pm10 fz13 cen btm z3 chakn_jghd_dr ab">点击查看更多</p>
 </section>
 

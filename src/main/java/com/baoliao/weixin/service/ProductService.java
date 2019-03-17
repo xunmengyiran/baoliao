@@ -12,4 +12,8 @@ public interface ProductService {
 
     void getPayInfo(HttpServletRequest request, String id, String price) throws Exception;
 
+    void getBuyProductList(HttpServletRequest request) throws Exception;
+
+    void getSellerProductList(HttpServletRequest request) throws Exception;
+
 }

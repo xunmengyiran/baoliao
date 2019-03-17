@@ -21,6 +21,8 @@ public class Trade {
 
     private String money;
 
+    private String sellerCount;
+
     public int getId() {
         return id;
     }
@@ -93,6 +95,14 @@ public class Trade {
         this.payType = payType;
     }
 
+    public String getSellerCount() {
+        return sellerCount;
+    }
+
+    public void setSellerCount(String sellerCount) {
+        this.sellerCount = sellerCount;
+    }
+
     @Override
     public String toString() {
         return "Trade{" +
@@ -105,6 +115,7 @@ public class Trade {
                 ", productTitle='" + productTitle + '\'' +
                 ", createTime=" + createTime +
                 ", money='" + money + '\'' +
+                ", sellerCount='" + sellerCount + '\'' +
                 '}';
     }
 }

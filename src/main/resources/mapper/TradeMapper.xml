@@ -26,4 +26,18 @@
     <select id="queryTradeList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
         select p.title as productTitle,t.buyer_open_id as buyerOpenId,t.seller_open_id as sellerOpenId,t.trade_type as tradeType,t.money,t.create_time as createTime from tb_trade t left join tb_product p on t.product_id=p.id  where buyer_open_id = #{openId} or seller_open_id=#{openId}
     </select>
+
+    <select id="queryBuyProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
+        SELECT t.money,t.create_time AS createTime, p.title as productTitle
+        FROM tb_trade t
+        LEFT JOIN tb_product p ON t.product_id = p.id
+        WHERE  buyer_open_id =#{openId} GROUP BY product_id
+    </select>
+
+    <select id="querySellerProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
+        SELECT t.money,t.create_time AS createTime, p.title as productTitle ,count(t.product_id) as sellerCount
+        FROM tb_trade t
+        LEFT JOIN tb_product p ON t.product_id = p.id
+        WHERE  seller_open_id =#{openId} GROUP BY product_id;
+    </select>
 </mapper>

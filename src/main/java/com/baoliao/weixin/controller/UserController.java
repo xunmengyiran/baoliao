@@ -1,5 +1,6 @@
 package com.baoliao.weixin.controller;
 
+import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,10 @@ public class UserController {
     private Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
+
+    @Autowired
+
+    private ProductService productService;
 
     /**
      * 初始化用户信息，返回index.jsp
@@ -44,8 +49,17 @@ public class UserController {
     }
 
     @GetMapping("/queryMyCode")
-    public String queryMyCode() {
+    public String queryMyCode(HttpServletRequest request) {
         log.info("进入我的料码页面");
+        try {
+            productService.getBuyProductList(request);
+            log.info("查询我买的料成功");
+            productService.getSellerProductList(request);
+            log.info("查询我卖的料成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info("进入我的料码页面出错。");
+        }
         return "myCode";
     }
 

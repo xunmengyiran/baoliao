@@ -6,7 +6,7 @@
         <result column="self_open_id" property="selfOpenId" jdbcType="VARCHAR"/>
         <result column="other_open_id" property="otherOpenId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="is_cancel" property="type" jdbcType="INTEGER"/>
+        <result column="is_cancel" property="isCancel" jdbcType="INTEGER"/>
         <result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <insert id="saveFocuInfo" parameterType="com.baoliao.weixin.bean.FocusInfo">

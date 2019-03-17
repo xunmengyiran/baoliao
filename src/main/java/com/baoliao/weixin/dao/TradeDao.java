@@ -15,4 +15,8 @@ public interface TradeDao {
     String getIncomeCountByopenId(String openId) throws Exception;
 
     List<Trade> queryTradeList(String openId) throws Exception;
+
+    List<Trade> queryBuyProductList(String openId) throws Exception;
+
+    List<Trade> querySellerProductList(String openId) throws Exception;
 }

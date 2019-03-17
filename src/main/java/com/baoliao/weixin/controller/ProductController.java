@@ -105,4 +105,33 @@ public class ProductController {
         log.info("付费成功后获取到的产品id" + id);
         return "product_detail_info";
     }
+
+    /* *//**
+     * 查询买到料列表
+     * @param request
+     * @return
+     *//*
+    @GetMapping("getBuyProductList")
+    public String getBuyProductList(HttpServletRequest request){
+        try {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    *//**
+     * 查询买到料列表
+     * @param request
+     * @return
+     *//*
+    @GetMapping("getSellerProductList")
+    public String getSellerProductList(HttpServletRequest request){
+        try {
+            productService.getSellerProductList(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }*/
 }

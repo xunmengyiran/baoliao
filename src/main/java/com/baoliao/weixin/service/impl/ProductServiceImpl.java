@@ -1,12 +1,10 @@
 package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.Constants;
-import com.baoliao.weixin.bean.Product;
-import com.baoliao.weixin.bean.TemplateData;
-import com.baoliao.weixin.bean.User;
-import com.baoliao.weixin.bean.WeChatTemplate;
+import com.baoliao.weixin.bean.*;
 import com.baoliao.weixin.dao.FocusDao;
 import com.baoliao.weixin.dao.ProductDao;
+import com.baoliao.weixin.dao.TradeDao;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.util.MessageUtil;
@@ -30,10 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Administrator on 2019\3\4 0004.
@@ -64,6 +59,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     FocusDao focusDao;
+
+    @Autowired
+    TradeDao tradeDao;
 
 
     @Override
@@ -167,6 +165,7 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+
     public void sendSaveSuccessMessage(Product product) {
         log.info("准备发送模板信息");
         WeChatTemplate weChatTemplate = new WeChatTemplate();
@@ -205,5 +204,38 @@ public class ProductServiceImpl implements ProductService {
         JSONObject json = JSONObject.fromObject(weChatTemplate);
         log.info("模板消息组装完成:" + json.toString());
         MessageUtil.sendCustomerService(json.toString());
+    }
+
+    /**
+     * 查询买到的料列表
+     *
+     * @param request
+     * @throws Exception
+     */
+    @Override
+    public void getBuyProductList(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        User user1 = new User();
+        user1.setOpenId("ohDAp1PJ7rxxLGZIoKbN1T2UllIo");
+        String openId = user1.getOpenId();
+        List<Trade> buyProductList = tradeDao.queryBuyProductList(openId);
+        session.setAttribute("buyProductList", buyProductList);
+    }
+
+    /**
+     * 查询卖到料列表
+     *
+     * @param request
+     * @throws Exception
+     */
+    @Override
+    public void getSellerProductList(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        User user1 = new User();
+        user1.setOpenId("ohDAp1MbpmyfnexLVONp2xCCTt-Q");
+        List<Trade> sellerProductList = tradeDao.querySellerProductList(user1.getOpenId());
+        session.setAttribute("sellerProductList", sellerProductList);
     }
 }
