@@ -117,11 +117,11 @@
     </view>
 
     <p class="cf fz36 cen pt20">${sessionScope.todayIncome}</p>
-    <input type="hidden" name="balance" id="balance" value="0"/>
+    <input type="hidden" name="balance" id="balance" value="${sessionScope.balance}"/>
     <input type="hidden" name="zfb_account" id="zfb_account" value=""/>
     <section class="mui-row mt20 cen">
         <section class="mui-col-xs-6 cf fz18">
-            0
+            ${sessionScope.balance}
             <p class="cf fz12">余额</p>
         </section>
         <section class="mui-col-xs-6 cf fz18">
@@ -143,7 +143,7 @@
         </a>
     </li>
     <li class="mui-table-view-cell fz16">
-        <a class="mui-navigate-right" href="https://lmjl.ttkgou.com/lmjl_core/weixin/get_transfer_record">
+        <a class="mui-navigate-right" href="/trade/depositList">
             提现明细
         </a>
     </li>
@@ -234,41 +234,67 @@
                 mui.alert('余额满2元才能提现！');
                 return
             }
+            var inputMoney = 0;
+            mui.prompt('请输入需要体现的金额', '请输入金额', '提现', ['取消', '确认'], function (e) {
+                if (e.index == 1) {
+                    //确认
+                    console.log("11111111" + e.index)
+                    inputValue = e.value;
+                    if (e.value > balance) {
+                        mui.alert('提现金额不能大于余额');
+                        return
+                    }
+                    if (e.value < 2) {
+                        mui.alert('提现金额至少2元');
+                        return
+                    }
+                    if (e.value > 20000) {
+                        mui.alert('提现金额每天最多20000');
+                        return
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: '/trade/oper_cash',
+                        sync: true,
+                        data: {
+                            'type': type,
+                            'inputMoney': inputMoney
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            $(".dsf_Jh_dfgf").removeClass("show");
+                            $(".bgb").hide();
+                            s_drer = false;
+                            if (result.success) {//成功
+                                //alert(result.msg)
+                                /* mui.alert(result.msg, '提示', function () {
+                                     window.location.href = basePath + "weixin/account_info";
+                                 });*/
+                                mui.toast("提现成功")
+                            } else {
+                                //mui.alert(result.msg)
+                                mui.alert(result.msg, '提示', function () {
+                                    if (result.data == "3") {//处理中
+                                        window.location.href = basePath + "weixin/account_info";
+                                    }
+                                });
+                            }
+                        },
+                        error: function () {
+                            s_drer = false;
+                            $(".dsf_Jh_dfgf").removeClass("show");
+                            $(".bgb").hide();
+                            mui.alert("网络错误！")
+                        }
+                    });
+                } else {
+                    return;
+                }
+            }, 'div');
             $(".dsf_Jh_dfgf").addClass("show");
             $(".bgb").show();
             s_drer = true;
-            $.ajax({
-                type: 'POST',
-                url: path + '/weixin/oper_cash',
-                data: {
-                    'type': type
-                },
-                dataType: 'json',
-                success: function (result) {
-                    $(".dsf_Jh_dfgf").removeClass("show");
-                    $(".bgb").hide();
-                    s_drer = false;
-                    if (result.success) {//成功
-                        //alert(result.msg)
-                        mui.alert(result.msg, '提示', function () {
-                            window.location.href = basePath + "weixin/account_info";
-                        });
-                    } else {
-                        //mui.alert(result.msg)
-                        mui.alert(result.msg, '提示', function () {
-                            if (result.data == "3") {//处理中
-                                window.location.href = basePath + "weixin/account_info";
-                            }
-                        });
-                    }
-                },
-                error: function () {
-                    s_drer = false;
-                    $(".dsf_Jh_dfgf").removeClass("show");
-                    $(".bgb").hide();
-                    mui.alert("网络错误！")
-                }
-            });
+
         })
     })
 

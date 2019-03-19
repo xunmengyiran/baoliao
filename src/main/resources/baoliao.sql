@@ -11,7 +11,7 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 15/03/2019 10:08:29
+ Date: 17/03/2019 21:46:29
 */
 
 SET NAMES utf8mb4;
@@ -86,7 +86,7 @@ CREATE TABLE `tb_trade`  (
   `pay_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '支付类型(余额支付和支付宝支付，待定)',
   `create_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_trade
@@ -97,6 +97,8 @@ INSERT INTO `tb_trade` VALUES (3, 31, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 'ohDAp1Mbp
 INSERT INTO `tb_trade` VALUES (4, 33, 'ohDAp1PykHDgkhyTXqEAEWQRo0bk', 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 0, '68', '1', '2019-03-14 19:24:47');
 INSERT INTO `tb_trade` VALUES (5, 31, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 0, '5', '1', '2019-03-14 21:50:25');
 INSERT INTO `tb_trade` VALUES (6, 31, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 0, '5', '1', '2019-03-14 21:54:09');
+INSERT INTO `tb_trade` VALUES (7, -999, '', 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 2, '2', '1', '2019-03-17 21:29:09');
+INSERT INTO `tb_trade` VALUES (8, -999, '', 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 2, '2', '1', '2019-03-17 21:38:46');
 
 -- ----------------------------
 -- Table structure for tb_wechat_user_info
@@ -121,7 +123,7 @@ CREATE TABLE `tb_wechat_user_info`  (
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `privilege` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 70 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_wechat_user_info
@@ -140,5 +142,6 @@ INSERT INTO `tb_wechat_user_info` VALUES (66, NULL, 'ohDAp1HGsXCWudGJYGigkV6Wd_c
 INSERT INTO `tb_wechat_user_info` VALUES (67, NULL, 'ohDAp1PALQ8jZ7pVn2d8Wjz8Bv_4', 1, 'chop', 1, '南京', '中国', '江苏', 'zh_CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/aoDuLiaKNpKDUccxmEDmPojQYEZWLH4BGiayCPiaDXphOqM5fTibiaUVlKYtCB1eSYbicDYD1SPRG7YPic0BItAic8e7Gw/132', '2019-03-13', NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `tb_wechat_user_info` VALUES (68, NULL, 'ohDAp1AbtQPCOCdYmC9YJMPfZW3I', 0, '陈铎', 1, '深圳', '中国', '广东', 'zh_CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/l98JXX5gEZoJYd6xuNBFsibIk8mBR9UZC6A4EwiaJicUIGSYL6OyYVDElvNy2wOGDFo0iamh9CKmfkZR69XliaJxzBA/132', '2019-03-13', '2019-03-13 23:21:23', NULL, NULL, NULL, NULL);
 INSERT INTO `tb_wechat_user_info` VALUES (69, NULL, 'ohDAp1CBVPEC312VcVQ2whlMHp2c', 0, '不合格', 1, '', '中国', '', 'zh_CN', 'http://thirdwx.qlogo.cn/mmopen/vi_32/DxA89AgRfqibxlG0jvNzbq0Cz2OTibsnI2qJ5jIlsedpTkXhjl18eyJRJ9poYicPnkic3nBHDXMibdoAMxIlhzUWz3w/132', '2019-03-14', '2019-03-14 05:37:07', NULL, NULL, NULL, NULL);
+INSERT INTO `tb_wechat_user_info` VALUES (70, NULL, 'ohDAp1LTnsn6cz9qZVGi9kgyRc7g', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-16', NULL, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

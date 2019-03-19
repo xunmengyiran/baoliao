@@ -216,9 +216,7 @@ public class ProductServiceImpl implements ProductService {
     public void getBuyProductList(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        User user1 = new User();
-        user1.setOpenId("ohDAp1PJ7rxxLGZIoKbN1T2UllIo");
-        String openId = user1.getOpenId();
+        String openId = user.getOpenId();
         List<Trade> buyProductList = tradeDao.queryBuyProductList(openId);
         session.setAttribute("buyProductList", buyProductList);
     }
@@ -233,9 +231,16 @@ public class ProductServiceImpl implements ProductService {
     public void getSellerProductList(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        User user1 = new User();
-        user1.setOpenId("ohDAp1MbpmyfnexLVONp2xCCTt-Q");
-        List<Trade> sellerProductList = tradeDao.querySellerProductList(user1.getOpenId());
+        List<Trade> sellerProductList = tradeDao.querySellerProductList(user.getOpenId());
         session.setAttribute("sellerProductList", sellerProductList);
+    }
+
+    @Override
+    public void getProductDetailInfo(HttpServletRequest request, String id) throws Exception {
+        HttpSession session = request.getSession();
+        Product product = productDao.getProductById(Integer.parseInt(id));
+        String[] imgArr = product.getImgArr().split(",");
+        session.setAttribute("product", product);
+        session.setAttribute("imgArr", imgArr);
     }
 }

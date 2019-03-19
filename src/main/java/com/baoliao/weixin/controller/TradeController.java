@@ -48,6 +48,30 @@ public class TradeController {
         }
     }
 
+    @RequestMapping("/oper_cash")
+    public void oper_cash(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter pw = null;
+        try {
+            String result = tradeService.oper_cash(request);
+            pw = response.getWriter();
+            pw.write(result);
+            log.info("提现成功:" + result);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (Exception e) {
+            log.error("提现失败" + e);
+        } finally {
+            pw.flush();
+            pw.close();
+        }
+    }
+
     @RequestMapping("/tradeList")
     public String queryTradeList(HttpServletRequest request) {
         try {
@@ -56,5 +80,17 @@ public class TradeController {
             e.printStackTrace();
         }
         return "trade_list";
+    }
+
+    @RequestMapping("/depositList")
+    public String queryDepositList(HttpServletRequest request) {
+        try {
+            tradeService.queryDepositList(request);
+            log.info("查询提现列表成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("查询提现列表失败！");
+        }
+        return "deposit_list";
     }
 }

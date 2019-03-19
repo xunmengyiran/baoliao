@@ -59,7 +59,8 @@ public class FocusServiceImpl implements FocusService {
 
     @Override
     public void getFocusList(HttpServletRequest request) throws Exception {
-        User user = (User) request.getSession().getAttribute("user");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         List<String> focusList = focusDao.getFocusList(user.getOpenId());
         log.info("获取到的关注openId集合:" + focusList.size());
         List<User> userList = new ArrayList<>();
@@ -73,12 +74,13 @@ public class FocusServiceImpl implements FocusService {
                 log.error("获取关注列表失败。" + e);
             }
         });
-        request.getSession().setAttribute("focusList", userList);
+        session.setAttribute("focusList", userList);
     }
 
     @Override
     public void getFansList(HttpServletRequest request) throws Exception {
-        User user = (User) request.getSession().getAttribute("user");
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
         List<String> fansList = focusDao.getFansList(user.getOpenId());
         log.info("获取到的粉丝openId集合:" + fansList.size());
         List<User> userList = new ArrayList<>();
@@ -92,6 +94,6 @@ public class FocusServiceImpl implements FocusService {
                 log.error("获取粉丝列表失败。" + e);
             }
         });
-        request.getSession().setAttribute("fansList", userList);
+        session.setAttribute("fansList", userList);
     }
 }

@@ -54,7 +54,7 @@
             </span>
             </c:if>
 
-            <c:if test="${trade.tradeType == 1}">
+            <c:if test="${trade.tradeType == 2}">
             <span>
                 <span style="color: #EBC49D;padding-right: 4px;">提现</span>
             </span>

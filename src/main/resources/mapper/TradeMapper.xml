@@ -7,37 +7,62 @@
         <result column="buyer_open_id" property="buyerOpenId" jdbcType="VARCHAR"/>
         <result column="seller_open_id" property="sellerOpenId" jdbcType="VARCHAR"/>
         <result column="money" property="money" jdbcType="VARCHAR"/>
-        <result column="pay_type" property="payType" jdbcType="VARCHAR"/>
-        <result column="trade_type" property="tradeType" jdbcType="VARCHAR"/>
+        <result column="pay_type" property="payType" jdbcType="INTEGER"/>
+        <result column="trade_type" property="tradeType" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <insert id="saveTradeInfo" parameterType="com.baoliao.weixin.bean.Trade">
       insert into tb_trade(product_id,buyer_open_id,seller_open_id,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{money},#{payType},#{createTime});
     </insert>
 
-    <select id="getTodayIncomeByopenId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="getTodayIncomeByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
         select sum(money) from tb_trade where to_days(create_time) = to_days(now()) and seller_open_id = #{openId} and trade_type=0
     </select>
 
-    <select id="getIncomeCountByopenId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="getIncomeByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
         select sum(money) from tb_trade where seller_open_id = #{openId} and trade_type=0
     </select>
 
+    <select id="getExpenditureByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0
+    </select>
+
+    <select id="getRefundToOtherByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=1
+    </select>
+
+    <select id="getRefundToSelfByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+        select sum(money) from tb_trade where seller_open_id = #{openId} and trade_type=1
+    </select>
+
+    <select id="getDepositByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=2
+    </select>
+
     <select id="queryTradeList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
-        select p.title as productTitle,t.buyer_open_id as buyerOpenId,t.seller_open_id as sellerOpenId,t.trade_type as tradeType,t.money,t.create_time as createTime from tb_trade t left join tb_product p on t.product_id=p.id  where buyer_open_id = #{openId} or seller_open_id=#{openId}
+        select p.title as productTitle,t.buyer_open_id as buyerOpenId,t.seller_open_id as sellerOpenId,t.trade_type as
+        tradeType,t.money,t.create_time as createTime from tb_trade t left join tb_product p on t.product_id=p.id where
+        (buyer_open_id = #{openId} or seller_open_id=#{openId})
+        <if test="tradeType == 2">
+            and t.trade_type = #{tradeType}
+        </if>
     </select>
 
     <select id="queryBuyProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
         SELECT t.money,t.create_time AS createTime, p.title as productTitle
         FROM tb_trade t
         LEFT JOIN tb_product p ON t.product_id = p.id
-        WHERE  buyer_open_id =#{openId} GROUP BY product_id
+        WHERE  buyer_open_id =#{openId} and trade_type=0 GROUP BY product_id
     </select>
 
     <select id="querySellerProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
         SELECT t.money,t.create_time AS createTime, p.title as productTitle ,count(t.product_id) as sellerCount
         FROM tb_trade t
         LEFT JOIN tb_product p ON t.product_id = p.id
-        WHERE  seller_open_id =#{openId} GROUP BY product_id;
+        WHERE  seller_open_id =#{openId} and trade_type=0 GROUP BY product_id;
     </select>
+
+    <insert id="saveOperCashInfo" parameterType="com.baoliao.weixin.bean.Trade">
+        insert into tb_trade(product_id,buyer_open_id,seller_open_id,trede_type,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{tradeType},#{money},#{payType},#{createTime});
+    </insert>
 </mapper>

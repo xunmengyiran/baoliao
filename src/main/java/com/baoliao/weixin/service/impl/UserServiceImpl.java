@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             user = Utils.getUserInfoByCode(request, code);
         }
         //当天收益额
-        String todayIncome = tradeDao.getTodayIncomeByopenId(user.getOpenId());
+        String todayIncome = tradeDao.getTodayIncomeByOpenId(user.getOpenId());
         log.info("当天收益" + todayIncome);
         if (todayIncome == null) {
             todayIncome = "0";
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         todayIncome = Utils.conversion2Mumber(todayIncome);
 
         //收益总额
-        String incomeCount = tradeDao.getIncomeCountByopenId(user.getOpenId());
+        String incomeCount = tradeDao.getIncomeByOpenId(user.getOpenId());
         log.info("收益总额" + incomeCount);
         if (incomeCount == null) {
             incomeCount = "0";
@@ -69,8 +69,37 @@ public class UserServiceImpl implements UserService {
 
         //余额
         //TODO
-        // 余额 = 收益总额-支出总额-退款金额-提现金额
+        // 余额 = 收益总额-支出总额-退款别人金额-提现金额+别人退自己
+        // 1.支出总额
+        String expenditureCount = tradeDao.getExpenditureByOpenId(user.getOpenId());
+        log.info("支出总额" + incomeCount);
+        if (expenditureCount == null) {
+            expenditureCount = "0";
+        }
+        expenditureCount = Utils.conversion2Mumber(expenditureCount);
+        //2.退款(1.退给别人，2，别人退给自己)
+        String refundToOtherCount = tradeDao.getRefundToOtherByOpenId(user.getOpenId());
+        log.info("退别人总额" + incomeCount);
+        if (refundToOtherCount == null) {
+            refundToOtherCount = "0";
+        }
+        refundToOtherCount = Utils.conversion2Mumber(refundToOtherCount);
+        String refundToSelfCount = tradeDao.getRefundToSelfByOpenId(user.getOpenId());
+        log.info("别人退自己总额" + refundToSelfCount);
+        if (refundToSelfCount == null) {
+            refundToSelfCount = "0";
+        }
+        refundToSelfCount = Utils.conversion2Mumber(refundToSelfCount);
+        //3.提现
+        String depositCount = tradeDao.getDepositByOpenId(user.getOpenId());
+        log.info("提现总额" + depositCount);
+        if (depositCount == null) {
+            depositCount = "0";
+        }
+        depositCount = Utils.conversion2Mumber(depositCount);
 
+        double balance = Double.parseDouble(incomeCount) - Double.parseDouble(expenditureCount) - Double.parseDouble(refundToOtherCount) - Double.parseDouble(depositCount) + Double.parseDouble(refundToSelfCount);
+        session.setAttribute("balance", balance);
 
         // 查询我关注的总数
         int focusCount = focusDao.getMyFocusCount(user.getOpenId());

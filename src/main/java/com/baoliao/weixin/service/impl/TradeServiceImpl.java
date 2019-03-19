@@ -1,5 +1,6 @@
 package com.baoliao.weixin.service.impl;
 
+import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Trade;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.dao.TradeDao;
@@ -40,7 +41,7 @@ public class TradeServiceImpl implements TradeService {
         trade.setCreateTime(new Date());
         trade.setBuyerOpenId(buyerOpenId);
         trade.setSellerOpenId(sellerOpenId);
-        trade.setPayType(payType);
+        trade.setPayType(Integer.parseInt(payType));
         log.info("========trade=============" + trade.toString());
         JSONObject jObject = new JSONObject();
         try {
@@ -62,10 +63,50 @@ public class TradeServiceImpl implements TradeService {
     public void queryTradeList(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        User user1 = new User();
-        user1.setOpenId("ohDAp1PJ7rxxLGZIoKbN1T2UllIo");
-        String openId = user1.getOpenId();
-        List<Trade> tradeList = tradeDao.queryTradeList(openId);
+        String openId = user.getOpenId();
+        List<Trade> tradeList = tradeDao.queryTradeList(openId, Constants.TRADE_TYPE.NOMAL_TRADE);
         session.setAttribute("tradeList", tradeList);
+    }
+
+    @Override
+    public String oper_cash(HttpServletRequest request) throws Exception {
+        String inputMoney = request.getParameter("inputMoney");
+        User user = (User) request.getSession().getAttribute("user");
+        Trade trade = new Trade();
+        // 提现时候设置产品id -999
+        trade.setProductId(-999);
+        trade.setMoney(inputMoney);
+        trade.setCreateTime(new Date());
+        trade.setBuyerOpenId("");
+        trade.setBuyerOpenId(user.getOpenId());
+        trade.setPayType(1);
+        trade.setTradeType(2);
+        log.info("========trade=============" + trade.toString());
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        JSONObject jObject = new JSONObject();
+        try {
+            int num = tradeDao.saveOperCashInfo(trade);
+            if (num == 1) {
+                resultMap.put("success", true);
+                jObject = JSONObject.fromObject(resultMap);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("保存交易信息异常！" + e);
+        }
+        //TODO 模拟提现成功
+
+        return jObject.toString();
+    }
+
+    @Override
+    public void queryDepositList(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        List<Trade> tradeList = tradeDao.queryTradeList(user.getOpenId(), Constants.TRADE_TYPE.DEPOSIT_TRADE);
+        for (Trade trade : tradeList) {
+            log.info(trade.toString());
+        }
+        session.setAttribute("depositList", tradeList);
     }
 }

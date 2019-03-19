@@ -9,9 +9,9 @@ public class Trade {
 
     private String sellerOpenId;
 
-    private String payType;
+    private int payType;
 
-    private String tradeType;
+    private int tradeType;
 
     private int productId;
 
@@ -47,14 +47,6 @@ public class Trade {
         this.sellerOpenId = sellerOpenId;
     }
 
-    public String getTradeType() {
-        return tradeType;
-    }
-
-    public void setTradeType(String tradeType) {
-        this.tradeType = tradeType;
-    }
-
     public int getProductId() {
         return productId;
     }
@@ -87,14 +79,6 @@ public class Trade {
         this.productTitle = productTitle;
     }
 
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
     public String getSellerCount() {
         return sellerCount;
     }
@@ -103,14 +87,30 @@ public class Trade {
         this.sellerCount = sellerCount;
     }
 
+    public int getPayType() {
+        return payType;
+    }
+
+    public void setPayType(int payType) {
+        this.payType = payType;
+    }
+
+    public int getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(int tradeType) {
+        this.tradeType = tradeType;
+    }
+
     @Override
     public String toString() {
         return "Trade{" +
                 "id=" + id +
                 ", buyerOpenId='" + buyerOpenId + '\'' +
                 ", sellerOpenId='" + sellerOpenId + '\'' +
-                ", payType='" + payType + '\'' +
-                ", tradeType='" + tradeType + '\'' +
+                ", payType=" + payType +
+                ", tradeType=" + tradeType +
                 ", productId=" + productId +
                 ", productTitle='" + productTitle + '\'' +
                 ", createTime=" + createTime +

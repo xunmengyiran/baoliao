@@ -87,8 +87,12 @@ public class ProductController {
     @GetMapping("detailInfo")
     public String getDetailInfoByScan(HttpServletRequest request, @RequestParam String id, @RequestParam String price) {
         log.info("扫描二维码获取到的id是:" + id + ",价格是:" + price);
-        String code = request.getParameter("code");
         if ("0".equals(price)) {
+            try {
+                productService.getProductDetailInfo(request, id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return "product_detail_info";
         } else {
             try {
@@ -101,8 +105,13 @@ public class ProductController {
     }
 
     @GetMapping("detailInfo2")
-    public String getDetailInfoByMoney(HttpServletRequest request, @RequestParam String id) {
+    public String getProductDetailInfoByMoney(HttpServletRequest request, @RequestParam String id) {
         log.info("付费成功后获取到的产品id" + id);
+        try {
+            productService.getProductDetailInfo(request, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "product_detail_info";
     }
 
