@@ -21,7 +21,8 @@
     <script type="text/javascript" src="/js/mui.min.js"></script>
     <script type="text/javascript" src="/js/mui.picker.min.js"></script>
     <script type="text/javascript" src="/js/base.js?v20180813"></script>
-    <script type="text/javascript" src="/js/lrz.bundle.js"></script>
+    <%--<script type="text/javascript" src="/js/lrz.bundle.js"></script>--%>
+    <script type="text/javascript" src="/js/lrz.mobile.min.js"></script>
 
 </head>
 <body>

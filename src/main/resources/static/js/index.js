@@ -246,12 +246,20 @@ function fileChange(that) {
     var length = files.length;
     var res = 0;
     for (var i = 0; i < files.length; i++) {
+        var reader = new FileReader();
         //以图片宽度为600进行压缩
         lrz(files[i], {
-            width: 600
-        })
-            .then(function (rst) {
-                //压缩后上传
+            width: 600,
+            before: function () {
+                // mui.alert("压缩开始");
+            },
+            fail: function (e) {
+                mui.alert("压缩失败" + e);
+            },
+            always: function () {
+                // mui.alert("压缩结束");
+            },
+            done: function (rst) {
                 $.ajax({
                     url: '/product/img_upload_base64',
                     type: "POST",
@@ -269,7 +277,7 @@ function fileChange(that) {
                         if (data.success) {
                             /*   alert(data.data);  */
                             $(".dsfs_jh_derrt.ab").show()
-                            console.log("===>>>" + rst.base64)
+                            // mui.alert("111===>>>" + rst.base64)
                             $(".dsf_jh_dr_reet").before('<section class="mui-col-xs-4 pr10 df_jhh_deert"> <section class="sd_jhh_s yj4 br cen pr"> <img src="' + rst.base64 + '" data-src="' + img_url + data.data + '" class="sd_jh_dertx"> <i class="dx sd_hjerer icon-guanbi  sder_jh_dert fz24 " style="color:#e0e0e0"></i> </section> </section>')
                             if (res == length) {
                                 $(".dsf_Jh_dfgf").removeClass("show");
@@ -279,14 +287,20 @@ function fileChange(that) {
                     },
                     error: function () {
                         res++;
-                        /*  mui.alert("服务中断或连接超时导致通信失败！"); */
+                        mui.alert("服务中断或连接超时导致通信失败！");
                         if (res == length) {
                             $(".dsf_Jh_dfgf").removeClass("show");
                             s_img = false;
                         }
                     }
                 });
-            });
+            }
+        })
+        /*.then(function (rst) {
+            mui.alert("==》"+rst);
+            //压缩后上传
+
+        });*/
     }
 }
 
