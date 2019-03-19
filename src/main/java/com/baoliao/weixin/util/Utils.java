@@ -228,8 +228,8 @@ public class Utils {
         return df.format(d);
     }
     public static void main(String[] args) {
-//        System.out.println(zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
-        String st = "䵺";
-        System.out.println(st);
+        System.out.println(zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
+//        String st = "䵺";
+//        System.out.println(st);
     }
 }
