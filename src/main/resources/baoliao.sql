@@ -11,7 +11,7 @@
  Target Server Version : 50087
  File Encoding         : 65001
 
- Date: 17/03/2019 21:46:29
+ Date: 19/03/2019 09:43:44
 */
 
 SET NAMES utf8mb4;
@@ -56,21 +56,22 @@ CREATE TABLE `tb_product`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `is_delete` int(1) NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY USING BTREE (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_product
 -- ----------------------------
-INSERT INTO `tb_product` VALUES (27, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '444', '', '88', '2019-03-12 10:23', '0', '32', NULL, NULL);
-INSERT INTO `tb_product` VALUES (28, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '2', '3', NULL, '44', '20190312105000015,20190312105000015,20190312105000015,20190312105000015,20190312105000015,20190312105000015', '68', '2019-03-12 10:47', '0', '32', NULL, NULL);
-INSERT INTO `tb_product` VALUES (29, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '你在', '', '88', '2019-03-12 11:05', '0', '32', NULL, NULL);
-INSERT INTO `tb_product` VALUES (30, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '不好喝', '', '88', '2019-03-12 17:40', '0', '32', NULL, NULL);
-INSERT INTO `tb_product` VALUES (31, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', '1', '2', NULL, '4', '', '5', '2019-03-12 22:19', '0', '32', NULL, NULL);
-INSERT INTO `tb_product` VALUES (32, 'ohDAp1PALQ8jZ7pVn2d8Wjz8Bv_4', 'rrrf f f', 'c&nbsp;c&nbsp;c', NULL, '', '20190313103500016605', '188', '', '0', '32', NULL, NULL);
-INSERT INTO `tb_product` VALUES (33, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '测试标题', '测试简介', NULL, '222', '', '68', '2019-03-13 20:55', '0', '36', NULL, 0);
-INSERT INTO `tb_product` VALUES (34, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '测试', '1', NULL, '3', '', '68', '2019-03-13 21:10', '0', '36', NULL, 0);
-INSERT INTO `tb_product` VALUES (35, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '我们', '', '68', '2019-03-13 21:19', '0', '36', NULL, 0);
-INSERT INTO `tb_product` VALUES (36, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', '啊啊啊啊啊啊啊', '哈哈哈哈哈哈哈哈', NULL, '', '20190313212000058930.png,20190313212000058618.png', '5', '', '0', '36', NULL, 0);
+INSERT INTO `tb_product` VALUES (27, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '444', '', '88', '2019-03-12 10:23', '0', '37', NULL, NULL);
+INSERT INTO `tb_product` VALUES (28, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '2', '3', NULL, '44', '20190312105000015,20190312105000015,20190312105000015,20190312105000015,20190312105000015,20190312105000015', '68', '2019-03-12 10:47', '0', '37', NULL, NULL);
+INSERT INTO `tb_product` VALUES (29, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '你在', '', '88', '2019-03-12 11:05', '0', '37', NULL, NULL);
+INSERT INTO `tb_product` VALUES (30, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '不好喝', '', '88', '2019-03-12 17:40', '0', '37', NULL, NULL);
+INSERT INTO `tb_product` VALUES (31, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', '1', '2', NULL, '4', '', '5', '2019-03-12 22:19', '0', '37', NULL, NULL);
+INSERT INTO `tb_product` VALUES (32, 'ohDAp1PALQ8jZ7pVn2d8Wjz8Bv_4', 'rrrf f f', 'c&nbsp;c&nbsp;c', NULL, '', '20190313103500016605', '188', '', '0', '37', NULL, NULL);
+INSERT INTO `tb_product` VALUES (33, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '测试标题', '测试简介', NULL, '222', '', '68', '2019-03-13 20:55', '0', '37', NULL, 0);
+INSERT INTO `tb_product` VALUES (34, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '测试', '1', NULL, '3', '', '68', '2019-03-13 21:10', '0', '37', NULL, 0);
+INSERT INTO `tb_product` VALUES (35, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '1', '2', NULL, '我们', '', '68', '2019-03-13 21:19', '0', '37', NULL, 0);
+INSERT INTO `tb_product` VALUES (36, 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', '啊啊啊啊啊啊啊', '哈哈哈哈哈哈哈哈', NULL, '', '20190313212000058930.png,20190313212000058618.png', '5', '', '0', '37', NULL, 0);
+INSERT INTO `tb_product` VALUES (37, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '爆料标题', '爆料简介', NULL, '内容很劲爆，看完好好带孩子看病不能想你想看想快点见到你那些年那些新农村你想静静想念想念想念出版社版本农村你想看的就不想变成你才能吃能吃肯德基你才能携家带口难道你对你说爸爸给我看', '2019031722120002396.png,20190317221200023641.png,20190317221200023815.png,2019031722120002352.png,20190317221200023626.png', '0', '2019-03-17 22:11', '0', '37', '2019-03-17 22:12:46', 0);
 
 -- ----------------------------
 -- Table structure for tb_trade
@@ -97,8 +98,8 @@ INSERT INTO `tb_trade` VALUES (3, 31, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 'ohDAp1Mbp
 INSERT INTO `tb_trade` VALUES (4, 33, 'ohDAp1PykHDgkhyTXqEAEWQRo0bk', 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 0, '68', '1', '2019-03-14 19:24:47');
 INSERT INTO `tb_trade` VALUES (5, 31, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 0, '5', '1', '2019-03-14 21:50:25');
 INSERT INTO `tb_trade` VALUES (6, 31, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 'ohDAp1MbpmyfnexLVONp2xCCTt-Q', 0, '5', '1', '2019-03-14 21:54:09');
-INSERT INTO `tb_trade` VALUES (7, -999, '', 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 2, '2', '1', '2019-03-17 21:29:09');
-INSERT INTO `tb_trade` VALUES (8, -999, '', 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', 2, '2', '1', '2019-03-17 21:38:46');
+INSERT INTO `tb_trade` VALUES (7, -999, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '', 2, '2', '1', '2019-03-17 21:29:09');
+INSERT INTO `tb_trade` VALUES (8, -999, 'ohDAp1PJ7rxxLGZIoKbN1T2UllIo', '', 2, '2', '1', '2019-03-17 21:38:46');
 
 -- ----------------------------
 -- Table structure for tb_wechat_user_info
