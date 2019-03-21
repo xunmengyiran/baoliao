@@ -13,10 +13,6 @@
     <script type="text/javascript" src="/js/mui.min.js"></script>
     <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
     <style type="text/css">
-        body {
-            margin: 8px;
-            padding: 8px;
-        }
 
         .user_icon_e.ab {
             width: 26px;
@@ -48,22 +44,64 @@
                         $.swipeoutClose(li);
                     }, 0);
                 } else {
-                    li.parentNode.removeChild(li);
                     //TODO 调用后台接口进行删除
+                    // 只有返回删除成功才可以remove
+                    li.parentNode.removeChild(li);
                 }
             });
         });
     })(mui);
 
 </script>
-<div class="mui-content">
-    <ul id="focusList" class="mui-table-view">
+<ul id="focusList" style="position:initial" class="mui-table-view">
+    <%--<li style="padding: 0px" class="mui-table-view-cell">
+        <div class="mui-slider-left mui-disabled">
+            <a class="mui-btn mui-btn-red">取消关注</a>
+        </div>
+        &lt;%&ndash;<div  class="mui-slider-handle">
+            <div style="margin-bottom: 6px">
+            </div>
+            <div> <span>
+            <img style="width: 26px;height: 26px" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">
+        </span>
+                <span>
+            <span style="color: #EBC49D;padding-right: 4px;">寻梦依然</span>
+        </span>
+            </div>
+        </div>&ndash;%&gt;
+        <div class="mui-slider-handle">
+            <img style="width: 26px;height: 26px" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">
+            <span style="color: #EBC49D;padding-right: 4px;">寻梦依然</span>
+        </span>
+        </div>
+    </li>
+    <li style="padding: 0px" class="mui-table-view-cell">
+        <div class="mui-slider-left mui-disabled">
+            <a class="mui-btn mui-btn-red">取消关注</a>
+        </div>
+        &lt;%&ndash;<div  class="mui-slider-handle">
+            <div style="margin-bottom: 6px">
+            </div>
+            <div> <span>
+            <img style="width: 26px;height: 26px" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">
+        </span>
+                <span>
+            <span style="color: #EBC49D;padding-right: 4px;">寻梦依然</span>
+        </span>
+            </div>
+        </div>&ndash;%&gt;
+        <div class="mui-slider-handle">
+            <img style="width: 26px;height: 26px" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">
+            <span style="color: #EBC49D;padding-right: 4px;">寻梦依然</span>
+            </span>
+        </div>
+    </li>--%>
         <c:forEach var="user" items="${sessionScope.focusList}">
         <li style="padding: 0px" class="mui-table-view-cell">
             <div class="mui-slider-left mui-disabled">
                 <a class="mui-btn mui-btn-red">取消关注</a>
             </div>
-            <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;" class="mui-slider-handle">
+            <div style="margin-top: 10px;" class="mui-slider-handle">
                 <div style="margin-bottom: 6px">
                     <%-- <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
                                                                                    pattern="yyyy-MM-dd HH:ss:mm"/></span>--%>
@@ -83,7 +121,6 @@
         </li>
         </c:forEach>
     </ul>
-</div>
 <div>
     <p style="text-align: center;color: #797979;font-size: 15px;">亲，没有更多数据了--！</p>
 </div>
