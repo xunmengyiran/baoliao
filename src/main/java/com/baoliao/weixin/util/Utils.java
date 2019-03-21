@@ -9,7 +9,11 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
@@ -17,9 +21,14 @@ import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -98,7 +107,7 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return fileName;
+        return fileName + ".jpg";
     }
 
     public static BufferedImage getBufferedImage(String content, Integer size, String logoPath) {
@@ -159,6 +168,46 @@ public class Utils {
         return image;
     }
 
+    public static void bigImgAddSmallImgAndText(String bigImgPath
+            , String smallImgPath, int sx, int sy
+            , String price, int cx, int cy
+            , String outPathWithFileName, int fontSize) throws IOException {
+        //主图片的路径
+        InputStream is = new FileInputStream(bigImgPath);
+        //通过JPEG图象流创建JPEG数据流解码器
+        JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
+        //解码当前JPEG数据流，返回BufferedImage对象
+        BufferedImage buffImg = jpegDecoder.decodeAsBufferedImage();
+        //得到画笔对象
+        Graphics g = buffImg.getGraphics();
+
+        //小图片的路径
+        ImageIcon imgIcon = new ImageIcon(smallImgPath);
+        //得到Image对象。
+        Image img = imgIcon.getImage();
+        //将小图片绘到大图片上,5,300 .表示你的小图片在大图片上的位置。
+        g.drawImage(img, sx, sy, null);
+        //设置颜色。
+        g.setColor(Color.WHITE);
+
+        //最后一个参数用来设置字体的大小
+        if (price != null) {
+            Font f = new Font("宋体", Font.PLAIN, fontSize);
+            Color mycolor = Color.WHITE;//new Color(0, 0, 255);
+            g.setColor(mycolor);
+            g.setFont(f);
+            g.drawString(price, cx, cy); //表示这段文字在图片上的位置(cx,cy) .第一个是你设置的内容。
+        }
+
+        g.dispose();
+        OutputStream os = new FileOutputStream(outPathWithFileName);
+        //创键编码器，用于编码内存中的图象数据。
+        JPEGImageEncoder en = JPEGCodec.createJPEGEncoder(os);
+        en.encode(buffImg);
+        is.close();
+        os.close();
+    }
+
     public static User getUserInfoByCode(HttpServletRequest request, String code) {
         String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
         JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
@@ -217,6 +266,90 @@ public class Utils {
     }
 
     /**
+     * 将图片写入到磁盘
+     *
+     * @param img      图片数据流
+     * @param fileName 文件保存时的名称
+     */
+    public static void writeImageToDisk(byte[] img, String fileName, String path) {
+        try {
+            File file = new File(path + fileName);
+            FileOutputStream fops = new FileOutputStream(file);
+            fops.write(img);
+            fops.flush();
+            fops.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 根据地址获得数据的字节流
+     *
+     * @param strUrl 网络连接地址
+     * @return
+     */
+    public static byte[] getImageFromNetByUrl(String strUrl) {
+        try {
+            URL url = new URL(strUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5 * 1000);
+            InputStream inStream = conn.getInputStream();//通过输入流获取图片数据
+            byte[] btImg = readInputStream(inStream);//得到图片的二进制数据
+            return btImg;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 从输入流中获取数据
+     *
+     * @param inStream 输入流
+     * @return
+     * @throws Exception
+     */
+    public static byte[] readInputStream(InputStream inStream) throws Exception {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = inStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, len);
+        }
+        inStream.close();
+        return outStream.toByteArray();
+    }
+
+    public static BufferedImage transferImgForRoundImgage(String url) {
+        BufferedImage resultImg = null;
+        try {
+            if (StringUtils.isBlank(url)) {
+                return null;
+            }
+            BufferedImage buffImg1 = ImageIO.read(new URL(url));
+            resultImg = new BufferedImage(buffImg1.getWidth(), buffImg1.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = resultImg.createGraphics();
+            Ellipse2D.Double shape = new Ellipse2D.Double(0, 0, buffImg1.getWidth(), buffImg1.getHeight());
+            // 使用 setRenderingHint 设置抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            resultImg = g.getDeviceConfiguration().createCompatibleImage(buffImg1.getWidth(), buffImg1.getHeight(),
+                    Transparency.TRANSLUCENT);
+            //g.fill(new Rectangle(buffImg2.getWidth(), buffImg2.getHeight()));
+            g = resultImg.createGraphics();
+            // 使用 setRenderingHint 设置抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setClip(shape);
+            g.drawImage(buffImg1, 0, 0, null);
+            g.dispose();
+        } catch (MalformedURLException e) {
+        } catch (IOException e) {
+        }
+        return resultImg;
+    }
+
+    /**
      * 数字字符串转为两位数
      *
      * @param st
@@ -227,9 +360,223 @@ public class Utils {
         DecimalFormat df = new DecimalFormat("0.00");//格式化
         return df.format(d);
     }
+
+    /**
+     * 图片添加水印
+     *
+     * @param srcImgPath       需要添加水印的图片的路径
+     * @param outImgPath       添加水印后图片输出路径
+     * @param fontType         水印文字的字体
+     * @param fontStyle        水印文字的字体份风格
+     * @param markContentColor 水印文字的颜色
+     * @param fontSize         水印的文字的大小
+     * @param waterMarkContent 水印的文字内容
+     */
+    public static void waterPress(String srcImgPath, String outImgPath, String fontType, int fontStyle, Color markContentColor, int fontSize, String waterMarkContent, int y) {
+        try {
+            // 读取原图片信息
+            File srcImgFile = new File(srcImgPath);
+            Image srcImg = null;
+            if (srcImgFile.exists() && srcImgFile.isFile() && srcImgFile.canRead()) {
+                srcImg = ImageIO.read(srcImgFile);
+            }
+            // 宽、高
+            int srcImgWidth = srcImg.getWidth(null);
+            int srcImgHeight = srcImg.getHeight(null);
+            // 加水印
+            BufferedImage bufImg = new BufferedImage(srcImgWidth, srcImgHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = bufImg.createGraphics();
+            g.drawImage(srcImg, 0, 0, srcImgWidth, srcImgHeight, null);
+            Font font = new Font(fontType, fontStyle, fontSize);
+            //设置水印颜色
+            g.setColor(markContentColor);
+            g.setFont(font);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int fontLength = getWatermarkLength(waterMarkContent, g);
+            // 实际生成的水印文字，实际文字行数
+            Double textLineCount = Math.ceil(Integer.valueOf(fontLength).doubleValue() / Integer.valueOf(srcImgWidth).doubleValue());
+            // 实际所有的水印文字的高度
+            int textHeight = textLineCount.intValue() * fontSize;
+            // 相对与X的起始的位置
+            int originX = 0;
+            // 相对与Y的起始的位置
+            int originY = 0;
+            // 实际文字大于1行，则x则为默认起始0，
+            if (1 == textLineCount.intValue()) {
+                // 实际文字行数是1，1/2个图片高度，减去1/2个字符高度
+//                originY = srcImgHeight / 2 - fontSize / 2;
+                originY = y;
+                // 实际文字行数是1，计算x的居中的起始位置
+                originX = (srcImgWidth - fontLength) / 2;
+            } else {
+                originY = y;
+                // 实际文字行数大于1，1/2个图片高度减去文字行数所需的高度
+//                originY = (srcImgHeight - textHeight) / 2;
+            }
+            System.out.println("水印文字总长度:" + fontLength + ",图片宽度:" + srcImgWidth + ",字符个数:" + waterMarkContent.length());
+            //文字叠加,自动换行叠加
+            int tempX = originX;
+            int tempY = originY;
+            int tempCharLen = 0;//单字符长度
+            int tempLineLen = 0;//单行字符总长度临时计算
+            StringBuffer stringBuffer = new StringBuffer();
+            for (int i = 0; i < waterMarkContent.length(); i++) {
+                char tempChar = waterMarkContent.charAt(i);
+                tempCharLen = getCharLen(tempChar, g);
+                if (tempLineLen >= srcImgWidth) {
+                    // 绘制前一行
+                    g.drawString(stringBuffer.toString(), tempX, tempY);
+                    //清空内容,重新追加
+                    stringBuffer.delete(0, stringBuffer.length());
+                    //文字长度已经满一行,Y的位置加1字符高度
+                    tempY = tempY + fontSize;
+                    tempLineLen = 0;
+                }
+                //追加字符
+                stringBuffer.append(tempChar);
+                tempLineLen += tempCharLen;
+            }
+            //最后叠加余下的文字
+            g.drawString(stringBuffer.toString(), tempX, tempY);
+            g.dispose();
+            // 输出图片
+            FileOutputStream outImgStream = new FileOutputStream(outImgPath);
+            ImageIO.write(bufImg, "png", outImgStream);
+            outImgStream.flush();
+            outImgStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int getCharLen(char c, Graphics2D g) {
+        return g.getFontMetrics(g.getFont()).charWidth(c);
+    }
+
+    /**
+     * 获取水印文字总长度
+     *
+     * @paramwaterMarkContent水印的文字
+     * @paramg
+     * @return水印文字总长度
+     */
+    public static int getWatermarkLength(String waterMarkContent, Graphics2D g) {
+        return g.getFontMetrics(g.getFont()).charsWidth(waterMarkContent.toCharArray(), 0, waterMarkContent.length());
+    }
+
+
     public static void main(String[] args) {
-        System.out.println(zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 500, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png"));
+        //首先生成二维码
+        String fileName = zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
 //        String st = "䵺";
 //        System.out.println(st);
+        try {
+            // 将二维码印到模板图片，并添加价格
+            bigImgAddSmallImgAndText("D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\muban1.jpg", "D:\\CCQ\\" + fileName, 250, 300, "免费", 600, 650, "D:\\CCQ\\" + fileName, 45);
+            // 下载图片到本地
+            byte[] btImg = getImageFromNetByUrl("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132");
+            if (null != btImg && btImg.length > 0) {
+                System.out.println("读取到：" + btImg.length + " 字节");
+                String headImgName = "headImg.jpg";
+                writeImageToDisk(btImg, headImgName, "D:\\CCQ\\");
+                // 变圆
+
+                BufferedImage bi1 = ImageIO.read(new File("D://CCQ//headImg.jpg"));
+                bi1 = transferImgForRoundImgage("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132");
+// 根据需要是否使用 BufferedImage.TYPE_INT_ARGB
+                BufferedImage bi2 = new BufferedImage(bi1.getWidth(), bi1.getHeight(),
+                        BufferedImage.TYPE_INT_RGB);
+
+                Ellipse2D.Double shape = new Ellipse2D.Double(0, 0, bi1.getWidth(), bi1
+                        .getHeight());
+
+                Graphics2D g2 = bi2.createGraphics();
+                // g2.setBackground(Color.WHITE);
+
+//                g2.setClip(shape);
+//                g2.setBackground(Color.WHITE);
+//                g2.fill(new Rectangle(bi2.getWidth(), bi2.getHeight()));
+//                g2.setColor(new Color(255,0,0));
+//                g2.setStroke(new BasicStroke(1));
+                bi2 = g2.getDeviceConfiguration().createCompatibleImage(bi1.getWidth(), bi1.getHeight(), Transparency.TRANSLUCENT);
+                // 使用 setRenderingHint 设置抗锯齿
+                g2.dispose();
+                g2 = bi2.createGraphics();
+                g2.drawImage(bi1, 0, 0, null);
+                g2.dispose();
+
+                try {
+                    ImageIO.write(bi2, "jpg", new File("D://CCQ//headImg.jpg"));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                //将头像 和昵称加载到图片
+                bigImgAddSmallImgAndText("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + headImgName, 100, 600, "寻梦依然", 250, 650, "D:\\CCQ\\" + fileName, 22);
+// 添加文字和标题
+                String fontType = "宋体";
+                int fontStyle = Font.BOLD;
+                int fontSize = 30;
+                String font = "测试标题";
+                /* String font = "印效果测水印效果整水印效果 ";*/
+                waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.WHITE, 35, font, 150);
+                String font1 = "测试简介内容";
+                waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                String font2 = "长按扫码 立即获取";
+                waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.gray, 18, font2, 580);
+
+            } else {
+                System.out.println("没有从该连接获得内容");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       /* String url = "http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132";
+        byte[] btImg = getImageFromNetByUrl(url);
+        if(null != btImg && btImg.length > 0){
+            System.out.println("读取到：" + btImg.length + " 字节");
+            String fileName = "test.jpg";
+            writeImageToDisk(btImg, fileName);
+        }else{
+            System.out.println("没有从该连接获得内容");
+        }*/
+        /*try {
+            //主图片的路径
+            InputStream is = new FileInputStream("D:\\\\CCQ\\\\ideaWork\\\\baoliao\\\\src\\\\main\\\\resources\\\\static\\\\img\\\\muban1.jpg");
+            //通过JPEG图象流创建JPEG数据流解码器
+            JPEGImageDecoder jpegDecoder = JPEGCodec.createJPEGDecoder(is);
+            //解码当前JPEG数据流，返回BufferedImage对象
+            BufferedImage image = jpegDecoder.decodeAsBufferedImage();
+            String text = "文字居中";
+            int width = 500;
+            int height = 400;
+            // 创建BufferedImage对象
+//            BufferedImage image = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+            // 获取Graphics2D
+            Graphics2D g2d = image.createGraphics();
+            // 画图
+            g2d.setBackground(new Color(255,255,255));
+            //g2d.setPaint(new Color(0,0,0));
+            g2d.setColor(Color.red);
+            g2d.clearRect(0, 0, width, height);
+            Font font=new Font("宋体",Font.PLAIN,64);
+            g2d.setFont(font);
+            // 抗锯齿
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 计算文字长度，计算居中的x点坐标
+            FontMetrics fm = g2d.getFontMetrics(font);
+            int textWidth = fm.stringWidth(text);
+            int widthX = (width - textWidth) / 2;
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g2d.drawString(text,widthX,100);
+            // 释放对象
+            g2d.dispose();
+            // 保存文件
+            ImageIO.write(image, "jpg", new File("D:/test.jpg"));
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }*/
     }
 }

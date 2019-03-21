@@ -20,15 +20,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
 
+import javax.imageio.ImageIO;
+import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019\3\4 0004.
@@ -108,14 +114,81 @@ public class ProductServiceImpl implements ProductService {
         //https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=http://" + redirect_domain_name + "/user/goIndex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect
         String fileName = Utils.zxingCodeCreate("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", path, 250, logoPath);
         log.info("生成的二维码名称:" + fileName);
+        // 继续生成图片
         try {
-            productDao.updateQRImgNameById(vo.getId());
-        } catch (Exception e) {
+            String price = "免费";
+            // 将二维码印到模板图片，并添加价格
+            if (!"0".equals(vo.getPrice())) {
+                price = vo.getPrice() + "元";
+            }
+            Utils.bigImgAddSmallImgAndText(qrCodeImgPath + "muban1.jpg", path + fileName, 250, 300, "免费", 600, 650, path + fileName, 45);
+            // 下载图片到本地
+            byte[] btImg = Utils.getImageFromNetByUrl(user.getHeadImgUrl());
+            if (null != btImg && btImg.length > 0) {
+                System.out.println("读取到：" + btImg.length + " 字节");
+                String headImgName = "headImg.jpg";
+                Utils.writeImageToDisk(btImg, headImgName, path);
+                // 变圆
+
+                BufferedImage bi1 = ImageIO.read(new File(path + "headImg.jpg"));
+                bi1 = Utils.transferImgForRoundImgage(user.getHeadImgUrl());
+// 根据需要是否使用 BufferedImage.TYPE_INT_ARGB
+                BufferedImage bi2 = new BufferedImage(bi1.getWidth(), bi1.getHeight(),
+                        BufferedImage.TYPE_INT_RGB);
+
+                Ellipse2D.Double shape = new Ellipse2D.Double(0, 0, bi1.getWidth(), bi1
+                        .getHeight());
+
+                Graphics2D g2 = bi2.createGraphics();
+                // g2.setBackground(Color.WHITE);
+
+//                g2.setClip(shape);
+//                g2.setBackground(Color.WHITE);
+//                g2.fill(new Rectangle(bi2.getWidth(), bi2.getHeight()));
+//                g2.setColor(new Color(255,0,0));
+//                g2.setStroke(new BasicStroke(1));
+                bi2 = g2.getDeviceConfiguration().createCompatibleImage(bi1.getWidth(), bi1.getHeight(), Transparency.TRANSLUCENT);
+                // 使用 setRenderingHint 设置抗锯齿
+                g2.dispose();
+                g2 = bi2.createGraphics();
+                g2.drawImage(bi1, 0, 0, null);
+                g2.dispose();
+
+                try {
+                    ImageIO.write(bi2, "jpg", new File(path + "headImg.jpg"));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                //将头像 和昵称加载到图片
+                Utils.bigImgAddSmallImgAndText(path + fileName, path + headImgName, 100, 600, user.getNickName(), 250, 650, path + fileName, 22);
+// 添加文字和标题
+                String fontType = "宋体";
+                int fontStyle = Font.BOLD;
+                int fontSize = 30;
+                String font = vo.getTitle();
+                /* String font = "印效果测水印效果整水印效果 ";*/
+                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.WHITE, 35, font, 150);
+                String font1 = vo.getIntroduct();
+                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                String font2 = "长按扫码 立即获取";
+                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.gray, 18, font2, 580);
+
+            } else {
+                log.error("没有从该连接获得内容");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        log.info("更新qr_img_name成功。");
+        try {
+            int num = productDao.updateQRImgNameById(fileName, vo.getId());
+            log.info("更新qr_img_name成功。" + num);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("更新qr_img_name失败。" + e);
+        }
         sendSaveSuccessMessage(vo);
-        session.setAttribute("fileName", fileName + ".jpg");
+        session.setAttribute("fileName", fileName);
         session.setAttribute("product", vo);
         JSONObject jObject = JSONObject.fromObject(model);
         return jObject.toString();

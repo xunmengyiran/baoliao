@@ -95,8 +95,8 @@
     </trim>
   </insert>
 
-  <update id="updateQRImgNameById" parameterType="java.lang.Integer">
-    update tb_product set qr_img_name = #{id}
+  <update id="updateQRImgNameById">
+    update tb_product set qr_img_name = #{fileName} where id=#{id}
   </update>
 
   <select id="getProductById" parameterType="java.lang.Integer" resultMap="BaseResultMap">

@@ -38,7 +38,7 @@
     <c:if test="${sessionScope.focus == 0}">
         <div><span class="sd_guanzhu">关注作者</span></div>
     </c:if>
-    <span class="b fz16 sd_jgh_ddr">CBA消息单</span>
+    <span class="b fz16 sd_jgh_ddr">${sessionScope.product.title}</span>
     <section class="mt15">
         <span class="fz14 dserrf_jh_d br yj4"><span
                 class="num_er red fz30">${sessionScope.product.price}</span> 元</span>

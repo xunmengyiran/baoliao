@@ -2,6 +2,7 @@ package com.baoliao.weixin.dao;
 
 import com.baoliao.weixin.bean.FocusInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface FocusDao {
 
     int saveFocuInfo(FocusInfo focusInfo) throws Exception;
 
-    int getFocusByOpenId(String selfOpenId, String otherOpenId) throws Exception;
+    int getFocusByOpenId(@Param("selfOpenId") String selfOpenId, @Param("otherOpenId") String otherOpenId) throws Exception;
 
     int getMyFocusCount(String openId) throws Exception;
 
