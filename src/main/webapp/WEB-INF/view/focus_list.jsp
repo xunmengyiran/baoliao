@@ -46,10 +46,10 @@
                 if (e.index == 0) {
                     setTimeout(function () {
                         $.swipeoutClose(li);
-                        //TODO 调用后台接口进行删除
                     }, 0);
                 } else {
                     li.parentNode.removeChild(li);
+                    //TODO 调用后台接口进行删除
                 }
             });
         });

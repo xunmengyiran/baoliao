@@ -12,33 +12,33 @@
         <title>料信息</title>
 </head>
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
+    /* html, body {
+         margin: 0;
+         padding: 0;
+         overflow: hidden;
+     }
 
-    .content {
-        width: 100%;
-        height: 100%;
-        top: 0;
-        z-index: -1;
-        position: absolute;
-    }
+     .content {
+         width: 100%;
+         height: 100%;
+         top: 0;
+         z-index: -1;
+         position: absolute;
+     }
 
-    .content img {
-        display: block;
-        outline: none;
-        border: 0;
-        height: 100%;
-        width: 100%;
-    }
+     .content img {
+         display: block;
+         outline: none;
+         border: 0;
+         height: 100%;
+         width: 100%;
+     }*/
 
-    /* img {
+    img {
          height: auto;
          width: auto \9;
          width: 100%;
-     }*/
+    }
 </style>
 <body>
 <div class="content">
