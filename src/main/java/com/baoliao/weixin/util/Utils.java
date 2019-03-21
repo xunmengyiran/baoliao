@@ -122,10 +122,11 @@ public class Utils {
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             //设置容错率最高
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-            hints.put(EncodeHintType.MARGIN, 1);
+            hints.put(EncodeHintType.MARGIN, 0);
             // 1、生成二维码
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             BitMatrix bitMatrix = multiFormatWriter.encode(content, BarcodeFormat.QR_CODE, size, size, hints);
+//            bitMatrix = deleteWhite(bitMatrix);//删除白边
             // 2、获取二维码宽高
             int codeWidth = bitMatrix.getWidth();
             int codeHeight = bitMatrix.getHeight();
@@ -168,6 +169,21 @@ public class Utils {
         return image;
     }
 
+    private static BitMatrix deleteWhite(BitMatrix matrix) {
+        int[] rec = matrix.getEnclosingRectangle();
+        int resWidth = rec[2] + 1;
+        int resHeight = rec[3] + 1;
+
+        BitMatrix resMatrix = new BitMatrix(resWidth, resHeight);
+        resMatrix.clear();
+        for (int i = 0; i < resWidth; i++) {
+            for (int j = 0; j < resHeight; j++) {
+                if (matrix.get(i + rec[0], j + rec[1]))
+                    resMatrix.set(i, j);
+            }
+        }
+        return resMatrix;
+    }
     public static void bigImgAddSmallImgAndText(String bigImgPath
             , String smallImgPath, int sx, int sy
             , String price, int cx, int cy
@@ -468,7 +484,7 @@ public class Utils {
 
     public static void main(String[] args) {
         //首先生成二维码
-        String fileName = zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
+        String fileName = zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1&openId=1", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
 //        String st = "䵺";
 //        System.out.println(st);
         try {
