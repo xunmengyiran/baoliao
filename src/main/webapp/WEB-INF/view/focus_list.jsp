@@ -58,7 +58,7 @@
 </script>
 <div class="mui-content">
     <ul id="focusList" class="mui-table-view">
-        <%--<c:forEach var="user" items="${sessionScope.focusList}">--%>
+        <c:forEach var="user" items="${sessionScope.focusList}">
         <li style="padding: 0px" class="mui-table-view-cell">
             <div class="mui-slider-left mui-disabled">
                 <a class="mui-btn mui-btn-red">取消关注</a>
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </li>
-        <%--</c:forEach>--%>
+        </c:forEach>
     </ul>
 </div>
 <div>
