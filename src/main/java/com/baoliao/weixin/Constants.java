@@ -15,6 +15,7 @@ public interface Constants {
         String APPID = "wxd69e2073c9ae0c39";
         String APPSECRET = "92cbe8e2fab977c4268c09fceb34d0d1";
         String WEIXIN_SCOPE = "snsapi_userinfo";
+        String certPath = "/root/servers/file_server/jdk8/zhengshu/apiclient_cert.p12";
     }
 
     interface TRADE_TYPE {
@@ -46,6 +47,8 @@ public interface Constants {
         String TEMPLATE_MESSSAGE_SEND_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
         // 获取ticket
         String TICKET_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN";
+        // 企业支付URL(post)
+        String ENTERPRISE_PAY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     }
 
     interface CONFIG {

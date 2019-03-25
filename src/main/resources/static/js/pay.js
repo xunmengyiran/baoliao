@@ -74,14 +74,22 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
            return; */
     $(".dsf_Jh_dfgf").addClass("show")
     s_drer = true;
-    if (wx_amount == '0') {//余额支付
+    /* if (wx_amount == '0') {//余额支付*/
+    if (balance >= parseFloat(amount)) { // 修改--》如果余额大于需要支付的金额 那就直接支付
         $.ajax({
-            url: path + '/weixin/pay_balance',
+            url: '/weixin/pay_balance',
             data: {
                 /* 					  "amount":amount,
                                       "wx_amount":wx_amount,
                                       "ba_amount":ba_amount, */
-                "id": en_id
+                // "id": en_id
+                "amount": amount,
+                /*                "wx_amount":wx_amount,
+                               "ba_amount":ba_amount, */
+                "type": 0,
+                "id": en_id,
+                "buyerOpenId": buyer_openId,
+                "sellerOpenId": seller_openId
             },
             beforeSend: function () {
                 /*  $(".loading_box ,.disalog_bg3").show(); 	 */
@@ -90,7 +98,8 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
                 s_drer = false;
                 $(".dsf_Jh_dfgf").removeClass("show");
                 if (result.success) {
-                    window.location.href = path + '/weixin/get_resource_detail?type=1&id=' + en_id;
+                    // window.location.href = path + '/weixin/get_resource_detail?type=1&id=' + en_id;
+                    window.location.href = '/product/detailInfo2?id=' + en_id;
                 } else {
                     if (result.data == '1') {
                         mui.toast("文章已过期，不能购买");
@@ -119,7 +128,7 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
                     "amount": amount,
                     /*                "wx_amount":wx_amount,
                                    "ba_amount":ba_amount, */
-                    "type": type,
+                    "type": 1,
                     "id": en_id,
                     "buyerOpenId": buyer_openId,
                     "sellerOpenId": seller_openId
@@ -132,15 +141,15 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
                     s_drer = false;
                     $(".dsf_Jh_dfgf").removeClass("show");
                     if (result.success) {
-                        /*appId=result.data.appId;
+                        appId = result.data.appId;
                         timeStamp=result.data.timeStamp;
                         nonceStr=result.data.nonceStr;
-                        packageStr=result.data.packageStr;
+                        packageStr = result.data.package;
                         signType=result.data.signType;
                         paySign=result.data.paySign;
-                        onBridgeReady(appId,timeStamp,nonceStr,packageStr,signType,paySign);*/
-                        mui.toast("支付成功");
-                        window.location.href = '/product/detailInfo2?id=' + en_id;
+                        onBridgeReady(appId, timeStamp, nonceStr, packageStr, signType, paySign);
+                        // mui.toast("支付成功");
+                        // window.location.href = '/product/detailInfo2?id=' + en_id;
                     } else {
                         if (result.data == '1') {
                             mui.toast("文章已过期，不能购买");
@@ -175,9 +184,11 @@ function onBridgeReady(appId, timeStamp, nonceStr, packageStr, signType, paySign
             "paySign": paySign    //微信签名
         },
         function (res) {
+            mui.alert(res.err_msg);
             /* toast(JSON.stringify(res));   */
             if (res.err_msg == "get_brand_wcpay_request:ok") {
-                window.location.href = path + '/weixin/resource_pay_suc?id=' + en_id;
+                // window.location.href = path + '/weixin/resource_pay_suc?id=' + en_id;
+                window.location.href = '/product/detailInfo2?id=' + en_id;
             }
             if (res.err_msg == "get_brand_wcpay_request:cancel") {
             }

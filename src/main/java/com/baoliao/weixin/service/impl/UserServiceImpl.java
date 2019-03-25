@@ -51,6 +51,18 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             user = Utils.getUserInfoByCode(request, code);
         }
+        getAllMoneyInfo(session, user);
+
+        // 查询我关注的总数
+        int focusCount = focusDao.getMyFocusCount(user.getOpenId());
+        // 查询我的粉丝总数
+        int fansCount = focusDao.getFansCount(user.getOpenId());
+        session.setAttribute("focusCount", focusCount);
+        session.setAttribute("fansCount", fansCount);
+        return user;
+    }
+
+    public void getAllMoneyInfo(HttpSession session, User user) throws Exception {
         //当天收益额
         String todayIncome = tradeDao.getTodayIncomeByOpenId(user.getOpenId());
         log.info("当天收益" + todayIncome);
@@ -72,7 +84,7 @@ public class UserServiceImpl implements UserService {
         // 余额 = 收益总额-支出总额-退款别人金额-提现金额+别人退自己
         // 1.支出总额
         String expenditureCount = tradeDao.getExpenditureByOpenId(user.getOpenId());
-        log.info("支出总额" + incomeCount);
+        log.info("支出总额(除微信支付的)" + incomeCount);
         if (expenditureCount == null) {
             expenditureCount = "0";
         }
@@ -97,18 +109,18 @@ public class UserServiceImpl implements UserService {
             depositCount = "0";
         }
         depositCount = Utils.conversion2Mumber(depositCount);
-
-        double balance = Double.parseDouble(incomeCount) - Double.parseDouble(expenditureCount) - Double.parseDouble(refundToOtherCount) - Double.parseDouble(depositCount) + Double.parseDouble(refundToSelfCount);
-        session.setAttribute("balance", balance);
-
-        // 查询我关注的总数
-        int focusCount = focusDao.getMyFocusCount(user.getOpenId());
-        // 查询我的粉丝总数
-        int fansCount = focusDao.getFansCount(user.getOpenId());
+        String balance = "0.00";
+        double balance_dou = Double.parseDouble(incomeCount) - Double.parseDouble(expenditureCount) - Double.parseDouble(refundToOtherCount) - Double.parseDouble(depositCount) + Double.parseDouble(refundToSelfCount);
+        if (balance_dou > 0) {
+            balance = Utils.conversion2Mumber(String.valueOf(balance_dou));
+        }
         session.setAttribute("todayIncome", todayIncome);
         session.setAttribute("incomeCount", incomeCount);
-        session.setAttribute("focusCount", focusCount);
-        session.setAttribute("fansCount", fansCount);
-        return user;
+        session.setAttribute("balance", balance);
+    }
+
+    public static void main(String[] args) {
+        String balance = Utils.conversion2Mumber(String.valueOf(Double.parseDouble("100") - Double.parseDouble("20") - Double.parseDouble("29.78") - Double.parseDouble("10") + Double.parseDouble("10")));
+        System.out.println(balance);
     }
 }

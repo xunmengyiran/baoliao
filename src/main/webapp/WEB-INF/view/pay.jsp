@@ -25,7 +25,7 @@
 </head>
 <body>
 <section class="cen df_jh_drt">
-    <img src="https://lmjl.ttkgou.com/lmjl_core/img/logo.png" class="logo_dert"/>
+    <img src="/img/logo.png" class="logo_dert"/>
     <p>资源变现工具</p>
 </section>
 
@@ -48,7 +48,7 @@
     <input type="hidden" name="en_id" id="en_id" value="${sessionScope.product.id}"/>
     <input type="hidden" name="buyer_openId" id="buyer_openId" value="${sessionScope.buyer_user.openId}"/>
     <input type="hidden" name="seller_openId" id="seller_openId" value="${sessionScope.seller_user.openId}"/>
-    <input type="hidden" name="balance" id="balance" value="0"/>
+    <input type="hidden" name="balance" id="balance" value="${sessionScope.balance}"/>
 
     <section class="eer_deert"></section>
 

@@ -24,8 +24,8 @@ public class TradeController {
     @Autowired
     private TradeService tradeService;
 
-    @GetMapping("/pay_weixin")
-    public void pay_weixin(HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/pay_balance")
+    public void payByBalance(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -34,18 +34,50 @@ public class TradeController {
         response.setCharacterEncoding("UTF-8");
         PrintWriter pw = null;
         try {
-            String result = tradeService.pay_weixin(request);
+            String result = tradeService.payByBalance(request);
             pw = response.getWriter();
             pw.write(result);
             log.info("支付成功:" + result);
         } catch (IOException e1) {
             e1.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("支付失败" + e);
         } finally {
             pw.flush();
             pw.close();
         }
+    }
+
+    @GetMapping("/pay_weixin")
+    public void payByWeixin(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter pw = null;
+        try {
+            String result = tradeService.payByWeixin(request);
+            pw = response.getWriter();
+            pw.write(result);
+            log.info("支付成功:" + result);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("支付失败" + e);
+        } finally {
+            pw.flush();
+            pw.close();
+        }
+    }
+
+    @RequestMapping("/paysuccessreturn")
+    public void paySuccessReturn(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("===paysuccessreturn=======>");
+
     }
 
     @RequestMapping("/oper_cash")

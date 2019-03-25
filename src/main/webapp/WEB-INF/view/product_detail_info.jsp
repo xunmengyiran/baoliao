@@ -15,7 +15,7 @@
 </head>
 <body>
 <div style="text-align: center;background-color: #F9F7F8;height: 120px;">
-    <img style="width: 17%;margin-top: 9px;" src="http://47.98.48.197:8090/QRCodeImg/logo.png">
+    <img style="width: 17%;margin-top: 9px;" src="/img/logo.png">
     <p style="margin-top: 0px;font-size: 24px;color: #A6A4A7">资源变现工具</p>
 </div>
 <div style="text-align: center;border-bottom: 1px solid #F9F7F8">

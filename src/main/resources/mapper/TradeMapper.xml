@@ -24,11 +24,11 @@
     </select>
 
     <select id="getExpenditureByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0 and pay_type=0
     </select>
 
     <select id="getRefundToOtherByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=1
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=1 and pay_type=0
     </select>
 
     <select id="getRefundToSelfByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -36,7 +36,7 @@
     </select>
 
     <select id="getDepositByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=2
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=2 and pay_type=0
     </select>
 
     <select id="queryTradeList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
@@ -46,19 +46,20 @@
         <if test="tradeType == 2">
             and t.trade_type = #{tradeType}
         </if>
+        ORDER BY p.id DESC
     </select>
 
     <select id="queryBuyProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
-        SELECT t.money,t.create_time AS createTime, p.title as productTitle
+        SELECT t.product_id as productId,t.money,t.create_time AS createTime, p.title as productTitle
         FROM tb_trade t
         LEFT JOIN tb_product p ON t.product_id = p.id
-        WHERE  buyer_open_id =#{openId} and trade_type=0 GROUP BY product_id
+        WHERE  buyer_open_id =#{openId} and trade_type=0 GROUP BY product_id  ORDER BY p.id DESC
     </select>
 
     <select id="querySellerProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
-        SELECT p.id, t.money, t.create_time AS createTime, p.title AS productTitle, count( t.id ) AS sellerCount FROM tb_product p left JOIN tb_trade t ON p.id = t.product_id
+        SELECT p.id as productId, t.money, t.create_time AS createTime, p.title AS productTitle, count( t.id ) AS sellerCount FROM tb_product p left JOIN tb_trade t ON p.id = t.product_id
           WHERE p.open_id = #{openId}
-	      GROUP BY p.id
+	      GROUP BY p.id ORDER BY p.id DESC
     </select>
 
     <insert id="saveOperCashInfo" parameterType="com.baoliao.weixin.bean.Trade">

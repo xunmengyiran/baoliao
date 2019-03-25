@@ -25,3 +25,6 @@ product_img_path: /root/servers/file_server/tomcat8534/webapps/ROOT/userImg/
 
 #生成的二维码位置
 qr_code_img_path: /root/servers/file_server/tomcat8534/webapps/ROOT/QRCodeImg/
+
+#证书地址
+certificate_path: /root/servers/file_server/jdk8/zhengshu/

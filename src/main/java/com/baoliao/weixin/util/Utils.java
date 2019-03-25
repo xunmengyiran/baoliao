@@ -3,6 +3,7 @@ package com.baoliao.weixin.util;
 import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.AccessToken;
 import com.baoliao.weixin.bean.User;
+import com.baoliao.weixin.wechatpay.WXPayUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -14,14 +15,33 @@ import com.sun.image.codec.jpeg.JPEGImageDecoder;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
@@ -29,11 +49,10 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyStore;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 import static com.google.zxing.client.j2se.MatrixToImageConfig.BLACK;
 import static com.google.zxing.client.j2se.MatrixToImageConfig.WHITE;
@@ -41,6 +60,11 @@ import static com.google.zxing.client.j2se.MatrixToImageConfig.WHITE;
 public class Utils {
 
     private Logger log = LoggerFactory.getLogger(Utils.class);
+
+    private static int socketTimeout = 10000;// 连接超时时间，默认10秒
+    private static int connectTimeout = 30000;// 传输超时时间，默认30秒
+    private static RequestConfig requestConfig;// 请求器的配置
+    private static CloseableHttpClient httpClient;// HTTP请求器
 
     public static String GetImageStr() {//将图片文件转化为字节数组字符串，并对其进行Base64编码处理
         String imgFile = "D:\\tupian\\a.jpg";//待处理的图片
@@ -184,6 +208,7 @@ public class Utils {
         }
         return resMatrix;
     }
+
     public static void bigImgAddSmallImgAndText(String bigImgPath
             , String smallImgPath, int sx, int sy
             , String price, int cx, int cy
@@ -482,10 +507,134 @@ public class Utils {
     }
 
 
+    /**
+     * 将Map转换为XML格式的字符串
+     *
+     * @param data Map类型数据
+     * @return XML格式的字符串
+     * @throws Exception
+     */
+    public static String mapToXml(Map<String, String> data) throws Exception {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        org.w3c.dom.Document document = documentBuilder.newDocument();
+        org.w3c.dom.Element root = document.createElement("xml");
+        document.appendChild(root);
+        for (String key : data.keySet()) {
+            String value = data.get(key);
+            if (value == null) {
+                value = "";
+            }
+            value = value.trim();
+            org.w3c.dom.Element filed = document.createElement(key);
+            filed.appendChild(document.createTextNode(value));
+            root.appendChild(filed);
+        }
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        DOMSource source = new DOMSource(document);
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        transformer.transform(source, result);
+        String output = writer.getBuffer().toString(); //.replaceAll("\n|\r", "");
+        try {
+            writer.close();
+        } catch (Exception ex) {
+        }
+        return output;
+    }
+
+    public static String getSignCode(Map<String, String> map, String keyValue) {
+        String result = "";
+        try {
+//            List<Map.Entry<String, String>> infoIds = new ArrayList<Map.Entry<String, String>>(map.entrySet());
+            List<Map.Entry<String, String>> infoIds = new ArrayList<Map.Entry<String, String>>(map.entrySet());
+            // 对所有传入参数按照字段名的 ASCII 码从小到大排序（字典序）
+            Collections.sort(infoIds, new Comparator<Map.Entry<String, String>>() {
+
+                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                    return (o1.getKey()).toString().compareTo(o2.getKey());
+                }
+            });
+
+            // 构造签名键值对的格式
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> item : infoIds) {
+                if (item.getKey() != null || item.getKey() != "") {
+                    String key = item.getKey();
+                    String val = item.getValue();
+                    if (!(val == "" || val == null)) {
+                        sb.append(key + "=" + val + "&");
+                    }
+                }
+
+            }
+            sb.append("key=" + keyValue);
+            result = sb.toString();
+
+            //进行MD5加密
+            result = WXPayUtil.MD5(result).toUpperCase();
+        } catch (Exception e) {
+            return null;
+        }
+        return result;
+    }
+
+    public static String doRefund(String url, String xmlData, String mchId) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        FileInputStream instream = new FileInputStream(new File(Constants.WECHAT_PARAMETER.certPath));//P12文件目录  写证书的项目路径
+        try {
+            keyStore.load(instream, mchId.toCharArray());//这里写密码..默认是你的MCHID 证书密码
+        } finally {
+            instream.close();
+        }
+
+
+        SSLContext sslcontext = SSLContexts.custom()
+                .loadKeyMaterial(keyStore, mchId.toCharArray())//这里也是写密码的
+                .build();
+
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[]{"TLSv1"},
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+        try {
+            HttpPost httpost = new HttpPost(url); // 设置响应头信息
+            httpost.addHeader("Connection", "keep-alive");
+            httpost.addHeader("Accept", "*/*");
+            httpost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            httpost.addHeader("Host", "api.mch.weixin.qq.com");
+            httpost.addHeader("X-Requested-With", "XMLHttpRequest");
+            httpost.addHeader("Cache-Control", "max-age=0");
+            httpost.addHeader("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0) ");
+            httpost.setEntity(new StringEntity(xmlData, "UTF-8"));
+            CloseableHttpResponse response = httpclient.execute(httpost);
+            try {
+                HttpEntity entity = response.getEntity();
+
+                String returnMessage = EntityUtils.toString(response.getEntity(), "UTF-8");
+                EntityUtils.consume(entity);
+                return returnMessage; //返回后自己解析结果
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
+    }
+
+
     public static void main(String[] args) {
         //首先生成二维码
-        String fileName = zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1&openId=1", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
-//        String st = "䵺";
+//        String fileName = zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1&openId=ohDAp1PJ7rxxLGZIoKbN1T2UllIo", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
+        String fileName = Utils.zxingCodeCreate("https://open.weixin.qq.com/connect/oauth2/authorize?appid=12324234444424&redirect_uri=wwwww..sfsfs.ccc/product/detailInfo%3Fid%3D7%26price%3D88%26openId%3DohDAp1PJ7rxxLGZIoKbN1T2UllIo&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
+// String st = "䵺";
 //        System.out.println(st);
         try {
             // 将二维码印到模板图片，并添加价格

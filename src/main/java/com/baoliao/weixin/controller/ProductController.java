@@ -4,6 +4,7 @@ import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.service.ProductService;
+import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
 import org.apache.commons.collections.bag.SynchronizedBag;
 import org.slf4j.Logger;
@@ -29,6 +30,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private UserService userService;
     /**
      * 保存首页数据
      *
@@ -79,17 +82,23 @@ public class ProductController {
 
     }
 
-    @GetMapping("resultPage")
+    @GetMapping("/resultPage")
     public String goGenerateResultPage() {
         return "generate_result";
     }
 
     @GetMapping("detailInfo")
-    public String getDetailInfoByScan(HttpServletRequest request, @RequestParam String id, @RequestParam String price, @RequestParam String openId) {
+    public String getDetailInfoByScan(HttpServletRequest request, @RequestParam String id, @RequestParam String price) {
         String code = request.getParameter("code");
         log.info("扫描二维码获取到的id是:" + id + ",价格是:" + price + ",code是" + code);
-        User user = Utils.getUserInfoByCode(request, code);
-        if ("0".equals(price) || openId.equals(user.getOpenId())) {
+        Product product = new Product();
+        try {
+            product = productService.getProductDetailInfo(request, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        User buyer_user = Utils.getUserInfoByCode(request, code);
+        if ("0".equals(price) /*|| openId.equals(buyer_user.getOpenId())*/) {
             try {
                 productService.getProductDetailInfo(request, id);
             } catch (Exception e) {
@@ -98,7 +107,8 @@ public class ProductController {
             return "product_detail_info";
         } else {
             try {
-                productService.getPayInfo(request, id, price);
+                productService.getPayInfo(request, id, price, buyer_user);
+                userService.getAllMoneyInfo(request.getSession(), buyer_user);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -106,7 +116,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("detailInfo2")
+    @GetMapping("/detailInfo2")
     public String getProductDetailInfoByMoney(HttpServletRequest request, @RequestParam String id) {
         log.info("付费成功后获取到的产品id" + id);
         try {
@@ -117,32 +127,14 @@ public class ProductController {
         return "product_detail_info";
     }
 
-    /* *//**
-     * 查询买到料列表
-     * @param request
-     * @return
-     *//*
-    @GetMapping("getBuyProductList")
-    public String getBuyProductList(HttpServletRequest request){
+    @GetMapping("/sellerproductdetail")
+    public String getSellerProductDetail(HttpServletRequest request, @RequestParam("id") String id) {
         try {
+            productService.getSellerProductDetail(request, id);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return "generate_result";
     }
 
-    *//**
-     * 查询买到料列表
-     * @param request
-     * @return
-     *//*
-    @GetMapping("getSellerProductList")
-    public String getSellerProductList(HttpServletRequest request){
-        try {
-            productService.getSellerProductList(request);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }*/
 }

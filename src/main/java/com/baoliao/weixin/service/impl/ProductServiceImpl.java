@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
         }
         log.info("保存时，环境是" + activeProfile + ",存储路径是" + path);
         //https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=http://" + redirect_domain_name + "/user/goIndex&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect
-        String fileName = Utils.zxingCodeCreate("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "%26openId%3D" + vo.getOpenId() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", path, 250, logoPath);
+        String fileName = Utils.zxingCodeCreate("https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", path, 250, logoPath);
         log.info("生成的二维码名称:" + fileName);
         // 继续生成图片
         try {
@@ -215,10 +215,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void getPayInfo(HttpServletRequest request, String id, String price) throws Exception {
+    public void getPayInfo(HttpServletRequest request, String id, String price, User buyer_user) throws Exception {
         log.info("传入的产品id为:" + id);
-        String code = request.getParameter("code");
-        User buyer_user = Utils.getUserInfoByCode(request, code);
         log.info("============buyer_user=============" + buyer_user.toString());
         Product product = productDao.getProductById(Integer.parseInt(id));
         log.info("============product=============" + product.toString());
@@ -309,11 +307,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void getProductDetailInfo(HttpServletRequest request, String id) throws Exception {
+    public Product getProductDetailInfo(HttpServletRequest request, String id) throws Exception {
         HttpSession session = request.getSession();
         Product product = productDao.getProductById(Integer.parseInt(id));
         String[] imgArr = product.getImgArr().split(",");
         session.setAttribute("product", product);
         session.setAttribute("imgArr", imgArr);
+        return product;
+    }
+
+    @Override
+    public void getSellerProductDetail(HttpServletRequest request, String id) throws Exception {
+        Product product = productDao.getProductById(Integer.parseInt(id));
+        request.getSession().setAttribute("fileName", product.getQrImgName());
     }
 }

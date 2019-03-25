@@ -258,7 +258,7 @@
                         sync: true,
                         data: {
                             'type': type,
-                            'inputMoney': inputMoney
+                            'inputMoney': e.value
                         },
                         dataType: 'json',
                         success: function (result) {

@@ -51,7 +51,8 @@
             </div>
             <div>
             <span>
-                <span style="color: #EBC49D;padding-right: 4px;">${trade.productTitle}</span>
+                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none"
+                                                                    href="/product/sellerproductdetail?id=${trade.productId}">${trade.productTitle}</a></span>
             </span>
                 <span style="float: right;font-size: 13px;">
                 <span style="color: grey">已售</span>
@@ -76,7 +77,8 @@
             </div>
             <div>
             <span>
-                <span style="color: #EBC49D;padding-right: 4px;">${trade.productTitle}</span>
+                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none"
+                                                                    href="/product/detailInfo2?id=${trade.productId}">${trade.productTitle}</a></span>
             </span>
             </div>
         </div>
