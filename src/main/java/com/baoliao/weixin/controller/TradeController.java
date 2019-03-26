@@ -125,4 +125,16 @@ public class TradeController {
         }
         return "deposit_list";
     }
+
+    public static void main(String[] args) {
+        String st = "   一键关停123456    ";
+        System.out.println("长度" + st.length());
+        st = st.trim();
+        if (st.trim().length() == 10) {
+            String s1 = st.substring(0, 4);
+            String s2 = st.substring(4, 10);
+            System.out.println(s1 + "========" + s2);
+        }
+
+    }
 }

@@ -187,7 +187,16 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
             log.error("更新qr_img_name失败。" + e);
         }
-        sendSaveSuccessMessage(vo);
+        sendSaveSuccessMessage(Constants.TEMPLATE_TYPE.SAVE_PRODUCT_TO_SELF, vo.getOpenId(), "C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM", domainName + "/product/detailInfo2?id=" + vo.getId(), "作品制作完成通知", vo.getTitle(), Constants.DATA_FORMAT.sdf2.format(vo.getCreateTime()), "请点击'我的作品'查看");
+        try {
+            List<String> list = focusDao.getFansList(vo.getOpenId());
+            for (String toOpenId : list) {
+                sendSaveSuccessMessage(Constants.TEMPLATE_TYPE.TO_FANS, toOpenId, "C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", "您好，您关注的'" + user.getNickName() + "'发布了新作品" +
+                        "。简介:" + vo.getIntroduct(), vo.getTitle(), Constants.DATA_FORMAT.sdf2.format(vo.getCreateTime()), "点击付费查看详细内容");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         session.setAttribute("fileName", fileName);
         session.setAttribute("product", vo);
         JSONObject jObject = JSONObject.fromObject(model);
@@ -237,37 +246,37 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public void sendSaveSuccessMessage(Product product) {
+    public void sendSaveSuccessMessage(int type, String touser, String tempLataId, String url, String firstValue, String keyword1Value, String keyword2Value, String remarkValue) {
         log.info("准备发送模板信息");
         WeChatTemplate weChatTemplate = new WeChatTemplate();
         // TODO
         // 模板ID
-        weChatTemplate.setTemplate_id("C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM");
+        weChatTemplate.setTemplate_id(tempLataId);
         // 需要推送的用户openId
-        weChatTemplate.setTouser(product.getOpenId());
+        weChatTemplate.setTouser(touser);
         //点击跳转的链接
-        weChatTemplate.setUrl("http://cailiao.bingbet.net/user/queryMyCode");
+        weChatTemplate.setUrl(url);
 
         Map<String, TemplateData> data = new HashMap<>();
 
         TemplateData first = new TemplateData();
-        first.setValue("作品制作完成通知");
+        first.setValue(firstValue);
         first.setColor("#173177");
         data.put("first", first);
 
         TemplateData keyword1 = new TemplateData();
-        keyword1.setValue(product.getTitle());
+        keyword1.setValue(keyword1Value);
         keyword1.setColor("#173177");
         data.put("keyword1", keyword1);
 
         TemplateData keyword2 = new TemplateData();
-        keyword2.setValue(Constants.DATA_FORMAT.sdf2.format(product.getCreateTime()));
+        keyword2.setValue(keyword2Value);
         keyword2.setColor("#173177");
         data.put("keyword2", keyword2);
 
 
         TemplateData remark = new TemplateData();
-        remark.setValue("请点击'我的作品'查看");
+        remark.setValue(remarkValue);
         remark.setColor("#173177");
         data.put("remark", remark);
 

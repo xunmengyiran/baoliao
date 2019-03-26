@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,5 +96,43 @@ public class FocusServiceImpl implements FocusService {
             }
         });
         session.setAttribute("fansList", userList);
+    }
+
+    /**
+     * 取消关注
+     *
+     * @param request
+     * @param otherOpenId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    @Transactional
+    public String cancelAttention(HttpServletRequest request, String otherOpenId) throws Exception {
+        HttpSession session = request.getSession();
+        //获取当前用户信息
+        User user = (User) session.getAttribute("user");
+        Map<String, Object> model = new HashMap<String, Object>();
+        FocusInfo focusInfo = new FocusInfo();
+        focusInfo.setSelfOpenId(user.getOpenId());
+        focusInfo.setOtherOpenId(otherOpenId);
+        focusInfo.setIsCancel(1);
+        focusInfo.setCancelTime(new Date());
+        System.out.println("=========focusInfo============" + focusInfo.toString());
+        int i = 0;
+        try {
+            i = focusDao.cancelAttention(focusInfo);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        if (i > 0) {
+            model.put("result", i);
+            model.put("msg", "成功");
+        } else {
+            model.put("result", i);
+            model.put("msg", "更新数据出现异常:" + i);
+        }
+        JSONObject jObject = JSONObject.fromObject(model);
+        return jObject.toString();
     }
 }

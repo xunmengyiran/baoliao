@@ -21,4 +21,6 @@ public interface FocusDao {
 
     List<String> getFansList(String openId) throws Exception;
 
+    int cancelAttention(FocusInfo focusInfo) throws Exception;
+
 }

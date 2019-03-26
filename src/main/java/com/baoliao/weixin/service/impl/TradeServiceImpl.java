@@ -197,10 +197,10 @@ public class TradeServiceImpl implements TradeService {
 
         data.put("mch_appid", mch_appid);
         data.put("mchid", mchid);
-        data.put("device_info", deviceInfo);
+//        data.put("device_info", deviceInfo);
         data.put("nonce_str", nonceStr);
 
-        data.put("sign_type", WXPayConstants.MD5);
+//        data.put("sign_type", WXPayConstants.MD5);
 
         data.put("partner_trade_no", Constants.DATA_FORMAT.sdf1.format(new Date()));
         data.put("openid", user.getOpenId());

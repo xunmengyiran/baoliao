@@ -25,11 +25,18 @@
     </select>
 
     <select id="getFocusList" parameterType="java.lang.String" resultType="java.lang.String">
-        select other_open_id from tb_focus_info where self_open_id=#{openId} ORDER BY id DESC
+        select other_open_id from tb_focus_info where self_open_id=#{openId} and is_cancel=0 ORDER BY id DESC
     </select>
 
     <select id="getFansList" parameterType="java.lang.String" resultType="java.lang.String">
-        select self_open_id from tb_focus_info where other_open_id=#{openId} ORDER BY id DESC
+        select self_open_id from tb_focus_info where other_open_id=#{openId} and is_cancel=0 ORDER BY id DESC
     </select>
+
+    <update id="cancelAttention" parameterType="com.baoliao.weixin.bean.FocusInfo">
+        update tb_focus_info
+        set is_cancel = #{isCancel,jdbcType=INTEGER},
+          cancel_time =  #{cancelTime,jdbcType=TIMESTAMP}
+        where self_open_id = #{selfOpenId,jdbcType=VARCHAR} and other_open_id = #{otherOpenId,jdbcType=VARCHAR}
+    </update>
 
 </mapper>

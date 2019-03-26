@@ -11,6 +11,7 @@ public interface Constants {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmsssss");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
+
     interface WECHAT_PARAMETER {
         String APPID = "wxd69e2073c9ae0c39";
         String APPSECRET = "92cbe8e2fab977c4268c09fceb34d0d1";
@@ -27,6 +28,11 @@ public interface Constants {
          * 提现产生的交易
          */
         int DEPOSIT_TRADE = 2;
+    }
+
+    interface TEMPLATE_TYPE {
+        int SAVE_PRODUCT_TO_SELF = 1;
+        int TO_FANS = 2;
     }
 
     interface URL {
@@ -66,6 +72,7 @@ public interface Constants {
     interface MSG_TEMPLATE {
         String SYNERGISTIC_MARKET_SUBSCRIBE = "感谢您的关注。";
     }
+
     interface MSG_TYPE {
         /**
          * 消息类型：文本

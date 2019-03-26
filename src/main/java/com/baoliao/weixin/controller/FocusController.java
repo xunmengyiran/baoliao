@@ -1,5 +1,6 @@
 package com.baoliao.weixin.controller;
 
+import com.baoliao.weixin.bean.FocusInfo;
 import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.service.FocusService;
 import com.baoliao.weixin.service.ProductService;
@@ -63,5 +64,36 @@ public class FocusController {
             e.printStackTrace();
         }
         return "fans_list";
+    }
+
+    /**
+     * 取消关注
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/cancelAttention")
+    public void cancelAttention(HttpServletRequest request, HttpServletResponse response, String otherOpenId) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        }
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter pw = null;
+        try {
+            String result = focusService.cancelAttention(request, otherOpenId);
+            pw = response.getWriter();
+            pw.write(result);
+            log.info("更新数据成功:" + result);
+        } catch (IOException e1) {
+            log.error(e1.getMessage(), e1);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("更新数据出错" + e);
+        } finally {
+            pw.flush();
+            pw.close();
+        }
     }
 }
