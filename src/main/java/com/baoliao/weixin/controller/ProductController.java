@@ -130,7 +130,7 @@ public class ProductController {
     @GetMapping("/sellerproductdetail")
     public String getSellerProductDetail(HttpServletRequest request, @RequestParam("id") String id) {
         try {
-            productService.getSellerProductDetail(request, id);
+            productService.getSellerProducQRimg(request, id);
         } catch (Exception e) {
             e.printStackTrace();
         }

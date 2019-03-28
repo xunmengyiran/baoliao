@@ -12,7 +12,9 @@
     <result column="price" property="price" jdbcType="VARCHAR"/>
     <result column="expritation_date" property="expritationDate" jdbcType="VARCHAR" />
     <result column="is_refund" property="isRefund" jdbcType="VARCHAR"/>
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     <result column="qr_img_name" property="qrImgName" jdbcType="VARCHAR"/>
+      <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
   </resultMap>
   <insert id="insert" parameterType="com.baoliao.weixin.bean.Product" >
     insert into t_product (id, open_id, title,

@@ -235,11 +235,11 @@ public class TradeServiceImpl implements TradeService {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         JSONObject jObject = new JSONObject();
         try {
-           /* int num = tradeDao.saveOperCashInfo(trade);
+            int num = tradeDao.saveOperCashInfo(trade);
             if (num == 1) {
                 resultMap.put("success", true);
                 jObject = JSONObject.fromObject(resultMap);
-            }*/
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("保存交易信息异常！" + e);

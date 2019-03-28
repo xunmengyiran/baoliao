@@ -43,6 +43,44 @@
 </section>
 
 <section class="sdf_khj_dert  show aa">
+    <%--<div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
+        <div style="margin-bottom: 6px">
+            &lt;%&ndash;<span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
+                                                                          pattern="yyyy-MM-dd HH:ss:mm"/></span>&ndash;%&gt;
+        </div>
+        <div>
+            <span>
+                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none"
+                                                                    href="/product/sellerproductdetail?id=1111">1111111111111111</a></span>
+            </span>
+            <span style="float: right;font-size: 13px;">
+                <span style="color: grey">已售</span>
+                <span style="color: #EBC49D;">
+                    1
+                </span>
+                <span style="color: grey">份</span>
+            </span>
+        </div>
+    </div>
+    <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
+        <div style="margin-bottom: 6px">
+            &lt;%&ndash;<span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
+                                                                          pattern="yyyy-MM-dd HH:ss:mm"/></span>&ndash;%&gt;
+        </div>
+        <div>
+            <span>
+                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none"
+                                                                    href="/product/sellerproductdetail?id=2222222222222">2222222222222222222222</a></span>
+            </span>
+            <span style="float: right;font-size: 13px;">
+                <span style="color: grey">已售</span>
+                <span style="color: #EBC49D;">
+                    22222222222222
+                </span>
+                <span style="color: grey">份</span>
+            </span>
+        </div>
+    </div>--%>
     <c:forEach var="trade" items="${sessionScope.sellerProductList}">
         <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
             <div style="margin-bottom: 6px">
@@ -51,7 +89,7 @@
             </div>
             <div>
             <span>
-                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none"
+                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none;color: black"
                                                                     href="/product/sellerproductdetail?id=${trade.productId}">${trade.productTitle}</a></span>
             </span>
                 <span style="float: right;font-size: 13px;">

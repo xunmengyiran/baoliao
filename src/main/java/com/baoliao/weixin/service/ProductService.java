@@ -19,6 +19,6 @@ public interface ProductService {
 
     Product getProductDetailInfo(HttpServletRequest request, String id) throws Exception;
 
-    void getSellerProductDetail(HttpServletRequest request, String id) throws Exception;
+    void getSellerProducQRimg(HttpServletRequest request, String id) throws Exception;
 
 }

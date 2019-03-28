@@ -326,8 +326,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void getSellerProductDetail(HttpServletRequest request, String id) throws Exception {
+    public void getSellerProducQRimg(HttpServletRequest request, String id) throws Exception {
+        HttpSession session = request.getSession();
         Product product = productDao.getProductById(Integer.parseInt(id));
-        request.getSession().setAttribute("fileName", product.getQrImgName());
+        session.setAttribute("fileName", product.getQrImgName());
+        session.setAttribute("product", product);
     }
 }
