@@ -329,7 +329,10 @@ public class ProductServiceImpl implements ProductService {
     public void getSellerProducQRimg(HttpServletRequest request, String id) throws Exception {
         HttpSession session = request.getSession();
         Product product = productDao.getProductById(Integer.parseInt(id));
+        //获取所有购买者信息
+        List<BuyerUserInfo> buyerUserInfoList = productDao.getTradeUserInfoByIdAndOpenId(id, product.getOpenId());
         session.setAttribute("fileName", product.getQrImgName());
         session.setAttribute("product", product);
+        session.setAttribute("buyerUserInfoList", buyerUserInfoList);
     }
 }

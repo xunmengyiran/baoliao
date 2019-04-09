@@ -77,7 +77,7 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
     /* if (wx_amount == '0') {//余额支付*/
     if (balance >= parseFloat(amount)) { // 修改--》如果余额大于需要支付的金额 那就直接支付
         $.ajax({
-            url: '/weixin/pay_balance',
+            url: '/trade/pay_balance',
             data: {
                 /* 					  "amount":amount,
                                       "wx_amount":wx_amount,
@@ -95,6 +95,7 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
                 /*  $(".loading_box ,.disalog_bg3").show(); 	 */
             },
             success: function (result) {
+                result = $.parseJSON(result);
                 s_drer = false;
                 $(".dsf_Jh_dfgf").removeClass("show");
                 if (result.success) {

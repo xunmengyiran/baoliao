@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.baoliao.weixin.dao.ProductDao" >
-  <resultMap id="BaseResultMap" type="com.baoliao.weixin.bean.Product" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="open_id" property="openId" jdbcType="VARCHAR"/>
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="introduct" property="introduct" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="VARCHAR"/>
-    <result column="content" property="content" jdbcType="VARCHAR" />
-      <result column="img_arr" property="imgArr" jdbcType="VARCHAR"/>
-    <result column="price" property="price" jdbcType="VARCHAR"/>
-    <result column="expritation_date" property="expritationDate" jdbcType="VARCHAR" />
-    <result column="is_refund" property="isRefund" jdbcType="VARCHAR"/>
-      <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-    <result column="qr_img_name" property="qrImgName" jdbcType="VARCHAR"/>
-      <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
-  </resultMap>
-  <insert id="insert" parameterType="com.baoliao.weixin.bean.Product" >
+<mapper namespace="com.baoliao.weixin.dao.ProductDao">
+    <resultMap id="BaseResultMap" type="com.baoliao.weixin.bean.Product">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="introduct" property="introduct" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="img_arr" property="imgArr" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="VARCHAR"/>
+        <result column="expritation_date" property="expritationDate" jdbcType="VARCHAR"/>
+        <result column="is_refund" property="isRefund" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="qr_img_name" property="qrImgName" jdbcType="VARCHAR"/>
+        <result column="is_delete" property="isDelete" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.baoliao.weixin.bean.Product">
     insert into t_product (id, open_id, title,
       introduct, type, content,
       img_arr, price, expritation_date,
@@ -28,80 +28,87 @@
   </insert>
     <insert id="saveProduct" parameterType="com.baoliao.weixin.bean.Product" useGeneratedKeys="true"
             keyProperty="id">
-      insert into tb_product
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="openId != null" >
-        open_id,
-      </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="introduct != null" >
-        introduct,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-        <if test="imgArr != null">
-            img_arr,
-      </if>
-      <if test="price != null" >
-        price,
-      </if>
-      <if test="expritationDate != null" >
-        expritation_date,
-      </if>
-      <if test="isRefund != null" >
-        is_refund,
-      </if>
-      create_time,
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="openId != null" >
-        #{openId,jdbcType=BIGINT},
-      </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="introduct != null" >
-        #{introduct,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=TINYINT},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
-        <if test="imgArr != null">
-            #{imgArr,jdbcType=VARCHAR},
-      </if>
-      <if test="price != null" >
-        #{price,jdbcType=DECIMAL},
-      </if>
-      <if test="expritationDate != null" >
-        #{expritationDate,jdbcType=VARCHAR},
-      </if>
-      <if test="isRefund != null" >
-        #{isRefund,jdbcType=TINYINT},
-      </if>
-      #{createTime}
-    </trim>
-  </insert>
+        insert into tb_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="introduct != null">
+                introduct,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="imgArr != null">
+                img_arr,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="expritationDate != null">
+                expritation_date,
+            </if>
+            <if test="isRefund != null">
+                is_refund,
+            </if>
+            create_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="introduct != null">
+                #{introduct,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="imgArr != null">
+                #{imgArr,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="expritationDate != null">
+                #{expritationDate,jdbcType=VARCHAR},
+            </if>
+            <if test="isRefund != null">
+                #{isRefund,jdbcType=TINYINT},
+            </if>
+            #{createTime}
+        </trim>
+    </insert>
 
-  <update id="updateQRImgNameById">
+    <update id="updateQRImgNameById">
     update tb_product set qr_img_name = #{fileName} where id=#{id}
   </update>
 
-  <select id="getProductById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="getProductById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select * from tb_product where id=#{id}
+  </select>
+
+    <select id="getTradeUserInfoByIdAndOpenId" parameterType="java.lang.String"
+            resultType="com.baoliao.weixin.bean.BuyerUserInfo">
+            select w.headImgUrl as headImage,w.nickName,t.create_time from tb_trade t LEFT JOIN
+            tb_wechat_user_info w on t.buyer_open_id=w.openId
+            where t.seller_open_id=#{openId} and t.product_id=#{id}
   </select>
 </mapper>

@@ -115,7 +115,7 @@
             </div>
             <div>
             <span>
-                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none"
+                <span style="color: #EBC49D;padding-right: 4px;"><a style="text-decoration:none;color: black"
                                                                     href="/product/detailInfo2?id=${trade.productId}">${trade.productTitle}</a></span>
             </span>
             </div>

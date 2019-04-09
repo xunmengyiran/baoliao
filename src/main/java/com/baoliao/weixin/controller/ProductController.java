@@ -98,7 +98,7 @@ public class ProductController {
             e.printStackTrace();
         }
         User buyer_user = Utils.getUserInfoByCode(request, code);
-        if ("0".equals(price) /*|| openId.equals(buyer_user.getOpenId())*/) {
+        if ("0".equals(price) || product.getOpenId().equals(buyer_user.getOpenId())) {
             try {
                 productService.getProductDetailInfo(request, id);
             } catch (Exception e) {

@@ -57,11 +57,34 @@
     <span>点击图片长按保存到相册</span></br>
     <span>方便发到群里或朋友圈</span>
 </div>
-<button class="button button1" onclick="window.location.href='/product/detailInfo2?id=${sessionScope.product.id}'">
+<button class="button button1"
+        onclick="window.location.href='/product/getDetailInfoByScan?id=${sessionScope.product.id}&price=${sessionScope.product.price}'">
     查看详情
 </button>
 <%--<button style="margin-top: -3px;" class="button button1">一键通知<span style="font-size: 16px;color: red;margin-left: 4px;">(关注粉丝会受到消息推送)</span>--%>
 </button>
-<%--<button style="margin-top: 3px;" class="button button2">关闭</button>--%>
+<button style="margin-top: 3px;" class="button button2" onclick="javascript:history.back();">关闭</button>
+<c:forEach var="buyerUserInfo" items="${sessionScope.buyerUserInfoList}">
+    <li style="padding: 0px" class="mui-table-view-cell">
+        <div style="margin-top: 10px;" class="mui-slider-handle">
+            <div style="margin-bottom: 6px">
+                    <%-- <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
+                                                                                   pattern="yyyy-MM-dd HH:ss:mm"/></span>--%>
+                    <%--<span style="float:right;font-size: 10px;color: #BCBCBC;">寻梦依然</span>--%>
+                    <%--<img class='user_icon_e yj cz ab' src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">--%>
+                    <%-- <span style="float:right;font-size: 10px;color: #BCBCBC;">${sessionScope.user.nickName}</span>
+                     <img class='user_icon_e yj cz ab' src="${sessionScope.user.headImgUrl}" alt="">--%>
+            </div>
+            <div> <span>
+                <img style="width: 26px;height: 26px" src="${buyerUserInfo.headImage}">
+            </span>
+                <span>
+                <span style="color: #EBC49D;padding-right: 4px;">${buyerUserInfo.nickName}</span>
+            </span>
+                <span style="color: #EBC49D;padding-right: 4px;float: right">${buyerUserInfo.createTime}</span>
+            </div>
+        </div>
+    </li>
+</c:forEach>
 </body>
 </html>
