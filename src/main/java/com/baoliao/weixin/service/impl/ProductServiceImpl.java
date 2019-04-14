@@ -121,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
             if (!"0".equals(vo.getPrice())) {
                 price = vo.getPrice() + "元";
             }
-            Utils.bigImgAddSmallImgAndText(qrCodeImgPath + "muban1.jpg", path + fileName, 250, 300, price, 600, 650, path + fileName, 45);
+            Utils.bigImgAddSmallImgAndText(qrCodeImgPath + "muban1.jpg", path + fileName, 250, 315, price, 600, 650, path + fileName, 45);
             // 下载图片到本地
             byte[] btImg = Utils.getImageFromNetByUrl(user.getHeadImgUrl());
             if (null != btImg && btImg.length > 0) {
@@ -166,13 +166,31 @@ public class ProductServiceImpl implements ProductService {
                 String fontType = "宋体";
                 int fontStyle = Font.BOLD;
                 int fontSize = 30;
-                String font = vo.getTitle();
+                String font = vo.getTitle().replace("&nbsp;", " ");
                 /* String font = "印效果测水印效果整水印效果 ";*/
                 Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.WHITE, 35, font, 150);
-                String font1 = vo.getIntroduct();
-                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                String font1 = vo.getIntroduct().replace("&nbsp;", " ");
+//                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                if (font1.length() > 16) {
+                    String font1_sub1 = font1.substring(16, font1.length() - 1);
+                    Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1.substring(0, 16), 220);
+                    if (font1_sub1.length() > 16) {
+                        String font1_sub2 = font1.substring(16, font1.length() - 1);
+                        Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub2.substring(0, 16), 260);
+                        if (font1_sub2.length() > 16) {
+                            String font1_sub3 = font1.substring(16, font1.length() - 1);
+                            Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub3.substring(0, 16), 300);
+                        } else {
+                            Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub2, 300);
+                        }
+                    } else {
+                        Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub1, 260);
+                    }
+                } else {
+                    Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                }
                 String font2 = "长按扫码 立即获取";
-                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.gray, 18, font2, 580);
+                Utils.waterPress(path + fileName, path + fileName, fontType, fontStyle, Color.gray, 18, font2, 590);
 
             } else {
                 log.error("没有从该连接获得内容");
@@ -189,10 +207,10 @@ public class ProductServiceImpl implements ProductService {
         }
         sendSaveSuccessMessage(Constants.TEMPLATE_TYPE.SAVE_PRODUCT_TO_SELF, vo.getOpenId(), "C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM", domainName + "/product/detailInfo2?id=" + vo.getId(), "作品制作完成通知", vo.getTitle(), Constants.DATA_FORMAT.sdf2.format(vo.getCreateTime()), "请点击'我的作品'查看");
         try {
-            List<String> list = focusDao.getFansList(vo.getOpenId());
-            for (String toOpenId : list) {
-                sendSaveSuccessMessage(Constants.TEMPLATE_TYPE.TO_FANS, toOpenId, "C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", "您好，您关注的'" + user.getNickName() + "'发布了新作品" +
-                        "。简介:" + vo.getIntroduct(), vo.getTitle(), Constants.DATA_FORMAT.sdf2.format(vo.getCreateTime()), "点击付费查看详细内容");
+            List<FocusInfo> list = focusDao.getFansList(vo.getOpenId());
+            for (FocusInfo focusInfo : list) {
+                sendSaveSuccessMessage(Constants.TEMPLATE_TYPE.TO_FANS, focusInfo.getSelfOpenId(), "C2AsLa9MzW-rNDsBbjc2D8X7TkH4XZG2xaMsOeX7GzM", "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + Constants.WECHAT_PARAMETER.APPID + "&redirect_uri=" + domainName + "/product/detailInfo%3Fid%3D" + vo.getId() + "%26price%3D" + vo.getPrice() + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", "您好，您关注的'" + user.getNickName() + "'发布了新作品" +
+                        "。简介:" + vo.getIntroduct().replace("&nbsp;", " "), vo.getTitle().replace("&nbsp;", " "), Constants.DATA_FORMAT.sdf2.format(vo.getCreateTime()), "点击付费查看详细内容");
             }
         } catch (Exception e) {
             e.printStackTrace();

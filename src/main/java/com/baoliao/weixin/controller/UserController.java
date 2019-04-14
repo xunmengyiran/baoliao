@@ -1,16 +1,22 @@
 package com.baoliao.weixin.controller;
 
+import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.service.UserService;
+import com.baoliao.weixin.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
@@ -36,10 +42,10 @@ public class UserController {
         log.info("进入首页");
         String code = request.getParameter("code");
         try {
-            // TODO
-            // 必须先关注才能进入首页，所以此处只需要更新就行了
-            if (true) {
-//                return "not_subscribe";
+            User user = Utils.getUserInfoByCode(request, code);
+            boolean isSubscribe = userService.getSubscribeUserByOpenId(user.getOpenId());
+            if (!isSubscribe) {
+                return "not_subscribe";
             }
             userService.updateUserInfo(request, code);
         } catch (Exception e) {
@@ -72,5 +78,36 @@ public class UserController {
             log.error("进入我页面出错,错误信息;" + e);
         }
         return "myInfo";
+    }
+
+    @PostMapping("/deleteBuyRecord")
+    public void deleteBuyRecord(HttpServletRequest request, HttpServletResponse response, String id) {
+        log.info("获取的id：" + id);
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+        }
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter pw = null;
+        try {
+            String result = userService.deleteBuyRecord(id);
+            pw = response.getWriter();
+            pw.write(result);
+            log.info("删除记录成功:" + result);
+        } catch (IOException e1) {
+            log.error(e1.getMessage(), e1);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("删除记录出错" + e);
+        } finally {
+            pw.flush();
+            pw.close();
+        }
+    }
+
+    @GetMapping("/goToSubscribe")
+    public String goToSubscribe() {
+        return "not_subscribe";
     }
 }

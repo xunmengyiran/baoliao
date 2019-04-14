@@ -145,7 +145,7 @@ public class Utils {
             //设置编码
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             //设置容错率最高
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             hints.put(EncodeHintType.MARGIN, 0);
             // 1、生成二维码
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
@@ -686,8 +686,27 @@ public class Utils {
                 String font = "测试标题";
                 /* String font = "印效果测水印效果整水印效果 ";*/
                 waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.WHITE, 35, font, 150);
-                String font1 = "测试简介内容";
-                waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                String font1 = "测试简介内容测试简介内容测试简介内容测试简介内容测试简介内容阿斯顿撒大苏打撒旦大撒大撒大苏打啊实打实大苏打";
+                if (font1.length() > 16) {
+                    String font1_sub1 = font1.substring(16, font1.length() - 1);
+                    waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1.substring(0, 16), 220);
+                    if (font1_sub1.length() > 16) {
+                        String font1_sub2 = font1.substring(16, font1.length() - 1);
+                        waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub2.substring(0, 16), 260);
+                        if (font1_sub2.length() > 16) {
+                            String font1_sub3 = font1.substring(16, font1.length() - 1);
+                            waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub3.substring(0, 16), 260);
+
+                        } else {
+                            waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub2, 260);
+                        }
+                    } else {
+                        waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1_sub1, 260);
+                    }
+                } else {
+                    waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.blue, fontSize, font1, 220);
+                }
+
                 String font2 = "长按扫码 立即获取";
                 waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.gray, 18, font2, 580);
 

@@ -96,22 +96,12 @@
     </li>--%>
     <c:forEach var="user" items="${sessionScope.fansList}">
         <li style="padding: 0px" class="mui-table-view-cell">
-            <div style="margin-top: 10px;" class="mui-slider-handle">
-                <div style="margin-bottom: 6px">
-                        <%-- <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                                       pattern="yyyy-MM-dd HH:ss:mm"/></span>--%>
-                        <%--<span style="float:right;font-size: 10px;color: #BCBCBC;">寻梦依然</span>--%>
-                        <%--<img class='user_icon_e yj cz ab' src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">--%>
-                        <%-- <span style="float:right;font-size: 10px;color: #BCBCBC;">${sessionScope.user.nickName}</span>
-                         <img class='user_icon_e yj cz ab' src="${sessionScope.user.headImgUrl}" alt="">--%>
-                </div>
-                <div> <span>
-                <img style="width: 26px;height: 26px" src="${user.headImgUrl}">
-            </span>
-                    <span>
-                <span style="color: #EBC49D;padding-right: 4px;">${user.nickName}</span>
-            </span>
-                </div>
+            <div style="margin-top: 5px;margin-bottom: 5px;padding-left: 10px;padding-right: 10px"
+                 class="mui-slider-handle">
+                <img style="vertical-align: middle; width: 26px;height: 26px" src="${user.headImgUrl}">
+                <span style="color: RGB(34, 34, 34);padding-right: 4px;font-size: 12px">${user.nickName}</span>
+                <span style="font-size: 10px;color: #BCBCBC;float: right;padding-right: 6px"><fmt:formatDate
+                        value="${user.subscribeTime}" pattern="yyyy-MM-dd HH:ss:mm"/></span>
             </div>
         </li>
     </c:forEach>
@@ -119,4 +109,5 @@
 <div>
     <p style="text-align: center;color: #797979;font-size: 15px;">亲，没有更多数据了--！</p>
 </div>
+</body>
 </html>

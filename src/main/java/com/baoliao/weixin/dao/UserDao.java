@@ -40,4 +40,8 @@ public interface UserDao {
     int updateFollowInfo(String fromUserName) throws Exception;
 
     User getUserInfoByOpenId(String openId) throws Exception;
+
+    int getSubscribeUserByOpenId(String openId) throws Exception;
+
+    int deleteBuyRecordById(String id) throws Exception;
 }

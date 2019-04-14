@@ -6,6 +6,7 @@ import com.baoliao.weixin.dao.TradeDao;
 import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.rmi.CORBA.Util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,8 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserInfo(HttpServletRequest request, String code) throws Exception {
         User user = Utils.getUserInfoByCode(request, code);
-        userDao.updateUserInfo(user);
-        return 0;
+        return userDao.updateUserInfo(user);
     }
 
     @Override
@@ -119,8 +121,35 @@ public class UserServiceImpl implements UserService {
         session.setAttribute("balance", balance);
     }
 
-    public static void main(String[] args) {
+    @Override
+    public String deleteBuyRecord(String id) throws Exception {
+        Map<String, Object> result = new HashMap<String, Object>();
+        int num = userDao.deleteBuyRecordById(id);
+        log.info("删除的条数：" + num);
+        if (num == 1) {
+            result.put("flag", num);
+            result.put("msg", "成功");
+        } else {
+            result.put("flag", num);
+            result.put("msg", "更新数据出现异常:" + num);
+        }
+        JSONObject jObject = JSONObject.fromObject(result);
+        return jObject.toString();
+    }
+
+    @Override
+    public boolean getSubscribeUserByOpenId(String openId) throws Exception {
+        int num = userDao.getSubscribeUserByOpenId(openId);
+        if (num == 1) {
+            return true;
+        }
+        return false;
+    }
+
+   /* public static void main(String[] args) {
         String balance = Utils.conversion2Mumber(String.valueOf(Double.parseDouble("100") - Double.parseDouble("20") - Double.parseDouble("29.78") - Double.parseDouble("10") + Double.parseDouble("10")));
         System.out.println(balance);
-    }
+    }*/
+
+
 }

@@ -50,10 +50,10 @@
     </select>
 
     <select id="queryBuyProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
-        SELECT t.product_id as productId,t.money,t.create_time AS createTime, p.title as productTitle
+        SELECT t.id as id,t.product_id as productId,t.money,t.create_time AS createTime, p.title as productTitle
         FROM tb_trade t
         LEFT JOIN tb_product p ON t.product_id = p.id
-        WHERE  buyer_open_id =#{openId} and trade_type=0 GROUP BY product_id  ORDER BY p.id DESC
+        WHERE  buyer_open_id =#{openId} and trade_type=0 and t.is_delete='0' GROUP BY product_id  ORDER BY p.id DESC
     </select>
 
     <select id="querySellerProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
@@ -63,6 +63,6 @@
     </select>
 
     <insert id="saveOperCashInfo" parameterType="com.baoliao.weixin.bean.Trade">
-        insert into tb_trade(product_id,buyer_open_id,seller_open_id,trede_type,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{tradeType},#{money},#{payType},#{createTime});
+        insert into tb_trade(product_id,buyer_open_id,seller_open_id,trade_type,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{tradeType},#{money},#{payType},#{createTime});
     </insert>
 </mapper>

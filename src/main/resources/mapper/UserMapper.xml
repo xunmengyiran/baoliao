@@ -27,4 +27,12 @@
   <select id="getUserInfoByOpenId" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.User">
     select * from tb_wechat_user_info where openId=#{openId} and subscribe='1'
   </select>
+
+  <select id="getSubscribeUserByOpenId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(0) from tb_wechat_user_info where openId=#{openId} and subscribe='1'
+  </select>
+
+  <update id="deleteBuyRecordById" parameterType="java.lang.String">
+    update tb_trade set is_delete='1' where id=#{id}
+  </update>
 </mapper>

@@ -14,4 +14,8 @@ public interface UserService {
     User queryMyInfo(HttpServletRequest request) throws Exception;
 
     void getAllMoneyInfo(HttpSession session, User user) throws Exception;
+
+    boolean getSubscribeUserByOpenId(String openId) throws Exception;
+
+    String deleteBuyRecord(String id) throws Exception;
 }

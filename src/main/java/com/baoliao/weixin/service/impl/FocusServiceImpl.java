@@ -62,19 +62,21 @@ public class FocusServiceImpl implements FocusService {
     public void getFocusList(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        List<String> focusList = focusDao.getFocusList(user.getOpenId());
+        List<FocusInfo> focusList = focusDao.getFocusList(user.getOpenId());
         log.info("获取到的关注openId集合:" + focusList.size());
         List<User> userList = new ArrayList<>();
-        focusList.forEach(s -> {
+        for (FocusInfo focusInfo : focusList) {
+            log.info("获取到的关注:" + focusInfo.toString());
             try {
-                User u = userDao.getUserInfoByOpenId(s);
+                User u = userDao.getUserInfoByOpenId(focusInfo.getOtherOpenId());
+                u.setSubscribeTime(focusInfo.getCreateTime());
                 log.info(u.toString());
                 userList.add(u);
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("获取关注列表失败。" + e);
             }
-        });
+        }
         session.setAttribute("focusList", userList);
     }
 
@@ -82,19 +84,21 @@ public class FocusServiceImpl implements FocusService {
     public void getFansList(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        List<String> fansList = focusDao.getFansList(user.getOpenId());
+        List<FocusInfo> fansList = focusDao.getFansList(user.getOpenId());
         log.info("获取到的粉丝openId集合:" + fansList.size());
         List<User> userList = new ArrayList<>();
-        fansList.forEach(s -> {
+        for (FocusInfo focusInfo : fansList) {
+            log.info("获取到的粉丝:" + focusInfo.toString());
             try {
-                User u = userDao.getUserInfoByOpenId(s);
+                User u = userDao.getUserInfoByOpenId(focusInfo.getSelfOpenId());
+                u.setSubscribeTime(focusInfo.getCreateTime());
                 log.info(u.toString());
                 userList.add(u);
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("获取粉丝列表失败。" + e);
             }
-        });
+        }
         session.setAttribute("fansList", userList);
     }
 

@@ -5,6 +5,7 @@ import com.baoliao.weixin.bean.Trade;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.dao.TradeDao;
 import com.baoliao.weixin.service.TradeService;
+import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
 import com.baoliao.weixin.util.WeChatPayUtils;
 import com.baoliao.weixin.wechatpay.*;
@@ -186,9 +187,10 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
-    public String oper_cash(HttpServletRequest request) throws Exception {
+    public String oper_cash(HttpServletRequest request, UserService userService) throws Exception {
+        HttpSession session = request.getSession();
         String inputMoney = request.getParameter("inputMoney");
-        User user = (User) request.getSession().getAttribute("user");
+        User user = (User) session.getAttribute("user");
         Map<String, String> data = new HashMap<String, String>();
         String nonceStr = WXPayUtil.generateNonceStr();
         String mch_appid = Constants.WECHAT_PARAMETER.APPID;
@@ -205,10 +207,9 @@ public class TradeServiceImpl implements TradeService {
         data.put("partner_trade_no", Constants.DATA_FORMAT.sdf1.format(new Date()));
         data.put("openid", user.getOpenId());
         data.put("check_name", "NO_CHECK");
-//        data.put("re_user_name", user.getNickName());
-        data.put("re_user_name", "xunmengyiran");
+        data.put("re_user_name", user.getNickName());
         data.put("amount", String.valueOf((int) Double.parseDouble(inputMoney) * 100));
-        data.put("desc", "tixian");
+        data.put("desc", "提现");
         data.put("spbill_create_ip", WeChatPayUtils.getIp(request));
         String sign = WXPayUtil.generateSignatureMD5(data, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET);
 //        String sign = Utils.getSignCode(data,PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET);
@@ -238,6 +239,8 @@ public class TradeServiceImpl implements TradeService {
             int num = tradeDao.saveOperCashInfo(trade);
             if (num == 1) {
                 resultMap.put("success", true);
+                userService.getAllMoneyInfo(session, user);
+                resultMap.put("balance", session.getAttribute("balance"));
                 jObject = JSONObject.fromObject(resultMap);
             }
         } catch (Exception e) {

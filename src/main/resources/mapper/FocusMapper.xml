@@ -24,12 +24,12 @@
         select count(0) from tb_focus_info where other_open_id=#{openId} and is_cancel=0
     </select>
 
-    <select id="getFocusList" parameterType="java.lang.String" resultType="java.lang.String">
-        select other_open_id from tb_focus_info where self_open_id=#{openId} and is_cancel=0 ORDER BY id DESC
+    <select id="getFocusList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.FocusInfo">
+        select self_open_id as selfOpenId,other_open_id as otherOpenId,create_time as createTime from tb_focus_info where self_open_id=#{openId} and is_cancel=0 ORDER BY id DESC
     </select>
 
-    <select id="getFansList" parameterType="java.lang.String" resultType="java.lang.String">
-        select self_open_id from tb_focus_info where other_open_id=#{openId} and is_cancel=0 ORDER BY id DESC
+    <select id="getFansList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.FocusInfo">
+        select self_open_id as selfOpenId,other_open_id as otherOpenId,create_time as createTime  from tb_focus_info where other_open_id=#{openId} and is_cancel=0 ORDER BY id DESC
     </select>
 
     <update id="cancelAttention" parameterType="com.baoliao.weixin.bean.FocusInfo">

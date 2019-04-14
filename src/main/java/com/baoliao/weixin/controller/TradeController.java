@@ -3,6 +3,7 @@ package com.baoliao.weixin.controller;
 import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.service.TradeService;
+import com.baoliao.weixin.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class TradeController {
 
     @Autowired
     private TradeService tradeService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/pay_balance")
     public void payByBalance(HttpServletRequest request, HttpServletResponse response) {
@@ -90,7 +93,7 @@ public class TradeController {
         response.setCharacterEncoding("UTF-8");
         PrintWriter pw = null;
         try {
-            String result = tradeService.oper_cash(request);
+            String result = tradeService.oper_cash(request, userService);
             pw = response.getWriter();
             pw.write(result);
             log.info("提现成功:" + result);
@@ -124,17 +127,5 @@ public class TradeController {
             log.error("查询提现列表失败！");
         }
         return "deposit_list";
-    }
-
-    public static void main(String[] args) {
-        String st = "   一键关停123456    ";
-        System.out.println("长度" + st.length());
-        st = st.trim();
-        if (st.trim().length() == 10) {
-            String s1 = st.substring(0, 4);
-            String s2 = st.substring(4, 10);
-            System.out.println(s1 + "========" + s2);
-        }
-
     }
 }

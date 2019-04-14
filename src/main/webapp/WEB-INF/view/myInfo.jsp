@@ -121,7 +121,7 @@
     <input type="hidden" name="zfb_account" id="zfb_account" value=""/>
     <section class="mui-row mt20 cen">
         <section class="mui-col-xs-6 cf fz18">
-            ${sessionScope.balance}
+            <p style="color: white;font-size: 18px" id="p1">${sessionScope.balance}</p>
             <p class="cf fz12">余额</p>
         </section>
         <section class="mui-col-xs-6 cf fz18">
@@ -177,7 +177,7 @@
 </section>
 
 <section class="dsf_jh_derert mui-row ">
-    <a class="mui-col-xs-4 z3 act" href="/user/goIndex">
+    <a class="mui-col-xs-4 z3 " href="/user/goIndex">
         <i class="dx icon-wenjian  fz22"></i>
         <p class="fz12">首页</p>
     </a>
@@ -185,7 +185,7 @@
         <i class="dx icon-ziliaoku fz20"></i>
         <p class="fz12">我的料</p>
     </a>
-    <a class="mui-col-xs-4 z3 " href="/user/queryMyInfo">
+    <a class="mui-col-xs-4 z3 act" href="/user/queryMyInfo">
         <i class="dx icon-qiandai  fz24"></i>
         <p class="fz12">我的</p>
     </a>
@@ -238,7 +238,6 @@
             mui.prompt('请输入需要体现的金额', '请输入金额', '提现', ['取消', '确认'], function (e) {
                 if (e.index == 1) {
                     //确认
-                    console.log("11111111" + e.index)
                     inputValue = e.value;
                     if (e.value > balance) {
                         mui.alert('提现金额不能大于余额');
@@ -271,6 +270,7 @@
                                      window.location.href = basePath + "weixin/account_info";
                                  });*/
                                 mui.toast("提现成功")
+                                $('#p1').html(result.balance);
                             } else {
                                 //mui.alert(result.msg)
                                 mui.alert(result.msg, '提示', function () {

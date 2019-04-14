@@ -98,22 +98,32 @@ public class ProductController {
             e.printStackTrace();
         }
         User buyer_user = Utils.getUserInfoByCode(request, code);
-        if ("0".equals(price) || product.getOpenId().equals(buyer_user.getOpenId())) {
-            try {
-                productService.getProductDetailInfo(request, id);
-            } catch (Exception e) {
-                e.printStackTrace();
+
+        try {
+            /*boolean isSubscribe = userService.getSubscribeUserByOpenId(buyer_user.getOpenId());
+            if (!isSubscribe) {
+                return "not_subscribe";
+            } else*/
+            if ("0".equals(price) || product.getOpenId().equals(buyer_user.getOpenId())) {
+                try {
+                    productService.getProductDetailInfo(request, id);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "product_detail_info";
+            } else {
+                try {
+                    productService.getPayInfo(request, id, price, buyer_user);
+                    userService.getAllMoneyInfo(request.getSession(), buyer_user);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "pay";
             }
-            return "product_detail_info";
-        } else {
-            try {
-                productService.getPayInfo(request, id, price, buyer_user);
-                userService.getAllMoneyInfo(request.getSession(), buyer_user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return "pay";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return "";
     }
 
     @GetMapping("/detailInfo2")

@@ -17,9 +17,9 @@ public interface FocusDao {
 
     int getFansCount(String openId) throws Exception;
 
-    List<String> getFocusList(String openId) throws Exception;
+    List<FocusInfo> getFocusList(String openId) throws Exception;
 
-    List<String> getFansList(String openId) throws Exception;
+    List<FocusInfo> getFansList(String openId) throws Exception;
 
     int cancelAttention(FocusInfo focusInfo) throws Exception;
 

@@ -72,49 +72,14 @@
 </script>
 <ul id="focusList" style="position:initial" class="mui-table-view">
     <%--<li style="padding: 0px" class="mui-table-view-cell">
-        <div class="mui-slider-left mui-disabled">
-            <a class="mui-btn mui-btn-red">取消关注</a>
-        </div>
-        <div style="margin-top: 10px;" class="mui-slider-handle">
-            <div style="margin-bottom: 6px">
-                &lt;%&ndash; <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                               pattern="yyyy-MM-dd HH:ss:mm"/></span>&ndash;%&gt;
-                &lt;%&ndash;<span style="float:right;font-size: 10px;color: #BCBCBC;">寻梦依然</span>&ndash;%&gt;
-                &lt;%&ndash;<img class='user_icon_e yj cz ab' src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">&ndash;%&gt;
-                &lt;%&ndash; <span style="float:right;font-size: 10px;color: #BCBCBC;">${sessionScope.user.nickName}</span>
-                 <img class='user_icon_e yj cz ab' src="${sessionScope.user.headImgUrl}" alt="">&ndash;%&gt;
-            </div>
-            <div> <span>
-                    <input type="text" hidden="hidden" value="11111111111">
-                <img style="width: 26px;height: 26px" src="${user.headImgUrl}">
-            </span>
-                <span>
-                <span style="color: #EBC49D;padding-right: 4px;">${user.nickName}</span>
-            </span>
-            </div>
-        </div>
-    </li>
-    <li style="padding: 0px" class="mui-table-view-cell">
         <input type="text" hidden="hidden" value="22222222222">
         <div class="mui-slider-left mui-disabled">
             <a class="mui-btn mui-btn-red">取消关注</a>
         </div>
-        <div style="margin-top: 10px;" class="mui-slider-handle">
-            <div style="margin-bottom: 6px">
-                &lt;%&ndash; <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                               pattern="yyyy-MM-dd HH:ss:mm"/></span>&ndash;%&gt;
-                &lt;%&ndash;<span style="float:right;font-size: 10px;color: #BCBCBC;">寻梦依然</span>&ndash;%&gt;
-                &lt;%&ndash;<img class='user_icon_e yj cz ab' src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">&ndash;%&gt;
-                &lt;%&ndash; <span style="float:right;font-size: 10px;color: #BCBCBC;">${sessionScope.user.nickName}</span>
-                 <img class='user_icon_e yj cz ab' src="${sessionScope.user.headImgUrl}" alt="">&ndash;%&gt;
-            </div>
-            <div> <span>
-                <img style="width: 26px;height: 26px" src="${user.headImgUrl}">
-            </span>
-                <span>
-                <span style="color: #EBC49D;padding-right: 4px;">${user.nickName}</span>
-            </span>
-            </div>
+        <div style="margin-top: 5px;margin-bottom: 5px;padding-left: 10px;padding-right: 10px" class="mui-slider-handle">
+                <img style="vertical-align: middle; width: 26px;height: 26px" src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">
+                <span style="color: RGB(34, 34, 34);padding-right: 4px;font-size: 12px">寻梦依然</span>
+            <span style="font-size: 10px;color: #BCBCBC;float: right">2019-04-13 17:28:34</span>
         </div>
     </li>--%>
     <c:forEach var="user" items="${sessionScope.focusList}">
@@ -123,22 +88,12 @@
             <div class="mui-slider-left mui-disabled">
                 <a class="mui-btn mui-btn-red">取消关注</a>
             </div>
-            <div style="margin-top: 10px;" class="mui-slider-handle">
-                <div style="margin-bottom: 6px">
-                        <%-- <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                                       pattern="yyyy-MM-dd HH:ss:mm"/></span>--%>
-                        <%--<span style="float:right;font-size: 10px;color: #BCBCBC;">寻梦依然</span>--%>
-                        <%--<img class='user_icon_e yj cz ab' src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">--%>
-                        <%-- <span style="float:right;font-size: 10px;color: #BCBCBC;">${sessionScope.user.nickName}</span>
-                         <img class='user_icon_e yj cz ab' src="${sessionScope.user.headImgUrl}" alt="">--%>
-                </div>
-                <div> <span>
-                <img style="width: 26px;height: 26px" src="${user.headImgUrl}">
-            </span>
-                    <span>
-                <span style="color: #EBC49D;padding-right: 4px;">${user.nickName}</span>
-            </span>
-                </div>
+            <div style="margin-top: 5px;margin-bottom: 5px;padding-left: 10px;padding-right: 10px"
+                 class="mui-slider-handle">
+                <img style="vertical-align: middle; width: 26px;height: 26px" src="${user.headImgUrl}">
+                <span style="color: RGB(34, 34, 34);padding-right: 4px;font-size: 12px">${user.nickName}</span>
+                <span style="font-size: 10px;color: #BCBCBC;float: right;padding-right: 6px"><fmt:formatDate
+                        value="${user.subscribeTime}" pattern="yyyy-MM-dd HH:ss:mm"/></span>
             </div>
         </li>
     </c:forEach>
