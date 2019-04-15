@@ -334,12 +334,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductDetailInfo(HttpServletRequest request, String id) throws Exception {
+    public Product getProductDetailInfo(HttpServletRequest request, User buyer_user, String id) throws Exception {
         HttpSession session = request.getSession();
         Product product = productDao.getProductById(Integer.parseInt(id));
+        User productUser = userDao.getUserInfoByOpenId(product.getOpenId());
+        //判段是否是关注的作者
+        int count = focusDao.getFocusByOpenId(buyer_user.getOpenId(), product.getOpenId());
+        if (count == 0) {
+            request.getSession().setAttribute("focus", 0);
+        } else {
+            request.getSession().setAttribute("focus", 1);
+        }
         String[] imgArr = product.getImgArr().split(",");
         session.setAttribute("product", product);
         session.setAttribute("imgArr", imgArr);
+        session.setAttribute("productUser", productUser);
         return product;
     }
 

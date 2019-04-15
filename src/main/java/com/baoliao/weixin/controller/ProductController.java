@@ -4,6 +4,7 @@ import com.baoliao.weixin.Constants;
 import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.service.ProductService;
+import com.baoliao.weixin.service.TradeService;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
 import org.apache.commons.collections.bag.SynchronizedBag;
@@ -32,6 +33,9 @@ public class ProductController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TradeService tradeService;
     /**
      * 保存首页数据
      *
@@ -92,21 +96,22 @@ public class ProductController {
         String code = request.getParameter("code");
         log.info("扫描二维码获取到的id是:" + id + ",价格是:" + price + ",code是" + code);
         Product product = new Product();
+        User buyer_user = Utils.getUserInfoByCode(request, code);
         try {
-            product = productService.getProductDetailInfo(request, id);
+            product = productService.getProductDetailInfo(request, buyer_user, id);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        User buyer_user = Utils.getUserInfoByCode(request, code);
-
+        String buyerOpenId = buyer_user.getOpenId();
         try {
-            /*boolean isSubscribe = userService.getSubscribeUserByOpenId(buyer_user.getOpenId());
+            boolean isPurchased = tradeService.checkIsPurchased(request, id, buyerOpenId);
+            /*boolean isSubscribe = userService.getSubscribeUserByOpenId(buyerOpenId);
             if (!isSubscribe) {
                 return "not_subscribe";
             } else*/
-            if ("0".equals(price) || product.getOpenId().equals(buyer_user.getOpenId())) {
+            if ("0".equals(price) || product.getOpenId().equals(buyerOpenId) || isPurchased) {
                 try {
-                    productService.getProductDetailInfo(request, id);
+                    productService.getProductDetailInfo(request, buyer_user, id);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -130,7 +135,8 @@ public class ProductController {
     public String getProductDetailInfoByMoney(HttpServletRequest request, @RequestParam String id) {
         log.info("付费成功后获取到的产品id" + id);
         try {
-            productService.getProductDetailInfo(request, id);
+            User user = (User) request.getSession().getAttribute("user");
+            productService.getProductDetailInfo(request, user, id);
         } catch (Exception e) {
             e.printStackTrace();
         }

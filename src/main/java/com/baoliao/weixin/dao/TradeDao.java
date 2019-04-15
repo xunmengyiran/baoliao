@@ -32,4 +32,6 @@ public interface TradeDao {
 
     int saveOperCashInfo(Trade trade) throws Exception;
 
+    int checkIsPurchased(@Param("productId") String productId, @Param("buyerOpenId") String buyerOpenId) throws Exception;
+
 }

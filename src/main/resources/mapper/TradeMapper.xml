@@ -65,4 +65,8 @@
     <insert id="saveOperCashInfo" parameterType="com.baoliao.weixin.bean.Trade">
         insert into tb_trade(product_id,buyer_open_id,seller_open_id,trade_type,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{tradeType},#{money},#{payType},#{createTime});
     </insert>
+
+    <select id="checkIsPurchased" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0) from tb_trade where product_id=#{productId} and buyer_open_id=#{buyerOpenId}
+    </select>
 </mapper>

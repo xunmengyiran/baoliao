@@ -13,4 +13,15 @@ public interface TradeService {
     String oper_cash(HttpServletRequest request, UserService userService) throws Exception;
 
     void queryDepositList(HttpServletRequest request) throws Exception;
+
+    /**
+     * 检查是否已经购买过
+     *
+     * @param request
+     * @param productId
+     * @param buyerOpenId
+     * @return
+     * @throws Exception
+     */
+    boolean checkIsPurchased(HttpServletRequest request, String productId, String buyerOpenId) throws Exception;
 }

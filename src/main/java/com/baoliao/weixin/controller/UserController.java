@@ -43,11 +43,11 @@ public class UserController {
         String code = request.getParameter("code");
         try {
             User user = Utils.getUserInfoByCode(request, code);
-            boolean isSubscribe = userService.getSubscribeUserByOpenId(user.getOpenId());
+            /*boolean isSubscribe = userService.getSubscribeUserByOpenId(user.getOpenId());
             if (!isSubscribe) {
                 return "not_subscribe";
-            }
-            userService.updateUserInfo(request, code);
+            }*/
+            userService.updateUserInfo(user);
         } catch (Exception e) {
             log.error("进入首页出错,错误信息;" + e);
         }

@@ -262,4 +262,21 @@ public class TradeServiceImpl implements TradeService {
         }
         session.setAttribute("depositList", tradeList);
     }
+
+    @Override
+    public boolean checkIsPurchased(HttpServletRequest request, String productId, String buyerOpenId) throws Exception {
+        int num = tradeDao.checkIsPurchased(productId, buyerOpenId);
+        HttpSession session = request.getSession();
+        if (num == 1) {
+            session.setAttribute("isPurchased", 1);
+            log.info(buyerOpenId + "用户已经购买过" + productId + "的产品");
+            return true;
+        } else {
+            session.setAttribute("isPurchased", 0);
+            log.info(buyerOpenId + "用户未购买过" + productId + "的产品");
+            return false;
+        }
+    }
 }
+
+
