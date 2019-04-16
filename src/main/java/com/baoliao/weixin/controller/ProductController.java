@@ -91,7 +91,7 @@ public class ProductController {
         return "generate_result";
     }
 
-    @GetMapping("detailInfo")
+    @GetMapping("/detailInfo")
     public String getDetailInfoByScan(HttpServletRequest request, @RequestParam String id, @RequestParam String price) {
         String code = request.getParameter("code");
         log.info("扫描二维码获取到的id是:" + id + ",价格是:" + price + ",code是" + code);

@@ -69,6 +69,9 @@ public class FocusServiceImpl implements FocusService {
             log.info("获取到的关注:" + focusInfo.toString());
             try {
                 User u = userDao.getUserInfoByOpenId(focusInfo.getOtherOpenId());
+                if (u == null) {
+                    u = Utils.getUserInfoByOpenId(focusInfo.getOtherOpenId());
+                }
                 u.setSubscribeTime(focusInfo.getCreateTime());
                 log.info(u.toString());
                 userList.add(u);
@@ -91,6 +94,9 @@ public class FocusServiceImpl implements FocusService {
             log.info("获取到的粉丝:" + focusInfo.toString());
             try {
                 User u = userDao.getUserInfoByOpenId(focusInfo.getSelfOpenId());
+                if (u == null) {
+                    u = Utils.getUserInfoByOpenId(focusInfo.getOtherOpenId());
+                }
                 u.setSubscribeTime(focusInfo.getCreateTime());
                 log.info(u.toString());
                 userList.add(u);

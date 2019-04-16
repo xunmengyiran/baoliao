@@ -58,7 +58,7 @@
     <span>方便发到群里或朋友圈</span>
 </div>
 <button class="button button1"
-        onclick="window.location.href='/product/getDetailInfoByScan?id=${sessionScope.product.id}&price=${sessionScope.product.price}'">
+        onclick="window.location.href='/product/detailInfo2?id=${sessionScope.product.id}'">
     查看详情
 </button>
 <%--<button style="margin-top: -3px;" class="button button1">一键通知<span style="font-size: 16px;color: red;margin-left: 4px;">(关注粉丝会受到消息推送)</span>--%>

@@ -59,7 +59,7 @@ import static com.google.zxing.client.j2se.MatrixToImageConfig.WHITE;
 
 public class Utils {
 
-    private Logger log = LoggerFactory.getLogger(Utils.class);
+    private static Logger log = LoggerFactory.getLogger(Utils.class);
 
     private static int socketTimeout = 10000;// 连接超时时间，默认10秒
     private static int connectTimeout = 30000;// 传输超时时间，默认30秒
@@ -121,9 +121,9 @@ public class Utils {
             String currDateStr = Constants.DATA_FORMAT.sdf1.format(new Date());
             fileName = currDateStr + String.valueOf(random.nextInt(1000));
             //生成二维码存放文件
-            System.out.println("保存二维码的路径:" + path + fileName + ".jpg");
+            log.info("保存二维码的路径:" + path + fileName + ".jpg");
             File file = new File(path + fileName + ".jpg");
-            System.out.println("File对象:" + file);
+            log.info("File对象:" + file);
             if (!file.exists()) {
                 file.mkdirs();
             }
@@ -250,6 +250,7 @@ public class Utils {
     }
 
     public static User getUserInfoByCode(HttpServletRequest request, String code) {
+        log.info("通过网页授权获取用户信息。");
         String oauth2_token_url = Constants.URL.OAUTH2_ACCESS_TOKEN.replace("APPID", Constants.WECHAT_PARAMETER.APPID).replace("SECRET", Constants.WECHAT_PARAMETER.APPSECRET).replace("CODE", code);
         JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(oauth2_token_url, "GET", null);
         String openId = jsonObject.getString("openid");
@@ -278,13 +279,14 @@ public class Utils {
     }
 
     public static User getUserInfoByOpenId(String openId) {
+        log.info("通过openId获取用户信息。");
         AccessToken accessToken = WeixinIntefaceUtil.getAccessToken(Constants.WECHAT_PARAMETER.APPID, Constants.WECHAT_PARAMETER.APPSECRET);
-        System.out.println("AccessToken==>" + accessToken);
+        log.info("AccessToken==>" + accessToken);
         String access_token = accessToken.getToken();
-        System.out.println("access_token==>" + access_token);
-        String userinfourl = Constants.URL.OAUTH2_USERINFO_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
-        JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(userinfourl, "GET", null);
-        System.out.println("jsonObject==>" + jsonObject.toString());
+        log.info("access_token==>" + access_token);
+        String getUserInfoByOpenIdUrl = Constants.URL.GET_USERINFO_BY_OPENID_URL.replace("ACCESS_TOKEN", access_token).replace("OPENID", openId);
+        JSONObject jsonObject = WeixinIntefaceUtil.httpRequest(getUserInfoByOpenIdUrl, "GET", null);
+        log.info("jsonObject==>" + jsonObject.toString());
         String nickName = jsonObject.getString("nickname");
         String sex = jsonObject.getString("sex");
         String language = jsonObject.getString("language");
@@ -302,7 +304,6 @@ public class Utils {
         user.setProvince(province);
         user.setCountry(country);
         user.setHeadImgUrl(headImgUrl);
-        // 由于code只能使用一次，所以将用户信息存入session
         return user;
     }
 
@@ -455,7 +456,7 @@ public class Utils {
                 // 实际文字行数大于1，1/2个图片高度减去文字行数所需的高度
 //                originY = (srcImgHeight - textHeight) / 2;
             }
-            System.out.println("水印文字总长度:" + fontLength + ",图片宽度:" + srcImgWidth + ",字符个数:" + waterMarkContent.length());
+            log.info("水印文字总长度:" + fontLength + ",图片宽度:" + srcImgWidth + ",字符个数:" + waterMarkContent.length());
             //文字叠加,自动换行叠加
             int tempX = originX;
             int tempY = originY;
@@ -635,14 +636,14 @@ public class Utils {
 //        String fileName = zxingCodeCreate("http://k5eqmb.natappfree.cc/product/detailInfo?id=7&price=1&openId=ohDAp1PJ7rxxLGZIoKbN1T2UllIo", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
         String fileName = Utils.zxingCodeCreate("https://open.weixin.qq.com/connect/oauth2/authorize?appid=12324234444424&redirect_uri=wwwww..sfsfs.ccc/product/detailInfo%3Fid%3D7%26price%3D88%26openId%3DohDAp1PJ7rxxLGZIoKbN1T2UllIo&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect", "D:/CCQ/", 250, "D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\logo.png");
 // String st = "䵺";
-//        System.out.println(st);
+//        log.info(st);
         try {
             // 将二维码印到模板图片，并添加价格
             bigImgAddSmallImgAndText("D:\\CCQ\\ideaWork\\baoliao\\src\\main\\resources\\static\\img\\muban1.jpg", "D:\\CCQ\\" + fileName, 250, 300, "免费", 600, 650, "D:\\CCQ\\" + fileName, 45);
             // 下载图片到本地
             byte[] btImg = getImageFromNetByUrl("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132");
             if (null != btImg && btImg.length > 0) {
-                System.out.println("读取到：" + btImg.length + " 字节");
+                log.info("读取到：" + btImg.length + " 字节");
                 String headImgName = "headImg.jpg";
                 writeImageToDisk(btImg, headImgName, "D:\\CCQ\\");
                 // 变圆
@@ -711,7 +712,7 @@ public class Utils {
                 waterPress("D:\\CCQ\\" + fileName, "D:\\CCQ\\" + fileName, fontType, fontStyle, Color.gray, 18, font2, 580);
 
             } else {
-                System.out.println("没有从该连接获得内容");
+                log.info("没有从该连接获得内容");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -719,11 +720,11 @@ public class Utils {
        /* String url = "http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132";
         byte[] btImg = getImageFromNetByUrl(url);
         if(null != btImg && btImg.length > 0){
-            System.out.println("读取到：" + btImg.length + " 字节");
+            log.info("读取到：" + btImg.length + " 字节");
             String fileName = "test.jpg";
             writeImageToDisk(btImg, fileName);
         }else{
-            System.out.println("没有从该连接获得内容");
+            log.info("没有从该连接获得内容");
         }*/
         /*try {
             //主图片的路径

@@ -248,6 +248,9 @@ public class ProductServiceImpl implements ProductService {
         Product product = productDao.getProductById(Integer.parseInt(id));
         log.info("============product=============" + product.toString());
         User seller_user = userDao.getUserInfoByOpenId(product.getOpenId());
+        if (seller_user == null) {
+            seller_user = Utils.getUserInfoByOpenId(product.getOpenId());
+        }
         log.info("============seller_user=============" + seller_user.toString());
         request.getSession().setAttribute("product", product);
         request.getSession().setAttribute("buyer_user", buyer_user);
@@ -338,6 +341,9 @@ public class ProductServiceImpl implements ProductService {
         HttpSession session = request.getSession();
         Product product = productDao.getProductById(Integer.parseInt(id));
         User productUser = userDao.getUserInfoByOpenId(product.getOpenId());
+        if (productUser == null) {
+            productUser = Utils.getUserInfoByOpenId(product.getOpenId());
+        }
         //判段是否是关注的作者
         int count = focusDao.getFocusByOpenId(buyer_user.getOpenId(), product.getOpenId());
         if (count == 0) {
