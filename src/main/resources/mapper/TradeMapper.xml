@@ -12,7 +12,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <insert id="saveTradeInfo" parameterType="com.baoliao.weixin.bean.Trade">
-      insert into tb_trade(product_id,buyer_open_id,seller_open_id,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{money},#{payType},#{createTime});
+      insert into tb_trade(product_id,buyer_open_id,seller_open_id,trade_type,money,pay_type,create_time) values(#{productId},#{buyerOpenId},#{sellerOpenId},#{tradeType},#{money},#{payType},#{createTime});
     </insert>
 
     <select id="getTodayIncomeByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -68,5 +68,9 @@
 
     <select id="checkIsPurchased" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(0) from tb_trade where product_id=#{productId} and buyer_open_id=#{buyerOpenId}
+    </select>
+
+    <select id="queryBuyerList" parameterType="java.lang.String" resultType="java.lang.String">
+        select buyer_open_id from tb_trade where trade_type=0 and is_delete=0 and product_id=#{productId}
     </select>
 </mapper>

@@ -17,4 +17,6 @@ public interface ProductDao {
     Product getProductById(int id) throws Exception;
 
     List<BuyerUserInfo> getTradeUserInfoByIdAndOpenId(@Param("id") String id, @Param("openId") String openId) throws Exception;
+
+    void setProductExpritationDateById(String id) throws Exception;
 }

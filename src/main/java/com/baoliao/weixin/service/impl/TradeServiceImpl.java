@@ -1,8 +1,10 @@
 package com.baoliao.weixin.service.impl;
 
 import com.baoliao.weixin.Constants;
+import com.baoliao.weixin.bean.Product;
 import com.baoliao.weixin.bean.Trade;
 import com.baoliao.weixin.bean.User;
+import com.baoliao.weixin.dao.ProductDao;
 import com.baoliao.weixin.dao.TradeDao;
 import com.baoliao.weixin.service.TradeService;
 import com.baoliao.weixin.service.UserService;
@@ -10,6 +12,7 @@ import com.baoliao.weixin.util.Utils;
 import com.baoliao.weixin.util.WeChatPayUtils;
 import com.baoliao.weixin.wechatpay.*;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +34,9 @@ public class TradeServiceImpl implements TradeService {
 
     @Autowired
     TradeDao tradeDao;
+
+    @Autowired
+    ProductDao productDao;
 
     @Value("${domain_name}")
     private String domainName;
@@ -88,11 +95,11 @@ public class TradeServiceImpl implements TradeService {
 //        data.put("nonce_str", nonceStr);
 //        data.put("sign", "");
 //        data.put("sign_type", WXPayConstants.MD5);
-        data.put("body", "购买料" + id);
-        data.put("detail", "购买料" + id);
+        data.put("body", "信息服务费");
+        data.put("detail", "信息服务费");
         data.put("attach", "必赢大数据");
         data.put("out_trade_no", id);
-        data.put("total_fee", String.valueOf((int) Double.parseDouble(amount) * 100));
+        data.put("total_fee", String.valueOf((int) (Double.parseDouble(amount) * 100)));
         data.put("spbill_create_ip", WeChatPayUtils.getIp(request));
 //        data.put("time_start", Constants.DATA_FORMAT.sdf2.format(currDate));
         data.put("notify_url", domainName + "/trade/paysuccessreturn");
@@ -208,7 +215,13 @@ public class TradeServiceImpl implements TradeService {
         data.put("openid", user.getOpenId());
         data.put("check_name", "NO_CHECK");
         data.put("re_user_name", user.getNickName());
-        data.put("amount", String.valueOf((int) Double.parseDouble(inputMoney) * 100));
+        String serviceCharge = user.getServiceCharge();
+        if (StringUtils.isEmpty(serviceCharge)) {
+            data.put("amount", String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * 0.95)));
+        } else {
+            double serviceCharge_float = 1 - Utils.percentage2Flooat(serviceCharge);
+            data.put("amount", String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * serviceCharge_float)));
+        }
         data.put("desc", "提现");
         data.put("spbill_create_ip", WeChatPayUtils.getIp(request));
         String sign = WXPayUtil.generateSignatureMD5(data, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET);
@@ -228,7 +241,6 @@ public class TradeServiceImpl implements TradeService {
         trade.setProductId(-999);
         trade.setMoney(inputMoney);
         trade.setCreateTime(new Date());
-        trade.setBuyerOpenId("");
         trade.setBuyerOpenId(user.getOpenId());
         trade.setPayType(1);
         trade.setTradeType(2);
@@ -275,6 +287,167 @@ public class TradeServiceImpl implements TradeService {
             session.setAttribute("isPurchased", 0);
             log.info(buyerOpenId + "用户未购买过" + productId + "的产品");
             return false;
+        }
+    }
+
+    @Override
+    public String refundMoney(String balance, String productId, String sellerOpenId) throws Exception {
+        Product product = productDao.getProductById(Integer.parseInt(productId));
+        // 单价
+        String price = product.getPrice();
+        log.info("产品单价" + price);
+        // 哪些人买了
+        List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
+        log.info("买的人数" + buyerOpenIdList.size());
+        // 总共需要退款
+        double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
+        log.info("总共需要退款" + redfundCount);
+        Map<String, Object> result = new HashMap<String, Object>();
+        if (Double.parseDouble(balance) >= redfundCount) {
+            // 直接余额退款
+            for (String buyerOpenId : buyerOpenIdList) {
+                Trade trade = new Trade();
+                trade.setProductId(Integer.parseInt(productId));
+                trade.setMoney(price);
+                trade.setCreateTime(new Date());
+                trade.setBuyerOpenId(sellerOpenId);
+                trade.setSellerOpenId(buyerOpenId);
+                trade.setPayType(0);
+                trade.setTradeType(1);
+                log.info("========trade=============" + trade.toString());
+                tradeDao.saveTradeInfo(trade);
+            }
+            // 设置产品过期，不能再购买
+            productDao.setProductExpritationDateById(productId);
+            result.put("success", true);
+        } else {
+            result.put("success", false);
+        }
+        return (JSONObject.fromObject(result)).toString();
+    }
+
+    @Override
+    public String refundMoneyByWeChatPay(HttpServletRequest request, String productId, String sellerOpenId) throws Exception {
+        Map<String, Object> result = new HashMap<String, Object>();
+        Product product = productDao.getProductById(Integer.parseInt(productId));
+        // 单价
+        String price = product.getPrice();
+        log.info("产品单价" + price);
+        // 哪些人买了
+        List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
+        log.info("买的人数" + buyerOpenIdList.size());
+        // 总共需要退款
+        double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
+        log.info("总共需要退款" + redfundCount);
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Date currDate = new Date();
+
+        Map<String, String> data = new HashMap<String, String>();
+        String nonceStr = WXPayUtil.generateNonceStr();
+        String appId = Constants.WECHAT_PARAMETER.APPID;
+        String mchId = PayConstants.WECHAT_PAT_CONFIG.MCH_ID;
+        String deviceInfo = "WEB";
+
+//        data.put("appid", appId);
+//        data.put("mch_id",mchId );
+        data.put("device_info", deviceInfo);
+//        data.put("nonce_str", nonceStr);
+//        data.put("sign", "");
+//        data.put("sign_type", WXPayConstants.MD5);
+        data.put("body", "退款");
+        data.put("detail", "退款");
+        data.put("attach", "必赢大数据");
+        data.put("out_trade_no", productId);
+        data.put("total_fee", String.valueOf((int) (redfundCount * 100)));
+        data.put("spbill_create_ip", WeChatPayUtils.getIp(request));
+//        data.put("time_start", Constants.DATA_FORMAT.sdf2.format(currDate));
+        data.put("notify_url", domainName + "/trade/paysuccessreturn");
+        data.put("trade_type", "JSAPI");
+        data.put("openid", sellerOpenId);
+
+        log.info("请求统一下单接口参数:" + data);
+        MyConfig config = new MyConfig();
+        WXPay wxpay = new WXPay(config);
+        Map<String, String> unifiedOrderMap = wxpay.unifiedOrder(data);
+
+        log.info("调用统一下单接口返回结果:" + unifiedOrderMap);
+
+        String returnCode = unifiedOrderMap.get("return_code");
+        String resultCode = unifiedOrderMap.get("result_code");
+        try {
+            if ("SUCCESS".equals(returnCode) && "SUCCESS".equals(resultCode)) {
+                log.info("微信支付下单成功");
+                // 进行签名校验
+                Map<String, String> map = new HashMap<>();
+                map.put("return_code", unifiedOrderMap.get("return_code"));
+                map.put("return_msg", unifiedOrderMap.get("return_msg"));
+                map.put("appid", unifiedOrderMap.get("appid"));
+                map.put("mch_id", unifiedOrderMap.get("mch_id"));
+                map.put("nonce_str", unifiedOrderMap.get("nonce_str"));
+                map.put("result_code", unifiedOrderMap.get("result_code"));
+                map.put("prepay_id", unifiedOrderMap.get("prepay_id"));
+                map.put("trade_type", unifiedOrderMap.get("trade_type"));
+                // 生成签名
+                String mySign = WXPayUtil.generateSignature(map, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET);
+                // 微信返回的签名
+                String wxSign = unifiedOrderMap.get("sign");
+                log.info("返回的签名" + wxSign);
+                log.info("最后生成的签名" + mySign);
+                System.out.println("最后生成的签名的参数:" + map);
+                // 需要返回给页面的数据
+                Map<String, String> returnMap = new HashMap<>();
+                // TODO 验证签名
+//                if (mySign.equals(wxSign)) {
+                returnMap.put("appId", unifiedOrderMap.get("appid"));
+                returnMap.put("timeStamp", WXPayUtil.getCurrentTimestamp() + "");
+                returnMap.put("nonceStr", nonceStr);
+                returnMap.put("package", "prepay_id=" + unifiedOrderMap.get("prepay_id"));
+                returnMap.put("signType", WXPayConstants.HMACSHA256);
+                // 此处生成的签名返回给页面作为参数
+                returnMap.put("paySign", WXPayUtil.generateSignature(returnMap, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET));
+                log.info("签名校验成功，下单返回信息为" + returnMap);
+
+                Map<String, Object> storeMap = new HashMap<>();
+                // 签名校验成功，你可以在此处进行自己业务逻辑的处理
+                // storeMap可以存储那些你需要存进数据库的信息，可以生成预支付订单
+                resultMap.put("data", returnMap);
+                for (String buyerOpenId : buyerOpenIdList) {
+                    Trade trade = new Trade();
+                    trade.setProductId(Integer.parseInt(productId));
+                    trade.setMoney(price);
+                    trade.setCreateTime(new Date());
+                    trade.setBuyerOpenId(buyerOpenId);
+                    trade.setPayType(1);
+                    trade.setTradeType(1);
+                    log.info("========trade=============" + trade.toString());
+                    tradeDao.saveTradeInfo(trade);
+                }
+                resultMap.put("success", true);
+                // 设置产品过期，不能再购买
+                productDao.setProductExpritationDateById(productId);
+                return (JSONObject.fromObject(result)).toString();
+               /* } else {
+                    log.error("签名校验失败，下单返回信息为 --> {}", JSONObject.fromObject(resultMap));
+                    // 签名校验失败，你可以在此处进行校验失败的业务逻辑
+                }*/
+            } else {
+                resultMap.put("success", false);
+                return (JSONObject.fromObject(result)).toString();
+            }
+        } catch (Exception e) {
+            log.error("用户支付，失败", e);
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        String serviceCharge = "10%";
+        String inputMoney = "100";
+        if (StringUtils.isEmpty(serviceCharge)) {
+            System.out.println(String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * 0.95)));
+        } else {
+            double serviceCharge_float = 1 - Utils.percentage2Flooat(serviceCharge);
+            System.out.println(String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * serviceCharge_float)));
         }
     }
 }

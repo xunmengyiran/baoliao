@@ -76,46 +76,50 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
     s_drer = true;
     /* if (wx_amount == '0') {//余额支付*/
     if (balance >= parseFloat(amount)) { // 修改--》如果余额大于需要支付的金额 那就直接支付
-        $.ajax({
-            url: '/trade/pay_balance',
-            data: {
-                /* 					  "amount":amount,
-                                      "wx_amount":wx_amount,
-                                      "ba_amount":ba_amount, */
-                // "id": en_id
-                "amount": amount,
-                /*                "wx_amount":wx_amount,
-                               "ba_amount":ba_amount, */
-                "type": 0,
-                "id": en_id,
-                "buyerOpenId": buyer_openId,
-                "sellerOpenId": seller_openId
-            },
-            beforeSend: function () {
-                /*  $(".loading_box ,.disalog_bg3").show(); 	 */
-            },
-            success: function (result) {
-                result = $.parseJSON(result);
-                s_drer = false;
-                $(".dsf_Jh_dfgf").removeClass("show");
-                if (result.success) {
-                    // window.location.href = path + '/weixin/get_resource_detail?type=1&id=' + en_id;
-                    window.location.href = '/product/detailInfo2?id=' + en_id;
-                } else {
-                    if (result.data == '1') {
-                        mui.toast("文章已过期，不能购买");
-                    } else if (result.data == '2') {
-                        mui.toast("已经支付过了，再次扫码看到内容");
-                    } else if (result.data == '3') {
-                        mui.toast("文章已删除，不能购买");
-                    } else if (result.data == '4') {
-                        mui.toast("扫码无效，请再次扫码");
-                    } else if (result.data == '5') {
-                        mui.toast("用户涉嫌违规，不能购买");
-                    } else {
-                        window.location.href = path + '/weixin/pay_fail';
+        mui.confirm('确认支付？', '确认支付', ['取消', '确认'], function (e) {
+            if (e.index == 1) {
+                $.ajax({
+                    url: '/trade/pay_balance',
+                    data: {
+                        /* 					  "amount":amount,
+                                              "wx_amount":wx_amount,
+                                              "ba_amount":ba_amount, */
+                        // "id": en_id
+                        "amount": amount,
+                        /*                "wx_amount":wx_amount,
+                                       "ba_amount":ba_amount, */
+                        "type": 0,
+                        "id": en_id,
+                        "buyerOpenId": buyer_openId,
+                        "sellerOpenId": seller_openId
+                    },
+                    beforeSend: function () {
+                        /*  $(".loading_box ,.disalog_bg3").show(); 	 */
+                    },
+                    success: function (result) {
+                        result = $.parseJSON(result);
+                        s_drer = false;
+                        $(".dsf_Jh_dfgf").removeClass("show");
+                        if (result.success) {
+                            // window.location.href = path + '/weixin/get_resource_detail?type=1&id=' + en_id;
+                            window.location.href = '/product/detailInfo2?id=' + en_id;
+                        } else {
+                            if (result.data == '1') {
+                                mui.toast("文章已过期，不能购买");
+                            } else if (result.data == '2') {
+                                mui.toast("已经支付过了，再次扫码看到内容");
+                            } else if (result.data == '3') {
+                                mui.toast("文章已删除，不能购买");
+                            } else if (result.data == '4') {
+                                mui.toast("扫码无效，请再次扫码");
+                            } else if (result.data == '5') {
+                                mui.toast("用户涉嫌违规，不能购买");
+                            } else {
+                                window.location.href = path + '/weixin/pay_fail';
+                            }
+                        }
                     }
-                }
+                });
             }
         });
     } else {

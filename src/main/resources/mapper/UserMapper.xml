@@ -13,7 +13,7 @@
     </select>
 
   <insert id="insertFollowInfo">
-        INSERT INTO tb_wechat_user_info(OPENID,SUBSCRIBE,SUBSCRIBETIME)VALUES (#{openId},1,NOW())
+        INSERT INTO tb_wechat_user_info(OPENID,SUBSCRIBE,SUBSCRIBETIME,serviceCharge)VALUES (#{openId},1,NOW(),'5%')
     </insert>
 
   <update id="updateFollowInfo">

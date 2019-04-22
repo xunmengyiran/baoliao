@@ -1,6 +1,7 @@
 package com.baoliao.weixin.controller;
 
 import com.baoliao.weixin.bean.Product;
+import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.service.TradeService;
 import com.baoliao.weixin.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -127,5 +129,45 @@ public class TradeController {
             log.error("查询提现列表失败！");
         }
         return "deposit_list";
+    }
+
+    @RequestMapping("/refundMoneyByBalance")
+    public void refundMoneyByBalance(HttpServletRequest request, HttpServletResponse response, String productId) {
+        PrintWriter pw = null;
+        log.info("开始申请一键退款,退款的产品(余额支付):" + productId);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String sellerOpenId = user.getOpenId();
+        try {
+            userService.getAllMoneyInfo(session, user);
+            String balance = (String) session.getAttribute("balance");
+            String result = tradeService.refundMoney(balance, productId, sellerOpenId);
+            pw = response.getWriter();
+            pw.write(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pw.flush();
+            pw.close();
+        }
+    }
+
+    @RequestMapping("/refundMoneyByWeChatPay")
+    public void refundMoneyByWeChatPay(HttpServletRequest request, HttpServletResponse response, String productId) {
+        PrintWriter pw = null;
+        log.info("开始申请一键退款,退款的产品(微信支付):" + productId);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String sellerOpenId = user.getOpenId();
+        try {
+            String result = tradeService.refundMoneyByWeChatPay(request, productId, sellerOpenId);
+            pw = response.getWriter();
+            pw.write(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            pw.flush();
+            pw.close();
+        }
     }
 }

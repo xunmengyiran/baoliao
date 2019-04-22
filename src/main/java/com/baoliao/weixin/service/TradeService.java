@@ -24,4 +24,8 @@ public interface TradeService {
      * @throws Exception
      */
     boolean checkIsPurchased(HttpServletRequest request, String productId, String buyerOpenId) throws Exception;
+
+    String refundMoney(String balance, String productId, String sellerOpenId) throws Exception;
+
+    String refundMoneyByWeChatPay(HttpServletRequest request, String productId, String sellerOpenId) throws Exception;
 }

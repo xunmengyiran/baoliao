@@ -364,6 +364,16 @@ public class Utils {
         return outStream.toByteArray();
     }
 
+    public static double percentage2Flooat(String percentage) {
+        if (percentage.contains("%")) {
+            percentage = percentage.replaceAll("%", "");
+            Double d = Double.valueOf(percentage);
+            return d / 100;
+        } else {
+            return 0.00;
+        }
+    }
+
     public static BufferedImage transferImgForRoundImgage(String url) {
         BufferedImage resultImg = null;
         try {

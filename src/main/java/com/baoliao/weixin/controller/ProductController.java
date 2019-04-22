@@ -8,6 +8,7 @@ import com.baoliao.weixin.service.TradeService;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
 import org.apache.commons.collections.bag.SynchronizedBag;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -97,12 +100,21 @@ public class ProductController {
         log.info("扫描二维码获取到的id是:" + id + ",价格是:" + price + ",code是" + code);
         Product product = new Product();
         User buyer_user = Utils.getUserInfoByCode(request, code);
+        String buyerOpenId = buyer_user.getOpenId();
         try {
             product = productService.getProductDetailInfo(request, buyer_user, id);
+            // 判断是否过期
+            String expritationDateStr = product.getExpritationDate();
+            log.info("过期时间为:" + expritationDateStr);
+            if (StringUtils.isNotEmpty(expritationDateStr)) {
+                if (new Date().after(Constants.DATA_FORMAT.sdf3.parse(expritationDateStr))) {
+                    request.getSession().setAttribute("isScan", 1);
+                    return "product_detail_info";
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String buyerOpenId = buyer_user.getOpenId();
         try {
             boolean isPurchased = tradeService.checkIsPurchased(request, id, buyerOpenId);
             /*boolean isSubscribe = userService.getSubscribeUserByOpenId(buyerOpenId);
@@ -136,7 +148,7 @@ public class ProductController {
         log.info("付费成功后获取到的产品id" + id);
         try {
             User user = (User) request.getSession().getAttribute("user");
-            productService.getProductDetailInfo(request, user, id);
+            Product product = productService.getProductDetailInfo(request, user, id);
         } catch (Exception e) {
             e.printStackTrace();
         }

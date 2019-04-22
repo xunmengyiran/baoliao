@@ -78,12 +78,12 @@
     <p style="font-size: 16px;font-weight: bolder;text-align: center;margin-top: 25px;color:RGB(22, 22, 22);">${sessionScope.product.introduct}</p>
 </div>
 
-<div style="margin-left: 15px;">
+<%--<div style="margin-left: 15px;">
     <p style="padding-top: 8px;font-size: 16px;color: #A6A4A7"><fmt:formatDate
             value="${sessionScope.product.createTime}" pattern="yyyy-MM-dd HH:ss:mm"/></p>
     <p style="padding-top: 21px;font-size: 16px;font-weight: bolder;text-align: center;color: RGB(22, 22, 22)">${sessionScope.product.title}</p>
 
-</div>
+</div>--%>
 <div style="margin-left: 15px;">
     <p style="padding-top: 8px;font-size: 16px;color: #A6A4A7"><fmt:formatDate
             value="${sessionScope.product.createTime}" pattern="yyyy-MM-dd HH:ss:mm"/></p>

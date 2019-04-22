@@ -22,6 +22,7 @@ public class User {
     private String remark;
     private String[] privilege;
     private String privilegeStr;
+    private String serviceCharge;
 
     private Long profit;
 
@@ -197,6 +198,14 @@ public class User {
         this.rate = rate;
     }
 
+    public String getServiceCharge() {
+        return serviceCharge;
+    }
+
+    public void setServiceCharge(String serviceCharge) {
+        this.serviceCharge = serviceCharge;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -218,6 +227,7 @@ public class User {
                 ", remark='" + remark + '\'' +
                 ", privilege=" + Arrays.toString(privilege) +
                 ", privilegeStr='" + privilegeStr + '\'' +
+                ", serviceCharge='" + serviceCharge + '\'' +
                 ", profit=" + profit +
                 ", balance=" + balance +
                 ", rate=" + rate +

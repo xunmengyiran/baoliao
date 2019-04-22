@@ -10,6 +10,7 @@ public interface Constants {
     interface DATA_FORMAT {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmsssss");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     }
 
     interface WECHAT_PARAMETER {

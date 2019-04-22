@@ -105,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
         }
         String path = qrCodeImgPath;
-        String logoPath = qrCodeImgPath + "logo.png";
+        String logoPath = qrCodeImgPath + "logo_white.png";
         if ("dev".equals(activeProfile)) {
             path = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "QRCodeImg" + File.separator;
             logoPath = file.getParentFile().getParentFile() + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static" + File.separator + "img" + File.separator + "logo.png";
@@ -217,6 +217,7 @@ public class ProductServiceImpl implements ProductService {
         }
         session.setAttribute("fileName", fileName);
         session.setAttribute("product", vo);
+        session.removeAttribute("buyerUserInfoList");
         JSONObject jObject = JSONObject.fromObject(model);
         return jObject.toString();
     }
