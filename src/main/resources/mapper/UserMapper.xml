@@ -34,5 +34,5 @@
 
   <update id="deleteBuyRecordById" parameterType="java.lang.String">
     update tb_trade set is_delete='1' where id=#{id}
-  </update>
+</update>
 </mapper>

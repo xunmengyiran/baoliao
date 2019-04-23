@@ -441,14 +441,9 @@ public class TradeServiceImpl implements TradeService {
     }
 
     public static void main(String[] args) {
-        String serviceCharge = "10%";
-        String inputMoney = "100";
-        if (StringUtils.isEmpty(serviceCharge)) {
-            System.out.println(String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * 0.95)));
-        } else {
-            double serviceCharge_float = 1 - Utils.percentage2Flooat(serviceCharge);
-            System.out.println(String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * serviceCharge_float)));
-        }
+        float f = 0.05f;
+        double d = 1 - f;
+        System.out.println(100 * d);
     }
 }
 
