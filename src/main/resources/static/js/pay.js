@@ -189,7 +189,6 @@ function onBridgeReady(appId, timeStamp, nonceStr, packageStr, signType, paySign
             "paySign": paySign    //微信签名
         },
         function (res) {
-            mui.alert(res.err_msg);
             /* toast(JSON.stringify(res));   */
             if (res.err_msg == "get_brand_wcpay_request:ok") {
                 // window.location.href = path + '/weixin/resource_pay_suc?id=' + en_id;
