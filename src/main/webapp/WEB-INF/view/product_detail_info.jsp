@@ -79,14 +79,13 @@
 </div>
 
 <%--<div style="margin-left: 15px;">
-    <p style="padding-top: 8px;font-size: 16px;color: #A6A4A7"><fmt:formatDate
-            value="${sessionScope.product.createTime}" pattern="yyyy-MM-dd HH:ss:mm"/></p>
-    <p style="padding-top: 21px;font-size: 16px;font-weight: bolder;text-align: center;color: RGB(22, 22, 22)">${sessionScope.product.title}</p>
-
+    <p style="padding-top: 8px;font-size: 16px;color: #A6A4A7">2019-04-09 22:22:22</p>
+    <span style="padding-top: 8px;font-size: 16px;color: #7E7E7E">dev</span>
 </div>--%>
+
 <div style="margin-left: 15px;">
     <p style="padding-top: 8px;font-size: 16px;color: #A6A4A7"><fmt:formatDate
-            value="${sessionScope.product.createTime}" pattern="yyyy-MM-dd HH:ss:mm"/></p>
+            value="${sessionScope.product.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></p>
     <span style="padding-top: 8px;font-size: 16px;color: #7E7E7E">${sessionScope.product.content}</span>
 </div>
 <c:forEach var="img" items="${sessionScope.imgArr}">
@@ -104,7 +103,7 @@
 </div>
 <div style="margin-left: 15px;margin-bottom: 22px;margin-top: 21px">
     <p style="font-size: 20px;color: #A6A4A7"><fmt:formatDate value="${sessionScope.product.createTime}"
-                                                              pattern="yyyy-MM-dd HH:ss:mm"/></p>
+                                                              pattern="yyyy-MM-dd HH:mm:ss"/></p>
     <p style="font-size: 25px;color: #8B8B8B">${sessionScope.product.content}</p>
 
 </div>

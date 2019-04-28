@@ -42,7 +42,7 @@
     <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
         <div style="margin-bottom: 6px">
             <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                          pattern="yyyy-MM-dd HH:ss:mm"/></span>
+                                                                          pattern="yyyy-MM-dd HH:mm:ss"/></span>
                 <%--<span style="float:right;font-size: 10px;color: #BCBCBC;">寻梦依然</span>--%>
                 <%--<img class='user_icon_e yj cz ab' src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132">--%>
                 <%-- <span style="float:right;font-size: 10px;color: #BCBCBC;">${sessionScope.user.nickName}</span>

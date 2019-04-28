@@ -77,7 +77,7 @@
         <div style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;">
             <div style="margin-bottom: 6px">
                     <%--<span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                                  pattern="yyyy-MM-dd HH:ss:mm"/></span>--%>
+                                                                                  pattern="yyyy-MM-dd HH:mm:ss"/></span>--%>
             </div>
             <div>
              <span>
@@ -132,7 +132,7 @@
         <div id="${trade.id}" style="border-bottom: 1px solid #F4F4F4;margin-top: 10px;padding-bottom: 17px">
             <div style="margin-bottom: 6px">
                 <span style="font-size: 10px;color: #BCBCBC;"><fmt:formatDate value="${trade.createTime}"
-                                                                              pattern="yyyy-MM-dd HH:ss:mm"/></span>
+                                                                              pattern="yyyy-MM-dd HH:mm:ss"/></span>
                 <span style="float:right;font-size: 15px;color: RGB(242, 139, 69);padding-right: 15px">${trade.money}元</span>
             </div>
             <div>
@@ -162,7 +162,7 @@
             </div>
         </div>--%>
     </c:forEach>
-    <p class="pt10 pm10 fz13 cen btm z3 chakn_jghd_dr ab">点击查看更多</p>
+    <p style="text-align: center;color: #797979;font-size: 15px;">亲，没有更多数据了--！</p>
 </section>
 
 <section class="dsf_jh_derert mui-row ">

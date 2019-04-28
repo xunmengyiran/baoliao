@@ -93,7 +93,7 @@
                 <img style="vertical-align: middle; width: 26px;height: 26px" src="${user.headImgUrl}">
                 <span style="color: RGB(34, 34, 34);padding-right: 4px;font-size: 12px">${user.nickName}</span>
                 <span style="font-size: 10px;color: #BCBCBC;float: right;padding-right: 6px"><fmt:formatDate
-                        value="${user.subscribeTime}" pattern="yyyy-MM-dd HH:ss:mm"/></span>
+                        value="${user.subscribeTime}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
             </div>
         </li>
     </c:forEach>

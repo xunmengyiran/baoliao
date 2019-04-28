@@ -6,6 +6,7 @@ import com.baoliao.weixin.bean.Trade;
 import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.dao.ProductDao;
 import com.baoliao.weixin.dao.TradeDao;
+import com.baoliao.weixin.dao.UserDao;
 import com.baoliao.weixin.service.TradeService;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
@@ -34,6 +35,9 @@ public class TradeServiceImpl implements TradeService {
 
     @Autowired
     TradeDao tradeDao;
+
+    @Autowired
+    UserDao userDao;
 
     @Autowired
     ProductDao productDao;
@@ -190,6 +194,9 @@ public class TradeServiceImpl implements TradeService {
         User user = (User) session.getAttribute("user");
         String openId = user.getOpenId();
         List<Trade> tradeList = tradeDao.queryTradeList(openId, Constants.TRADE_TYPE.NOMAL_TRADE);
+        if (tradeList.size() > 0) {
+            log.info("=tradeList(0)=======>" + tradeList.get(0).toString());
+        }
         session.setAttribute("tradeList", tradeList);
     }
 
@@ -215,7 +222,10 @@ public class TradeServiceImpl implements TradeService {
         data.put("openid", user.getOpenId());
         data.put("check_name", "NO_CHECK");
         data.put("re_user_name", user.getNickName());
+        user = userDao.getUserInfoByOpenId(user.getOpenId());
         String serviceCharge = user.getServiceCharge();
+
+        log.info("serviceCharge=====" + serviceCharge);
         if (StringUtils.isEmpty(serviceCharge)) {
             data.put("amount", String.valueOf((int) (Double.parseDouble(inputMoney) * 100 * 0.95)));
         } else {
@@ -254,6 +264,7 @@ public class TradeServiceImpl implements TradeService {
                 userService.getAllMoneyInfo(session, user);
                 resultMap.put("balance", session.getAttribute("balance"));
                 jObject = JSONObject.fromObject(resultMap);
+                log.info("提现成功的json:" + jObject.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

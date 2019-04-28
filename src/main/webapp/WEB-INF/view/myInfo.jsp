@@ -216,7 +216,7 @@
             /*     	mui.alert('数据维护提现暂停2小时，10点重新开放！');
              return;  */
             if (s_drer) {
-                return
+                return;
             }
             var data_type = $(this).attr("data-type");
             var type = "1";
@@ -232,24 +232,26 @@
             var balance = $('#balance').val();//余额
             if (balance < 2) {
                 mui.alert('余额满2元才能提现！');
-                return
+                return;
             }
             var inputMoney = 0;
-            mui.prompt('请输入需要体现的金额', '请输入金额', '提现', ['取消', '确认'], function (e) {
+            mui.prompt('请输入需要提现的金额', '请输入金额', '提现', ['取消', '确认'], function (e) {
                 if (e.index == 1) {
                     //确认
-                    inputValue = e.value;
-                    if (e.value > balance) {
+                    inputMoney = e.value;
+                    //小数比较可能会报错
+                    if (inputMoney * 100 > balance * 100) {
+
                         mui.alert('提现金额不能大于余额');
-                        return
+                        return;
                     }
-                    if (e.value < 2) {
+                    if (inputMoney < 2) {
                         mui.alert('提现金额至少2元');
-                        return
+                        return;
                     }
-                    if (e.value > 20000) {
+                    if (inputMoney > 20000) {
                         mui.alert('提现金额每天最多20000');
-                        return
+                        return;
                     }
                     $.ajax({
                         type: 'POST',
@@ -257,7 +259,7 @@
                         sync: true,
                         data: {
                             'type': type,
-                            'inputMoney': e.value
+                            'inputMoney': inputMoney
                         },
                         dataType: 'json',
                         success: function (result) {
@@ -269,8 +271,10 @@
                                 /* mui.alert(result.msg, '提示', function () {
                                      window.location.href = basePath + "weixin/account_info";
                                  });*/
-                                mui.toast("提现成功")
+                                mui.toast("提现成功");
+                                //更新余额
                                 $('#p1').html(result.balance);
+                                $('#balance').val(result.balance);
                             } else {
                                 //mui.alert(result.msg)
                                 mui.alert(result.msg, '提示', function () {
@@ -291,9 +295,9 @@
                     return;
                 }
             }, 'div');
-            $(".dsf_Jh_dfgf").addClass("show");
-            $(".bgb").show();
-            s_drer = true;
+            /* $(".dsf_Jh_dfgf").addClass("show");
+             $(".bgb").show();
+             s_drer = true;*/
 
         })
     })

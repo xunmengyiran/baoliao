@@ -352,7 +352,15 @@ public class ProductServiceImpl implements ProductService {
         } else {
             request.getSession().setAttribute("focus", 1);
         }
-        String[] imgArr = product.getImgArr().split(",");
+        String imgString = product.getImgArr();
+        log.info("imgString" + imgString);
+        String[] imgArr = null;
+        if (StringUtils.isNotEmpty(imgString)) {
+            imgArr = imgString.split(",");
+        } else {
+            imgArr = new String[0];
+        }
+        log.info("==imgArr=length==========" + imgArr.length);
         session.setAttribute("product", product);
         session.setAttribute("imgArr", imgArr);
         session.setAttribute("productUser", productUser);
@@ -368,5 +376,12 @@ public class ProductServiceImpl implements ProductService {
         session.setAttribute("fileName", product.getQrImgName());
         session.setAttribute("product", product);
         session.setAttribute("buyerUserInfoList", buyerUserInfoList);
+    }
+
+    public static void main(String[] args) {
+        String imgString = "";
+        System.out.println("imgString" + imgString);
+        String[] imgArr = imgString.split(",");
+        System.out.println("==imgArr=length==========" + imgArr.length);
     }
 }

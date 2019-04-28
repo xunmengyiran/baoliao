@@ -24,11 +24,11 @@
     </select>
 
     <select id="getExpenditureByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0 and pay_type=0
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0
     </select>
 
     <select id="getRefundToOtherByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=1 and pay_type=0
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=1
     </select>
 
     <select id="getRefundToSelfByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -36,7 +36,7 @@
     </select>
 
     <select id="getDepositByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=2 and pay_type=0
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=2
     </select>
 
     <select id="queryTradeList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
