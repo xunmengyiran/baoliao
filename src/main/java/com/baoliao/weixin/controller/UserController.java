@@ -4,6 +4,7 @@ import com.baoliao.weixin.bean.User;
 import com.baoliao.weixin.service.ProductService;
 import com.baoliao.weixin.service.UserService;
 import com.baoliao.weixin.util.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +40,20 @@ public class UserController {
      */
     @GetMapping("/goIndex")
     public String goIndex(HttpServletRequest request, HttpServletResponse response) {
-        log.info("进入首页");
         String code = request.getParameter("code");
-        try {
-            User user = Utils.getUserInfoByCode(request, code);
+        log.info("进入首页" + code);
+        if (StringUtils.isNotEmpty(code)) {
+            try {
+                User user = Utils.getUserInfoByCode(request, code);
             /*boolean isSubscribe = userService.getSubscribeUserByOpenId(user.getOpenId());
             if (!isSubscribe) {
                 return "not_subscribe";
             }*/
-            userService.updateUserInfo(user);
-        } catch (Exception e) {
-            log.error("进入首页出错,错误信息;" + e);
+                userService.updateUserInfo(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("进入首页出错,错误信息;" + e);
+            }
         }
         return "index";
     }
