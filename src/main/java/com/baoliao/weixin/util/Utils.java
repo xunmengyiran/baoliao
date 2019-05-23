@@ -275,6 +275,7 @@ public class Utils {
         user.setCountry(country);
         user.setHeadImgUrl(headImgUrl);
         request.getSession().setAttribute("user", user);
+
         return user;
     }
 
@@ -654,7 +655,7 @@ public class Utils {
             byte[] btImg = getImageFromNetByUrl("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqfAA1AJAgRCFthEdAvqzMSut19A09ibzBVv5lkjdia643BGmXrLKeZZJ5sXptUyjrHyILcJHcax58A/132");
             if (null != btImg && btImg.length > 0) {
                 log.info("读取到：" + btImg.length + " 字节");
-                String headImgName = "headImg.jpg";
+                String headImgName = "headImg0000000000000.jpg";
                 writeImageToDisk(btImg, headImgName, "D:\\CCQ\\");
                 // 变圆
 
@@ -683,7 +684,7 @@ public class Utils {
                 g2.dispose();
 
                 try {
-                    ImageIO.write(bi2, "jpg", new File("D://CCQ//headImg.jpg"));
+                    ImageIO.write(bi2, "jpg", new File("D://CCQ//headImg0000000000000.jpg"));
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

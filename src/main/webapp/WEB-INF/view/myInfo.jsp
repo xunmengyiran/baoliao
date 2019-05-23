@@ -194,11 +194,11 @@
 <!--         <p class="fz16 cen mt40">料码</p>
             <p class="cen fz12">资源变现工具，帮你提高变现率</p> -->
 
-<p class="cen mt40_">
+<%--<p class="cen mt40_">
     <a class="cen fz14  z9 sd_j_rrrt" href="https://lmjl.ttkgou.com/lmjl_core/weixin/protocol_info">
         <ins>用户使用协议</ins>
     </a>
-</p>
+</p>--%>
 
 <section class="dsf_Jh_dfgf yj4" style="z-index:102">
     <p class="cen mt30"><i class="dx icon-load cf fz40 dsdf_df_ert"></i></p>
@@ -277,11 +277,7 @@
                                 $('#balance').val(result.balance);
                             } else {
                                 //mui.alert(result.msg)
-                                mui.alert(result.msg, '提示', function () {
-                                    if (result.data == "3") {//处理中
-                                        window.location.href = basePath + "weixin/account_info";
-                                    }
-                                });
+                                mui.alert(result.msg);
                             }
                         },
                         error: function () {

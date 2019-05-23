@@ -86,14 +86,14 @@ public class UserServiceImpl implements UserService {
         // 余额 = 收益总额-支出总额-退款别人金额-提现金额+别人退自己
         // 1.支出总额
         String expenditureCount = tradeDao.getExpenditureByOpenId(user.getOpenId());
-        log.info("支出总额(除微信支付的)" + incomeCount);
+        log.info("支出总额(除微信支付的)" + expenditureCount);
         if (expenditureCount == null) {
             expenditureCount = "0";
         }
         expenditureCount = Utils.conversion2Mumber(expenditureCount);
         //2.退款(1.退给别人，2，别人退给自己)
         String refundToOtherCount = tradeDao.getRefundToOtherByOpenId(user.getOpenId());
-        log.info("退别人总额" + incomeCount);
+        log.info("退别人总额" + refundToOtherCount);
         if (refundToOtherCount == null) {
             refundToOtherCount = "0";
         }
@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
         if (balance_dou > 0) {
             balance = Utils.conversion2Mumber(String.valueOf(balance_dou));
         }
+        log.info("调用余额接口得到余额:"+balance);
         session.setAttribute("todayIncome", todayIncome);
         session.setAttribute("incomeCount", incomeCount);
         session.setAttribute("balance", balance);

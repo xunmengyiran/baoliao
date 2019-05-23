@@ -81,8 +81,11 @@ public class TradeController {
 
     @RequestMapping("/paysuccessreturn")
     public void paySuccessReturn(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("===paysuccessreturn=======>");
-
+        try {
+            tradeService.paySuccessReturn(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping("/oper_cash")

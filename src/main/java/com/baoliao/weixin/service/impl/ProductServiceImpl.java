@@ -126,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
             byte[] btImg = Utils.getImageFromNetByUrl(user.getHeadImgUrl());
             if (null != btImg && btImg.length > 0) {
                 System.out.println("读取到：" + btImg.length + " 字节");
-                String headImgName = "headImg.jpg";
+                String headImgName = "headImg"+user.getOpenId()+".jpg";
                 Utils.writeImageToDisk(btImg, headImgName, path);
                 // 变圆
 
@@ -155,7 +155,7 @@ public class ProductServiceImpl implements ProductService {
                 g2.dispose();
 
                 try {
-                    ImageIO.write(bi2, "jpg", new File(path + "headImg.jpg"));
+                    ImageIO.write(bi2, "jpg", new File(path + "headImg"+user.getOpenId()+".jpg"));
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

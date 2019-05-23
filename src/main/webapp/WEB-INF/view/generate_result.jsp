@@ -188,7 +188,7 @@
                  class="mui-slider-handle">
                 <img style="vertical-align: middle; width: 26px;height: 26px" src="${buyerUserInfo.headImage}">
                 <span style="color: RGB(34, 34, 34);padding-right: 4px;font-size: 12px">${buyerUserInfo.nickName}</span>
-                <span style="font-size: 14px;color: #BCBCBC;float: right">${buyerUserInfo.createTime}</span>
+                <span style="font-size: 14px;color: #BCBCBC;float: right"><fmt:formatDate value="${buyerUserInfo.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
         </div>
     </li>
 </c:forEach>

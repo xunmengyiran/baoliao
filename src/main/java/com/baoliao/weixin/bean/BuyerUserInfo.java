@@ -1,9 +1,11 @@
 package com.baoliao.weixin.bean;
 
+import java.util.Date;
+
 public class BuyerUserInfo {
     private String headImage;
     private String nickName;
-    private String createTime;
+    private Date createTime;
 
     public String getHeadImage() {
         return headImage;
@@ -21,11 +23,11 @@ public class BuyerUserInfo {
         this.nickName = nickName;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 }

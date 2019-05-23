@@ -14,14 +14,19 @@ import com.baoliao.weixin.util.WeChatPayUtils;
 import com.baoliao.weixin.wechatpay.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,7 +91,8 @@ public class TradeServiceImpl implements TradeService {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         String id = request.getParameter("id");
         Date currDate = new Date();
-
+        ServletContext application = request.getSession().getServletContext();
+        application.setAttribute(id, buyerOpenId);
         Map<String, String> data = new HashMap<String, String>();
         String nonceStr = WXPayUtil.generateNonceStr();
         String appId = Constants.WECHAT_PARAMETER.APPID;
@@ -156,25 +162,25 @@ public class TradeServiceImpl implements TradeService {
                 // 签名校验成功，你可以在此处进行自己业务逻辑的处理
                 // storeMap可以存储那些你需要存进数据库的信息，可以生成预支付订单
                 resultMap.put("data", returnMap);
-                Trade trade = new Trade();
+        /*        Trade trade = new Trade();
                 trade.setProductId(Integer.parseInt(id));
                 trade.setMoney(amount);
                 trade.setCreateTime(currDate);
                 trade.setBuyerOpenId(buyerOpenId);
                 trade.setSellerOpenId(sellerOpenId);
                 trade.setPayType(Integer.parseInt(payType));
-                log.info("========trade=============" + trade.toString());
+                log.info("========trade=============" + trade.toString());*/
                 JSONObject jObject = new JSONObject();
-                try {
-                    int num = tradeDao.saveTradeInfo(trade);
-                    if (num == 1) {
-                        resultMap.put("success", true);
-                        jObject = JSONObject.fromObject(resultMap);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    log.error("保存交易信息异常！" + e);
-                }
+//                try {
+//                    int num = tradeDao.saveTradeInfo(trade);
+//                    if (num == 1) {
+                resultMap.put("success", true);
+                jObject = JSONObject.fromObject(resultMap);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    log.error("保存交易信息异常！" + e);
+//                }
                 return jObject.toString();
                /* } else {
                     log.error("签名校验失败，下单返回信息为 --> {}", JSONObject.fromObject(resultMap));
@@ -244,34 +250,42 @@ public class TradeServiceImpl implements TradeService {
         MyConfig config = new MyConfig();
         WXPay wxpay = new WXPay(config);
 //        Map<String, String> tiXianResultMap = wxpay.tixian(data);
-        String result = Utils.doRefund("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", xmlStr, mchid);
-        log.info("请求提现的返回数据:" + result);
-        Trade trade = new Trade();
-        // 提现时候设置产品id -999
-        trade.setProductId(-999);
-        trade.setMoney(inputMoney);
-        trade.setCreateTime(new Date());
-        trade.setBuyerOpenId(user.getOpenId());
-        trade.setPayType(1);
-        trade.setTradeType(2);
-        log.info("========trade=============" + trade.toString());
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        String resultXml = Utils.doRefund("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers", xmlStr, mchid);
+        log.info("请求提现的返回xml数据:" + resultXml);
+        Map<String, String> resultMap = WXPayUtil.xmlToMap(resultXml);
+        String returnCode = resultMap.get("return_code");
+        String resultCode = resultMap.get("result_code");
+        Map<String, Object> returnMap = new HashMap<String, Object>();
         JSONObject jObject = new JSONObject();
-        try {
-            int num = tradeDao.saveOperCashInfo(trade);
-            if (num == 1) {
-                resultMap.put("success", true);
-                userService.getAllMoneyInfo(session, user);
-                resultMap.put("balance", session.getAttribute("balance"));
-                jObject = JSONObject.fromObject(resultMap);
-                log.info("提现成功的json:" + jObject.toString());
+        if ("SUCCESS".equals(returnCode) && "SUCCESS".equals(resultCode)) {
+            Trade trade = new Trade();
+            // 提现时候设置产品id -999
+            trade.setProductId(-999);
+            trade.setMoney(inputMoney);
+            trade.setCreateTime(new Date());
+            trade.setBuyerOpenId(user.getOpenId());
+            trade.setPayType(1);
+            trade.setTradeType(2);
+            log.info("========trade=============" + trade.toString());
+            try {
+                int num = tradeDao.saveOperCashInfo(trade);
+                if (num == 1) {
+                    returnMap.put("success", true);
+                    userService.getAllMoneyInfo(session, user);
+                    returnMap.put("balance", session.getAttribute("balance"));
+                    jObject = JSONObject.fromObject(returnMap);
+                    log.info("提现成功的json:" + jObject.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("保存交易信息异常！" + e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("保存交易信息异常！" + e);
+        } else {
+            returnMap.put("success", false);
+            returnMap.put("msg", "财务系统例行维护,请稍后再试");
+            jObject = JSONObject.fromObject(returnMap);
         }
-        //TODO 模拟提现成功
-
+        log.info("提现结果:" + jObject.toString());
         return jObject.toString();
     }
 
@@ -314,6 +328,7 @@ public class TradeServiceImpl implements TradeService {
         double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
         log.info("总共需要退款" + redfundCount);
         Map<String, Object> result = new HashMap<String, Object>();
+        log.info("余额:" + balance);
         if (Double.parseDouble(balance) >= redfundCount) {
             // 直接余额退款
             for (String buyerOpenId : buyerOpenIdList) {
@@ -448,6 +463,68 @@ public class TradeServiceImpl implements TradeService {
         } catch (Exception e) {
             log.error("用户支付，失败", e);
             return null;
+        }
+    }
+
+    @Override
+    public void paySuccessReturn(HttpServletRequest request) throws Exception {
+        // 解析结果存储在HashMap
+        Map<String, String> map = new HashMap<String, String>();
+        InputStream inputStream = request.getInputStream();
+        // 读取输入流
+        SAXReader reader = new SAXReader();
+        Document document = reader.read(inputStream);
+        // 得到xml根元素
+        Element root = document.getRootElement();
+        // 得到根元素的所有子节点
+        List<Element> elementList = root.elements();
+
+        // 遍历所有子节点
+        for (Element e : elementList)
+            map.put(e.getName(), e.getText());
+
+        // 释放资源
+        inputStream.close();
+        inputStream = null;
+
+        Map<String, String> retMap = new HashMap<String, String>();
+
+        String returnCode = map.get("return_code");
+        log.info("=======returnCode===========" + returnCode);
+        if ("SUCCESS".equals(returnCode)) {
+            String productId = map.get("out_trade_no");
+            log.info("=======productId===========" + productId);
+            ServletContext application = request.getSession().getServletContext();
+            String buyerOpenId = (String) application.getAttribute(productId);
+            log.info("=======buyerOpenId===========" + buyerOpenId);
+            Product product = productDao.getProductById(Integer.parseInt(productId));
+            String sellerOpenId = product.getOpenId();
+            log.info("==product=======" + product.toString());
+            Trade trade = new Trade();
+            trade.setProductId(Integer.parseInt(productId));
+            trade.setMoney(product.getPrice());
+            trade.setCreateTime(new Date());
+            trade.setBuyerOpenId(buyerOpenId);
+            trade.setSellerOpenId(sellerOpenId);
+            trade.setPayType(1);
+            log.info("========trade=============" + trade.toString());
+            JSONObject jObject = new JSONObject();
+            try {
+                int count = tradeDao.isTraded(productId, buyerOpenId, sellerOpenId);
+                if (count > 0) {
+                    log.info("该产品已经支付过" + count);
+                } else {
+                    int num = tradeDao.saveTradeInfo(trade);
+                    if (num == 1) {
+                        log.info("回调保存信息成功。");
+                    } else {
+                        log.info("回调保存信息失败。");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("保存交易信息异常！" + e);
+            }
         }
     }
 

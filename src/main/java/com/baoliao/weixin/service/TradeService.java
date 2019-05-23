@@ -28,4 +28,6 @@ public interface TradeService {
     String refundMoney(String balance, String productId, String sellerOpenId) throws Exception;
 
     String refundMoneyByWeChatPay(HttpServletRequest request, String productId, String sellerOpenId) throws Exception;
+
+    void paySuccessReturn(HttpServletRequest request) throws Exception;
 }

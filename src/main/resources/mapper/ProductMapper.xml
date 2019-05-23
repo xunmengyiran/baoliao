@@ -109,7 +109,7 @@
             resultType="com.baoliao.weixin.bean.BuyerUserInfo">
             select w.headImgUrl as headImage,w.nickName,t.create_time as createTime from tb_trade t LEFT JOIN
             tb_wechat_user_info w on t.buyer_open_id=w.openId
-            where t.seller_open_id=#{openId} and t.product_id=#{id}
+            where t.seller_open_id=#{openId} and t.product_id=#{id} and w.subscribe=1
   </select>
 
     <update id="setProductExpritationDateById" parameterType="java.lang.String">

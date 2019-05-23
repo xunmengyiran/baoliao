@@ -41,9 +41,10 @@ $(function () {
 })
 var s_drer = false
 $('#pay_resource,#pay_resource_zfb').click(function () {
-    if (s_drer) {
+// function payByWeChat(){
+  /*  if (s_drer) {
         return
-    }
+    }*/
     var data_type = $(this).attr("data-type");
     var amount = $('#price').val();//单价
     var buyer_openId = $('#buyer_openId').val();
@@ -72,11 +73,11 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
            toast(wx_amount);
            toast(ba_amount);
            return; */
-    $(".dsf_Jh_dfgf").addClass("show")
+    $(".dsf_Jh_dfgf").addClass("show");
     s_drer = true;
     /* if (wx_amount == '0') {//余额支付*/
     if (balance >= parseFloat(amount)) { // 修改--》如果余额大于需要支付的金额 那就直接支付
-        mui.confirm('确认支付？', '确认支付', ['取消', '确认'], function (e) {
+        mui.confirm('优先使用彩料助手余额支付，是否确认？', '确认支付', ['取消', '确认'], function (e) {
             if (e.index == 1) {
                 $.ajax({
                     url: '/trade/pay_balance',
@@ -120,6 +121,8 @@ $('#pay_resource,#pay_resource_zfb').click(function () {
                         }
                     }
                 });
+            }else{
+                $(".dsf_Jh_dfgf").removeClass("show");
             }
         });
     } else {

@@ -53,7 +53,7 @@
     <section class="eer_deert"></section>
 
     <p class="fz12 mt5 z3 cen  pd">
-        <a class="mui-btn bgls  pt10 pm10 fz16 " style="width:320px" id="pay_resource" data-type="weixin">微信支付获取付费资源</a>
+        <a class="mui-btn bgls  pt10 pm10 fz16 " style="width:320px" id="pay_resource" data-type="weixin" onclick="payByWeChat()">微信支付获取付费资源</a>
         <%--<a class="mui-btn bgls_zfb  pt10 pm10 fz16 mt10" style="width:320px" id="pay_resource_zfb" data-type="zfb">支付宝支付获取付费资源</a>--%>
     </p>
 

@@ -24,7 +24,7 @@
     </select>
 
     <select id="getExpenditureByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and pay_type=0
     </select>
 
     <select id="getRefundToOtherByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -46,7 +46,7 @@
         <if test="tradeType == 2">
             and t.trade_type = #{tradeType}
         </if>
-        ORDER BY p.id DESC
+        ORDER BY t.id DESC
     </select>
 
     <select id="queryBuyProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
@@ -57,9 +57,23 @@
     </select>
 
     <select id="querySellerProductList" parameterType="java.lang.String" resultType="com.baoliao.weixin.bean.Trade">
-        SELECT p.id as productId, t.money, t.create_time AS createTime, p.title AS productTitle, count( t.id ) AS sellerCount FROM tb_product p left JOIN tb_trade t ON p.id = t.product_id
-          WHERE p.open_id = #{openId}
-	      GROUP BY p.id ORDER BY p.id DESC
+	SELECT
+	p.id AS productId,
+	p.open_id,
+	t.money,
+	t.create_time AS createTime,
+	p.title AS productTitle,
+	count( t.id ) AS sellerCount
+FROM
+	tb_product p
+	LEFT JOIN tb_trade t ON p.id = t.product_id
+WHERE
+	p.open_id = #{openId}
+	AND ( t.trade_type = 0 OR t.create_time IS NULL )
+GROUP BY
+	p.id
+ORDER BY
+	p.id DESC;
     </select>
 
     <insert id="saveOperCashInfo" parameterType="com.baoliao.weixin.bean.Trade">
@@ -72,5 +86,9 @@
 
     <select id="queryBuyerList" parameterType="java.lang.String" resultType="java.lang.String">
         select buyer_open_id from tb_trade where trade_type=0 and is_delete=0 and product_id=#{productId}
+    </select>
+
+    <select id="isTraded" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0) from tb_trade where product_id=#{productId} and buyer_open_id=#{buyerOpenId} and seller_open_id=#{sellerOpenId}
     </select>
 </mapper>
