@@ -37,4 +37,5 @@ public interface TradeDao {
     List<String> queryBuyerList(@Param("productId") String productId) throws Exception;
 
     int isTraded(@Param("productId") String productId,@Param("buyerOpenId") String buyerOpenId,@Param("sellerOpenId") String sellerOpenId) throws Exception;
+    int isRefundByProductId(@Param("productId") String productId) throws Exception;
 }

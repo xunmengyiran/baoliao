@@ -91,4 +91,8 @@ ORDER BY
     <select id="isTraded" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(0) from tb_trade where product_id=#{productId} and buyer_open_id=#{buyerOpenId} and seller_open_id=#{sellerOpenId}
     </select>
+
+    <select id="isRefundByProductId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0) from tb_trade where product_id=#{productId} and trade_type=1
+    </select>
 </mapper>

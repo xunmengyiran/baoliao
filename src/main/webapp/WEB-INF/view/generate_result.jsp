@@ -72,10 +72,18 @@
                     dataType: 'json',
                     success: function (data) {
                         // 只有返回删除成功才可以remove
-                        if (data.success) {
+                        if (data.success == 1) {
                             mui.alert("退款成功！");
                         } else {
-                            refundMoeyByWeChatPay();
+                            if (data.success == 2) {
+                                mui.alert(data.msg);
+                            }else{
+                                mui.confirm('余额不足，将使用微信余额支付', '一键退款', ['取消', '确认'], function (e) {
+                                    if (e.index == 1) {
+                                        refundMoeyByWeChatPay();
+                                    }
+                                });
+                            }
                         }
                     },
                     error: function () {
@@ -108,8 +116,6 @@
                     signType = result.data.signType;
                     paySign = result.data.paySign;
                     onBridgeReady(appId, timeStamp, nonceStr, packageStr, signType, paySign);
-                    // mui.toast("支付成功");
-                    // window.location.href = '/product/detailInfo2?id=' + en_id;
                 } else {
                     mui.alert("退款失败！");
                 }
@@ -118,8 +124,6 @@
     }
 
     function onBridgeReady(appId, timeStamp, nonceStr, packageStr, signType, paySign) {
-        var id = $('#id').val();
-        var en_id = $('#en_id').val();
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest', {
                 "appId": appId,     //公众号名称，由商户传入
@@ -130,10 +134,7 @@
                 "paySign": paySign    //微信签名
             },
             function (res) {
-                mui.alert(res.err_msg);
-                /* toast(JSON.stringify(res));   */
                 if (res.err_msg == "get_brand_wcpay_request:ok") {
-                    // window.location.href = path + '/weixin/resource_pay_suc?id=' + en_id;
                     mui.alert("退款成功！");
                 }
                 if (res.err_msg == "get_brand_wcpay_request:cancel") {

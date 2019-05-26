@@ -136,6 +136,12 @@ public class TradeController {
 
     @RequestMapping("/refundMoneyByBalance")
     public void refundMoneyByBalance(HttpServletRequest request, HttpServletResponse response, String productId) {
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        response.setCharacterEncoding("UTF-8");
         PrintWriter pw = null;
         log.info("开始申请一键退款,退款的产品(余额支付):" + productId);
         HttpSession session = request.getSession();

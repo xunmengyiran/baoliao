@@ -93,6 +93,7 @@ public class TradeServiceImpl implements TradeService {
         Date currDate = new Date();
         ServletContext application = request.getSession().getServletContext();
         application.setAttribute(id, buyerOpenId);
+        application.setAttribute("tradeType",0);
         Map<String, String> data = new HashMap<String, String>();
         String nonceStr = WXPayUtil.generateNonceStr();
         String appId = Constants.WECHAT_PARAMETER.APPID;
@@ -317,153 +318,170 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public String refundMoney(String balance, String productId, String sellerOpenId) throws Exception {
-        Product product = productDao.getProductById(Integer.parseInt(productId));
-        // 单价
-        String price = product.getPrice();
-        log.info("产品单价" + price);
-        // 哪些人买了
-        List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
-        log.info("买的人数" + buyerOpenIdList.size());
-        // 总共需要退款
-        double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
-        log.info("总共需要退款" + redfundCount);
-        Map<String, Object> result = new HashMap<String, Object>();
-        log.info("余额:" + balance);
-        if (Double.parseDouble(balance) >= redfundCount) {
-            // 直接余额退款
-            for (String buyerOpenId : buyerOpenIdList) {
-                Trade trade = new Trade();
-                trade.setProductId(Integer.parseInt(productId));
-                trade.setMoney(price);
-                trade.setCreateTime(new Date());
-                trade.setBuyerOpenId(sellerOpenId);
-                trade.setSellerOpenId(buyerOpenId);
-                trade.setPayType(0);
-                trade.setTradeType(1);
-                log.info("========trade=============" + trade.toString());
-                tradeDao.saveTradeInfo(trade);
-            }
-            // 设置产品过期，不能再购买
-            productDao.setProductExpritationDateById(productId);
-            result.put("success", true);
-        } else {
-            result.put("success", false);
-        }
-        return (JSONObject.fromObject(result)).toString();
-    }
-
-    @Override
-    public String refundMoneyByWeChatPay(HttpServletRequest request, String productId, String sellerOpenId) throws Exception {
         Map<String, Object> result = new HashMap<String, Object>();
         Product product = productDao.getProductById(Integer.parseInt(productId));
-        // 单价
-        String price = product.getPrice();
-        log.info("产品单价" + price);
-        // 哪些人买了
-        List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
-        log.info("买的人数" + buyerOpenIdList.size());
-        // 总共需要退款
-        double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
-        log.info("总共需要退款" + redfundCount);
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        Date currDate = new Date();
-
-        Map<String, String> data = new HashMap<String, String>();
-        String nonceStr = WXPayUtil.generateNonceStr();
-        String appId = Constants.WECHAT_PARAMETER.APPID;
-        String mchId = PayConstants.WECHAT_PAT_CONFIG.MCH_ID;
-        String deviceInfo = "WEB";
-
-//        data.put("appid", appId);
-//        data.put("mch_id",mchId );
-        data.put("device_info", deviceInfo);
-//        data.put("nonce_str", nonceStr);
-//        data.put("sign", "");
-//        data.put("sign_type", WXPayConstants.MD5);
-        data.put("body", "退款");
-        data.put("detail", "退款");
-        data.put("attach", "必赢大数据");
-        data.put("out_trade_no", productId);
-        data.put("total_fee", String.valueOf((int) (redfundCount * 100)));
-        data.put("spbill_create_ip", WeChatPayUtils.getIp(request));
-//        data.put("time_start", Constants.DATA_FORMAT.sdf2.format(currDate));
-        data.put("notify_url", domainName + "/trade/paysuccessreturn");
-        data.put("trade_type", "JSAPI");
-        data.put("openid", sellerOpenId);
-
-        log.info("请求统一下单接口参数:" + data);
-        MyConfig config = new MyConfig();
-        WXPay wxpay = new WXPay(config);
-        Map<String, String> unifiedOrderMap = wxpay.unifiedOrder(data);
-
-        log.info("调用统一下单接口返回结果:" + unifiedOrderMap);
-
-        String returnCode = unifiedOrderMap.get("return_code");
-        String resultCode = unifiedOrderMap.get("result_code");
-        try {
-            if ("SUCCESS".equals(returnCode) && "SUCCESS".equals(resultCode)) {
-                log.info("微信支付下单成功");
-                // 进行签名校验
-                Map<String, String> map = new HashMap<>();
-                map.put("return_code", unifiedOrderMap.get("return_code"));
-                map.put("return_msg", unifiedOrderMap.get("return_msg"));
-                map.put("appid", unifiedOrderMap.get("appid"));
-                map.put("mch_id", unifiedOrderMap.get("mch_id"));
-                map.put("nonce_str", unifiedOrderMap.get("nonce_str"));
-                map.put("result_code", unifiedOrderMap.get("result_code"));
-                map.put("prepay_id", unifiedOrderMap.get("prepay_id"));
-                map.put("trade_type", unifiedOrderMap.get("trade_type"));
-                // 生成签名
-                String mySign = WXPayUtil.generateSignature(map, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET);
-                // 微信返回的签名
-                String wxSign = unifiedOrderMap.get("sign");
-                log.info("返回的签名" + wxSign);
-                log.info("最后生成的签名" + mySign);
-                System.out.println("最后生成的签名的参数:" + map);
-                // 需要返回给页面的数据
-                Map<String, String> returnMap = new HashMap<>();
-                // TODO 验证签名
-//                if (mySign.equals(wxSign)) {
-                returnMap.put("appId", unifiedOrderMap.get("appid"));
-                returnMap.put("timeStamp", WXPayUtil.getCurrentTimestamp() + "");
-                returnMap.put("nonceStr", nonceStr);
-                returnMap.put("package", "prepay_id=" + unifiedOrderMap.get("prepay_id"));
-                returnMap.put("signType", WXPayConstants.HMACSHA256);
-                // 此处生成的签名返回给页面作为参数
-                returnMap.put("paySign", WXPayUtil.generateSignature(returnMap, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET));
-                log.info("签名校验成功，下单返回信息为" + returnMap);
-
-                Map<String, Object> storeMap = new HashMap<>();
-                // 签名校验成功，你可以在此处进行自己业务逻辑的处理
-                // storeMap可以存储那些你需要存进数据库的信息，可以生成预支付订单
-                resultMap.put("data", returnMap);
+        int count = tradeDao.isRefundByProductId(productId);
+        log.info("(余额退款)查询到"+count+"条退款记录");
+        if(count>0){
+            result.put("success", 2);
+            result.put("msg", "该料已经退过款了。");
+        }else{
+            // 单价
+            String price = product.getPrice();
+            log.info("产品单价" + price);
+            // 哪些人买了
+            List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
+            log.info("买的人数" + buyerOpenIdList.size());
+            // 总共需要退款
+            double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
+            log.info("总共需要退款" + redfundCount);
+            log.info("余额:" + balance);
+            if (Double.parseDouble(balance) >= redfundCount) {
+                // 直接余额退款
                 for (String buyerOpenId : buyerOpenIdList) {
                     Trade trade = new Trade();
                     trade.setProductId(Integer.parseInt(productId));
                     trade.setMoney(price);
                     trade.setCreateTime(new Date());
-                    trade.setBuyerOpenId(buyerOpenId);
-                    trade.setPayType(1);
+                    trade.setBuyerOpenId(sellerOpenId);
+                    trade.setSellerOpenId(buyerOpenId);
+                    trade.setPayType(0);
                     trade.setTradeType(1);
                     log.info("========trade=============" + trade.toString());
                     tradeDao.saveTradeInfo(trade);
                 }
-                resultMap.put("success", true);
                 // 设置产品过期，不能再购买
                 productDao.setProductExpritationDateById(productId);
-                return (JSONObject.fromObject(result)).toString();
+                result.put("success", 1);
+            } else {
+                result.put("success", false);
+            }
+        }
+log.info("退款（余额）返回的参数为"+(JSONObject.fromObject(result)));
+        return (JSONObject.fromObject(result)).toString();
+    }
+
+    @Override
+    public String refundMoneyByWeChatPay(HttpServletRequest request, String productId, String sellerOpenId) throws Exception {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Product product = productDao.getProductById(Integer.parseInt(productId));
+        ServletContext application = request.getSession().getServletContext();
+        application.setAttribute("tradeType",1);
+        int count = tradeDao.isRefundByProductId(productId);
+        log.info("(微信退款)查询到"+count+"条退款记录");
+        if(count>0){
+            resultMap.put("success", 2);
+            resultMap.put("msg", "该料已经退过款了。");
+        }else{
+            // 单价
+            String price = product.getPrice();
+            log.info("产品单价" + price);
+            // 哪些人买了
+            List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
+            log.info("买的人数" + buyerOpenIdList.size());
+            // 总共需要退款
+            double redfundCount = buyerOpenIdList.size() * Double.parseDouble(price);
+            log.info("总共需要退款" + redfundCount);
+            Date currDate = new Date();
+
+            Map<String, String> data = new HashMap<String, String>();
+            String nonceStr = WXPayUtil.generateNonceStr();
+            String appId = Constants.WECHAT_PARAMETER.APPID;
+            String mchId = PayConstants.WECHAT_PAT_CONFIG.MCH_ID;
+            String deviceInfo = "WEB";
+
+//        data.put("appid", appId);
+//        data.put("mch_id",mchId );
+            data.put("device_info", deviceInfo);
+//        data.put("nonce_str", nonceStr);
+//        data.put("sign", "");
+//        data.put("sign_type", WXPayConstants.MD5);
+            data.put("body", "退款");
+            data.put("detail", "退款");
+            data.put("attach", "必赢大数据");
+            data.put("out_trade_no", productId+"_1");
+            data.put("total_fee", String.valueOf((int) (redfundCount * 100)));
+            data.put("spbill_create_ip", WeChatPayUtils.getIp(request));
+//        data.put("time_start", Constants.DATA_FORMAT.sdf2.format(currDate));
+            data.put("notify_url", domainName + "/trade/paysuccessreturn");
+            data.put("trade_type", "JSAPI");
+            data.put("openid", sellerOpenId);
+
+            log.info("请求统一下单接口参数:" + data);
+            MyConfig config = new MyConfig();
+            WXPay wxpay = new WXPay(config);
+            Map<String, String> unifiedOrderMap = wxpay.unifiedOrder(data);
+
+            log.info("调用统一下单接口返回结果:" + unifiedOrderMap);
+
+            String returnCode = unifiedOrderMap.get("return_code");
+            String resultCode = unifiedOrderMap.get("result_code");
+            try {
+                if ("SUCCESS".equals(returnCode) && "SUCCESS".equals(resultCode)) {
+                    log.info("微信支付下单成功");
+                    // 进行签名校验
+                    Map<String, String> map = new HashMap<>();
+                    map.put("return_code", unifiedOrderMap.get("return_code"));
+                    map.put("return_msg", unifiedOrderMap.get("return_msg"));
+                    map.put("appid", unifiedOrderMap.get("appid"));
+                    map.put("mch_id", unifiedOrderMap.get("mch_id"));
+                    map.put("nonce_str", unifiedOrderMap.get("nonce_str"));
+                    map.put("result_code", unifiedOrderMap.get("result_code"));
+                    map.put("prepay_id", unifiedOrderMap.get("prepay_id"));
+                    map.put("trade_type", unifiedOrderMap.get("trade_type"));
+                    // 生成签名
+                    String mySign = WXPayUtil.generateSignature(map, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET);
+                    // 微信返回的签名
+                    String wxSign = unifiedOrderMap.get("sign");
+                    log.info("返回的签名" + wxSign);
+                    log.info("最后生成的签名" + mySign);
+                    System.out.println("最后生成的签名的参数:" + map);
+                    // 需要返回给页面的数据
+                    Map<String, String> returnMap = new HashMap<>();
+                    // TODO 验证签名
+//                if (mySign.equals(wxSign)) {
+                    returnMap.put("appId", unifiedOrderMap.get("appid"));
+                    returnMap.put("timeStamp", WXPayUtil.getCurrentTimestamp() + "");
+                    returnMap.put("nonceStr", nonceStr);
+                    returnMap.put("package", "prepay_id=" + unifiedOrderMap.get("prepay_id"));
+                    returnMap.put("signType", WXPayConstants.HMACSHA256);
+                    // 此处生成的签名返回给页面作为参数
+                    returnMap.put("paySign", WXPayUtil.generateSignature(returnMap, PayConstants.WECHAT_PAT_CONFIG.MCH_APPSECRET));
+                    log.info("签名校验成功，下单返回信息为" + returnMap);
+
+                    Map<String, Object> storeMap = new HashMap<>();
+                    // 签名校验成功，你可以在此处进行自己业务逻辑的处理
+                    // storeMap可以存储那些你需要存进数据库的信息，可以生成预支付订单
+                    resultMap.put("data", returnMap);
+                    /*for (String buyerOpenId : buyerOpenIdList) {
+                        Trade trade = new Trade();
+                        trade.setProductId(Integer.parseInt(productId));
+                        trade.setMoney(price);
+                        trade.setCreateTime(new Date());
+                        trade.setBuyerOpenId(buyerOpenId);
+                        trade.setPayType(1);
+                        trade.setTradeType(1);
+                        log.info("========trade=============" + trade.toString());
+                        tradeDao.saveTradeInfo(trade);
+                    }*/
+                    resultMap.put("success", 1);
+                    // 设置产品过期，不能再购买
+                    productDao.setProductExpritationDateById(productId);
                /* } else {
                     log.error("签名校验失败，下单返回信息为 --> {}", JSONObject.fromObject(resultMap));
                     // 签名校验失败，你可以在此处进行校验失败的业务逻辑
                 }*/
-            } else {
-                resultMap.put("success", false);
-                return (JSONObject.fromObject(result)).toString();
+                } else {
+                    resultMap.put("success", false);
+                    return (JSONObject.fromObject(resultMap)).toString();
+                }
+            } catch (Exception e) {
+                log.error("用户支付，失败", e);
+                return null;
             }
-        } catch (Exception e) {
-            log.error("用户支付，失败", e);
-            return null;
         }
+        log.info("微信退款参数"+(JSONObject.fromObject(resultMap)).toString());
+        return (JSONObject.fromObject(resultMap)).toString();
     }
 
     @Override
@@ -491,40 +509,67 @@ public class TradeServiceImpl implements TradeService {
 
         String returnCode = map.get("return_code");
         log.info("=======returnCode===========" + returnCode);
+        String productId = map.get("out_trade_no");
+        productId = productId.split("_")[0];
+        log.info("=======productId===========" + productId);
+        Product product = productDao.getProductById(Integer.parseInt(productId));
         if ("SUCCESS".equals(returnCode)) {
-            String productId = map.get("out_trade_no");
-            log.info("=======productId===========" + productId);
             ServletContext application = request.getSession().getServletContext();
             String buyerOpenId = (String) application.getAttribute(productId);
-            log.info("=======buyerOpenId===========" + buyerOpenId);
-            Product product = productDao.getProductById(Integer.parseInt(productId));
-            String sellerOpenId = product.getOpenId();
-            log.info("==product=======" + product.toString());
-            Trade trade = new Trade();
-            trade.setProductId(Integer.parseInt(productId));
-            trade.setMoney(product.getPrice());
-            trade.setCreateTime(new Date());
-            trade.setBuyerOpenId(buyerOpenId);
-            trade.setSellerOpenId(sellerOpenId);
-            trade.setPayType(1);
-            log.info("========trade=============" + trade.toString());
-            JSONObject jObject = new JSONObject();
-            try {
-                int count = tradeDao.isTraded(productId, buyerOpenId, sellerOpenId);
-                if (count > 0) {
-                    log.info("该产品已经支付过" + count);
-                } else {
-                    int num = tradeDao.saveTradeInfo(trade);
-                    if (num == 1) {
-                        log.info("回调保存信息成功。");
+            int tradeType = (int) application.getAttribute("tradeType");
+            log.info("交易类型"+tradeType);
+            if(0 == tradeType){
+                log.info("=======buyerOpenId===========" + buyerOpenId);
+                String sellerOpenId = product.getOpenId();
+                log.info("==product=======" + product.toString());
+                Trade trade = new Trade();
+                trade.setProductId(Integer.parseInt(productId));
+                trade.setMoney(product.getPrice());
+                trade.setCreateTime(new Date());
+                trade.setBuyerOpenId(buyerOpenId);
+                trade.setSellerOpenId(sellerOpenId);
+                trade.setPayType(1);
+                trade.setTradeType(0);
+                log.info("========trade=============" + trade.toString());
+                JSONObject jObject = new JSONObject();
+                try {
+                    int count = tradeDao.isTraded(productId, buyerOpenId, sellerOpenId);
+                    if (count > 0) {
+                        log.info("该产品已经支付过" + count);
                     } else {
-                        log.info("回调保存信息失败。");
+                        int num = tradeDao.saveTradeInfo(trade);
+                        if (num == 1) {
+                            log.info("回调保存信息成功。");
+                        } else {
+                            log.info("回调保存信息失败。");
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.error("保存交易信息异常！" + e);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error("保存交易信息异常！" + e);
+            }else if(1 == tradeType){
+                // 哪些人买了
+                List<String> buyerOpenIdList = tradeDao.queryBuyerList(productId);
+                log.info("(回调)买的人数" + buyerOpenIdList.size());
+                // 单价
+                String price = product.getPrice();
+                log.info("产品单价" + price);
+                for (String buyerOpenId1 : buyerOpenIdList) {
+                    Trade trade = new Trade();
+                    trade.setProductId(Integer.parseInt(productId));
+                    trade.setMoney(price);
+                    trade.setCreateTime(new Date());
+                    trade.setBuyerOpenId(product.getOpenId());
+                    trade.setSellerOpenId(buyerOpenId1);
+                    trade.setPayType(1);
+                    trade.setTradeType(1);
+                    log.info("========trade=============" + trade.toString());
+                    tradeDao.saveTradeInfo(trade);
+                }
+                productDao.setProductExpritationDateById(productId);
             }
+
         }
     }
 
