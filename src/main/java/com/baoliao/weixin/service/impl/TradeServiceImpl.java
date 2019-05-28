@@ -348,7 +348,12 @@ public class TradeServiceImpl implements TradeService {
                     trade.setPayType(0);
                     trade.setTradeType(1);
                     log.info("========trade=============" + trade.toString());
-                    tradeDao.saveTradeInfo(trade);
+                    int i = tradeDao.isHaveRefundRecord(productId,buyerOpenId,sellerOpenId);
+                    if(i==0){
+                        tradeDao.saveTradeInfo(trade);
+                    }else{
+                        log.info("退款记录已存在(余额)"+productId);
+                    }
                 }
                 // 设置产品过期，不能再购买
                 productDao.setProductExpritationDateById(productId);
@@ -565,7 +570,12 @@ log.info("退款（余额）返回的参数为"+(JSONObject.fromObject(result)))
                     trade.setPayType(1);
                     trade.setTradeType(1);
                     log.info("========trade=============" + trade.toString());
-                    tradeDao.saveTradeInfo(trade);
+                    int i = tradeDao.isHaveRefundRecord(productId,product.getOpenId(),buyerOpenId1);
+                    if(i==0){
+                        tradeDao.saveTradeInfo(trade);
+                    }else{
+                        log.info("退款记录已存在（微信）"+productId);
+                    }
                 }
                 productDao.setProductExpritationDateById(productId);
             }

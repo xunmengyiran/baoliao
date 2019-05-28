@@ -24,7 +24,7 @@
     </select>
 
     <select id="getExpenditureByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
-        select sum(money) from tb_trade where buyer_open_id = #{openId} and pay_type=0
+        select sum(money) from tb_trade where buyer_open_id = #{openId} and trade_type=0 and pay_type=0
     </select>
 
     <select id="getRefundToOtherByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -94,5 +94,9 @@ ORDER BY
 
     <select id="isRefundByProductId" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(0) from tb_trade where product_id=#{productId} and trade_type=1
+    </select>
+    
+    <select id="isHaveRefundRecord" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0) from tb_trade where product_id=#{productId} and buyer_open_id=#{buyerOpenId} and seller_open_id=#{sellerOpenId} and trade_type=1
     </select>
 </mapper>
